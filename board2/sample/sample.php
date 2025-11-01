@@ -12,7 +12,7 @@ $affectedRows = fnDBUpdate("
 ");
 fnEchoBR("affectedRows",$affectedRows);
 
-$listArray = fnDBGetList("SELECT * FROM tb_board");
+$listArray = fnDBGetList("SELECT * FROM tb_board_info");
 fnEchoBR("list print");
 print_r($listArray);
 
