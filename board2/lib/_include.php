@@ -3,4 +3,5 @@
 	include $_SERVER['DOCUMENT_ROOT']."/board2/lib/var.php";
 	include $envVarMap["appPath"]."/lib/func.php";
 	include $envVarMap["appPath"]."/lib/paging.php";
+	include $envVarMap["appPath"]."/lib/dateLibrary.php";
 ?>

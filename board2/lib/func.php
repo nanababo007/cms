@@ -151,4 +151,13 @@ function fnEchoBR($title="",$cont=""){
 	echo "<strong>${title}</strong> : ${cont}";
 	echo "<br />";
 }
+function debugString($titleString="",$debugString=""){
+	echo "<br/>".$titleString." : ".$debugString."<br/>";
+}
+function echoBr($stringValue=""){
+	echo "<br/>".$stringValue."<br/>";
+}
+function echoNl($stringValue=""){
+	echo "\n".$stringValue."\n";
+}
 ?>
