@@ -3,7 +3,7 @@ $dbCon = null;
 function fnOpenDB(){
 	global $dbCon;
 	global $envVarMap;
-	
+
 	$host = $envVarMap["dbHostname"];
 	$user = $envVarMap["dbUsername"];
 	$pass = $envVarMap["dbUserpwd"];
@@ -145,6 +145,13 @@ function fnExit(){
 	fnCloseDB();
 	exit();
 }
+function nvl($stringValue="",$defaultValue=""){
+	if($stringValue==null || $stringValue==""){
+		return $defaultValue;
+	}else{
+		return $stringValue;
+	}#if
+}
 # fnEchoBR("title","cont");
 function fnEchoBR($title="",$cont=""){
 	echo "<br />";
@@ -152,12 +159,48 @@ function fnEchoBR($title="",$cont=""){
 	echo "<br />";
 }
 function debugString($titleString="",$debugString=""){
-	echo "<br/>".$titleString." : ".$debugString."<br/>";
+	global $envVarMap;
+	if($envVarMap["debugMode"]){
+		echo "<br/>".DateLibraryClass::getCurrentDatetimeFormatString("Y-m-d H:i:s")." : ".$titleString." : ".$debugString."<br/>";
+		echo "<br/>";
+	}#if
+}
+function debugArray($titleString="",&$debugArray=null){
+	global $envVarMap;
+	if($envVarMap["debugMode"] && $debugArray!=null){
+		echo "<br/>".DateLibraryClass::getCurrentDatetimeFormatString("Y-m-d H:i:s")." : ".$titleString." : <br/>";
+		print_r($debugArray);
+		echo "<br/>";
+	}#if
+}
+function debugDump($titleString="",&$debugVal=null){
+	global $envVarMap;
+	if($envVarMap["debugMode"] && $debugVal!=null){
+		echo "<br/>".DateLibraryClass::getCurrentDatetimeFormatString("Y-m-d H:i:s")." : ".$titleString." : <br/>";
+		var_dump($debugVal);
+		echo "<br/>";
+	}#if
 }
 function echoBr($stringValue=""){
 	echo "<br/>".$stringValue."<br/>";
 }
 function echoNl($stringValue=""){
 	echo "\n".$stringValue."\n";
+}
+function getArrayValue(&$array=null,$keyString=""){
+	$returnValue = "";
+	#---
+	if($array!=null && $keyString!="" && isset($array[$keyString])){
+		$returnValue = $array[$keyString];
+	}#if
+	#---
+	return $returnValue;
+}
+function getArrayCount(&$array=null){
+	if($array!=null && is_array($array)){
+		return count($array);
+	}else{
+		return 0;
+	}#if
 }
 ?>

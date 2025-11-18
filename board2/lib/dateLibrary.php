@@ -30,6 +30,9 @@ $korWeekName = DateLibraryClass::getDateKorWeekNameForEngWeekName("eng");
 $korWeekName = DateLibraryClass::getCurrentKorWeekName();
 $engWeekName = DateLibraryClass::getEngWeekName("2025-01-01");
 $korWeekName = DateLibraryClass::getKorWeekName("2025-01-01");
+$lastDayOfMonth = DateLibraryClass::getLastDayOfMonth($dateString="");
+# $dateIntervalString : "P2M" (Add 2 months), "P2Y4DT6H8M" (2년, 4일, 6시간, 8분)
+$addedFormatDateString = DateLibraryClass::getAddedFormatDateString($dateString="",$dateIntervalString="",$isDateCalcPlus=true,$formatString="Y-m-d");
 #--- 날짜관련 소스코드
 $now = new DateTime();
 echo $now->format("Y-m-d H:i:s"); // 출력: 현재 날짜와 시간
@@ -374,6 +377,41 @@ $datediffObject = DateLibraryClass::getDateDiffForObject("2025-01-01 13:22:35","
 		$engWeekNameString = self::getEngWeekName($dateString);
 		$korWeekNameString = self::getDateKorWeekNameForEngWeekName($engWeekNameString);
 		return $korWeekNameString;
+	}
+	# 특정 년월의 마지막 일수 반환, 입력값이 비어있으면 현재년월의 마지막 일수 반환.
+	public static function getLastDayOfMonth($dateString="") {
+		if(trim($dateString)==""){
+			$dateString = self::getCurrentDatetimeFormatString($formatString="Y-m-")."01";
+		}else{
+			if(strlen($dateString)==6){$dateString = $dateString."01";}#if
+			$dateString = self::getStandardDatetimeString($dateString);
+		}#if
+		#---
+		$date = new DateTime($dateString);
+		$lastDaysOfMonth = (int)$date->format('t');
+		#---
+		return $lastDaysOfMonth;
+	}
+	# $dateIntervalString : "P2M" (Add 2 months), "P2Y4DT6H8M" (2년, 4일, 6시간, 8분)
+	public static function getAddedFormatDateString($dateString="",$dateIntervalString="",$isDateCalcPlus=true,$formatString="Y-m-d") {
+debugString("=== dateString 1",$dateString);
+debugString("=== dateIntervalString 1",$dateIntervalString);
+		if($dateString==""){return "";}#if
+		if($dateIntervalString==""){return "";}#if
+		#---
+		$dateString = self::getStandardDatetimeString($dateString);
+debugString("=== dateString",$dateString);
+		#---
+		$date = new DateTime($dateString);
+		$interval = new DateInterval($dateIntervalString);
+		if($isDateCalcPlus){
+			$date->add($interval); // P2M (Add 2 months)
+		}else{
+			$date->sub($interval);
+		}#if
+		$formattedDateString = $date->format($formatString); 
+		#---
+		return $formattedDateString;
 	}
 }
 ?>
