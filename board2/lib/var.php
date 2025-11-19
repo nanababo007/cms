@@ -9,6 +9,8 @@ if($modeString=="server"){
 	$envVarMap["dbName"] = "";
 	$envVarMap["appPath"] = $_SERVER['DOCUMENT_ROOT']."/board2";
 	$envVarMap["appWebPath"] = "/board2";
+	$envVarMap["pluginsWebPath"] = "/plugins";
+	$envVarMap["debugMode"] = false;
 }else{
 	$envVarMap["dbUsername"] = "";
 	$envVarMap["dbUserpwd"] = "";
@@ -16,6 +18,8 @@ if($modeString=="server"){
 	$envVarMap["dbName"] = "";
 	$envVarMap["appPath"] = $_SERVER['DOCUMENT_ROOT']."/board2";
 	$envVarMap["appWebPath"] = "/board2";
+	$envVarMap["pluginsWebPath"] = "/plugins";
+	$envVarMap["debugMode"] = true;
 }
 #---
 function getServerModeString(){
