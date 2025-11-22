@@ -1,38 +1,50 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 #---
 $actionString = getRequestValue("actionString");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
+$bdSeq = nvl(getRequestValue("bdSeq"));
+$boardInfo = null;
 #---
 debugString("actionString",$actionString);
 debugString("pageNumber",$pageNumber);
 debugString("pageSize",$pageSize);
 debugString("blockSize",$blockSize);
+debugArray("request values",$_REQUEST);
 #---
 $moveUrlParam = "";
 $moveUrlParam .= "?pageNumber=".$pageNumber;
 $moveUrlParam .= "&pageSize=".$pageSize;
 $moveUrlParam .= "&blockSize=".$blockSize;
+$moveUrlParam .= "&bdSeq=".$bdSeq;
 #---
 fnOpenDB();
 #---
+if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
+$boardInfo = fnBoardGetInfo($bdSeq);
+if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
+debugArray("boardInfo",$boardInfo);
+#---
 if($actionString=="write"){
-	$bdNm = nvl(getRequestValue("bdNm"));
-	$bdContent = nvl(getRequestValue("bdContent"));
+	$bdaTitle = nvl(getRequestValue("bdaTitle"));
+	$bdaContent = nvl(getRequestValue("bdaContent"));
 	#---
-	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
+	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		insert into tb_board_info (
-			bd_nm
-			,bd_content
+		insert into tb_board_article (
+			bda_title
+			,bda_content
+			,bd_seq
 			,regdate
 			,reguser
 		)values(
-			'${bdNm}'
-			,'${bdContent}'
+			'${bdaTitle}'
+			,'${bdaContent}'
+			,'${bdSeq}'
 			,NOW(3)
 			,'admin'
 		)
@@ -41,43 +53,47 @@ if($actionString=="write"){
 	fnDBUpdate($sql);
 	#---
 	$sql = "SELECT LAST_INSERT_ID()";
-	$bdSeq = nvl(fnDBGetStringValue($sql));
+	$bdaSeq = nvl(fnDBGetStringValue($sql));
 	#---
-	$moveUrlParam .= "&bdSeq=".$bdSeq;
-	alertGo("처리 되었습니다.","board.php".$moveUrlParam);
+	$moveUrlParam .= "&bdaSeq=".$bdaSeq;
+	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else if($actionString=="modify"){
-	$bdSeq = nvl(getRequestValue("bdSeq"));
-	$bdNm = nvl(getRequestValue("bdNm"));
-	$bdContent = nvl(getRequestValue("bdContent"));
+	$bdaSeq = nvl(getRequestValue("bdaSeq"));
+	$bdaTitle = nvl(getRequestValue("bdaTitle"));
+	$bdaContent = nvl(getRequestValue("bdaContent"));
 	#---
-	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
-	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
+	debugString("bdaSeq",$bdaSeq);
+	debugString("bdaTitle",$bdaTitle);
+	debugString("bdaContent",$bdaContent);
+	#---
+	if($bdaSeq==""){alertBack("정보가 부족 합니다.");}#if
+	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		update tb_board_info set
-			bd_nm = '${bdNm}'
-			,bd_content = '${bdContent}'
+		update tb_board_article set
+			bda_title = '${bdaTitle}'
+			,bda_content = '${bdaContent}'
 			,moddate = NOW(3)
 			,moduser = 'admin'
-		where bd_seq = ${bdSeq}
+		where bda_seq = ${bdaSeq}
 	";
 	#---
 	fnDBUpdate($sql);
 	#---
-	alertGo("처리 되었습니다.","board.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else if($actionString=="delete"){
-	$bdSeq = nvl(getRequestValue("bdSeq"));
+	$bdaSeq = nvl(getRequestValue("bdaSeq"));
 	#---
-	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
+	if($bdaSeq==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		delete from tb_board_info
-		where bd_seq = ${bdSeq}
+		delete from tb_board_article
+		where bda_seq = ${bdaSeq}
 	";
 	#---
 	fnDBUpdate($sql);
 	#---
-	alertGo("처리 되었습니다.","board.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
 }#if

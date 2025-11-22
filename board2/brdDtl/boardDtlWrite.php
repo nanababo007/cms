@@ -1,32 +1,47 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 #---
 $bdSeq = nvl(getRequestValue("bdSeq"));
+$bdaSeq = nvl(getRequestValue("bdaSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
+$boardInfo = null;
+$boardArticleInfo = null;
+$pageTitleString = "";
 #---
 fnOpenDB();
 #---
-if($bdSeq!=""){
+$boardInfo = fnBoardGetInfo($bdSeq);
+if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
+debugArray("boardInfo",$boardInfo);
+#---
+$pageTitleString = getArrayValue($boardInfo,"bd_nm")." | 멀티게시판";
+#---
+if($bdaSeq!=""){
 	$sqlBodyPart = "
-		FROM tb_board_info a
-		where bd_seq = ${bdSeq}
+		FROM tb_board_article a
+		where bda_seq = ${bdaSeq}
 	";
 	#---
 	$sqlMain = "
 		SELECT
-			a.bd_seq
-			,a.bd_nm
-			,a.bd_content
+			a.bda_seq
+			,a.bd_seq
+			,a.bda_title
+			,a.bda_content
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 			,a.regdate
 			,a.reguser
+			,a.moddate
+			,a.moduser
 		${sqlBodyPart}
 	";
-	$boardInfo = fnDBGetRow($sqlMain);
+	$boardArticleInfo = fnDBGetRow($sqlMain);
 }else{
-	$boardInfo = array();
+	$boardArticleInfo = array();
 }#if
 #---
 fnCloseDB();
@@ -37,11 +52,12 @@ fnCloseDB();
 	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/head.php'); ?>
 </head>
 <body>
-<h2>게시판 관리</h2>
+<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>)</h2>
 
-<form name="writeForm" method="post" action="boardProc.php">
+<form name="writeForm" method="post" action="boardDtlProc.php">
 <input type="hidden" name="actionString" value="write" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -53,13 +69,13 @@ fnCloseDB();
 	<col width="30%" />
 </colgroup>
 <tr>
-	<th>게시판 이름</th>
-	<td colspan="3"><input type="text" name="bdNm" value="<?php echo getArrayValue($boardInfo,"bd_nm"); ?>" style="width:90%;height:20px;" /></td>
+	<th>게시글 제목</th>
+	<td colspan="3"><input type="text" name="bdaTitle" value="<?php echo getArrayValue($boardArticleInfo,"bda_title"); ?>" style="width:90%;height:20px;" /></td>
 </tr>
 <tr>
-	<th>게시판 설명</th>
+	<th>게시글 내용</th>
 	<td colspan="3">
-		<textarea name="bdContent" style="width:90%;height:200px;"><?php echo getArrayValue($boardInfo,"bd_content"); ?></textarea>
+		<textarea name="bdaContent" style="width:90%;height:200px;"><?php echo getArrayValue($boardArticleInfo,"bda_content"); ?></textarea>
 	</td>
 </tr>
 <!--<tr>
@@ -80,6 +96,7 @@ fnCloseDB();
 
 <form name="paramForm" method="get">
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -90,16 +107,16 @@ var paramFormObject = document.paramForm;
 var writeFormObject = document.writeForm;
 //---
 function goSave(pageNumber){
-	if(writeFormObject.bdSeq.value!==''){
+	if(writeFormObject.bdaSeq.value!==''){
 		writeFormObject.actionString.value = 'modify';
 	}else{
 		writeFormObject.actionString.value = 'write';
 	}//if
-	if(writeFormObject.bdNm.value===''){alert('게시판 이름을 입력해주세요.');writeFormObject.bdNm.focus();return;}//if
+	if(writeFormObject.bdaTitle.value===''){alert('게시글 제목을 입력해주세요.');writeFormObject.bdaTitle.focus();return;}//if
 	writeFormObject.submit();
 }
 function goCancel(){
-	paramFormObject.action = 'board.php';
+	paramFormObject.action = 'boardDtl.php';
 	paramFormObject.submit();
 }
 </script>

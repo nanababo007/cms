@@ -63,7 +63,7 @@ function fnDBGetRow($sql=""){
 	$returnValue = null;
 	
 	if($sql=="") return $returnArray;
-	
+
 	$result = mysqli_query($dbCon, $sql);
 	if (mysqli_num_rows($result) > 0) {
 		while($row = mysqli_fetch_assoc($result)){

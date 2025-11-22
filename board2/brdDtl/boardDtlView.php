@@ -1,34 +1,53 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 #---
 $bdSeq = nvl(getRequestValue("bdSeq"));
+$bdaSeq = nvl(getRequestValue("bdaSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
-#---
-if($bdSeq==""){alertBack("정보가 부족합니다.");}#if
+$boardArticleInfo = null;
+$boardInfo = null;
 #---
 fnOpenDB();
 #---
-if($bdSeq!=""){
+if($bdSeq==""){alertBack("정보가 부족합니다.");}#if
+$boardInfo = fnBoardGetInfo($bdSeq);
+if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
+debugArray("boardInfo",$boardInfo);
+#---
+if($bdaSeq!=""){
+	$sql = "
+		update tb_board_article set
+			bda_view_cnt = bda_view_cnt + 1
+		where bda_seq = ${bdaSeq}
+	";
+	fnDBUpdate($sql);
+	#---
 	$sqlBodyPart = "
-		FROM tb_board_info a
-		where bd_seq = ${bdSeq}
+		FROM tb_board_article a
+		where bda_seq = ${bdaSeq}
 	";
 	#---
 	$sqlMain = "
 		SELECT
-			a.bd_seq
-			,a.bd_nm
-			,a.bd_content
+			a.bda_seq
+			,a.bd_seq
+			,a.bda_title
+			,a.bda_content
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 			,a.regdate
 			,a.reguser
+			,a.moddate
+			,a.moduser
 		${sqlBodyPart}
 	";
-	$boardInfo = fnDBGetRow($sqlMain);
+	debugString("sqlMain",getDecodeHtmlString($sqlMain));
+	$boardArticleInfo = fnDBGetRow($sqlMain);
 }else{
-	$boardInfo = array();
+	$boardArticleInfo = array();
 }#if
 #---
 fnCloseDB();
@@ -39,7 +58,7 @@ fnCloseDB();
 	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/head.php'); ?>
 </head>
 <body>
-<h2>게시판 관리</h2>
+<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>)</h2>
 
 <table class="board-write-table-class">
 <colgroup>
@@ -49,12 +68,12 @@ fnCloseDB();
 	<col width="30%" />
 </colgroup>
 <tr>
-	<th>게시판 이름</th>
-	<td colspan="3"><?php echo getArrayValue($boardInfo,"bd_nm"); ?></td>
+	<th>게시글 제목</th>
+	<td colspan="3"><?php echo getArrayValue($boardArticleInfo,"bda_title"); ?></td>
 </tr>
 <tr>
-	<th>게시판 설명</th>
-	<td colspan="3"><?php echo getDecodeHtmlString(getArrayValue($boardInfo,"bd_content")); ?></td>
+	<th>게시글 내용</th>
+	<td colspan="3"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></td>
 </tr>
 <!--<tr>
 	<th>게시판 이름</th>
@@ -74,6 +93,7 @@ fnCloseDB();
 
 <form name="paramForm" method="get">
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -82,6 +102,7 @@ fnCloseDB();
 <form name="actionParamForm" method="post">
 <input type="hidden" name="actionString" value="" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -92,17 +113,17 @@ var paramFormObject = document.paramForm;
 var actionParamFormObject = document.actionParamForm;
 //---
 function goModify(){
-	paramFormObject.action = 'boardWrite.php';
+	paramFormObject.action = 'boardDtlWrite.php';
 	paramFormObject.submit();
 }
 function goList(){
-	paramFormObject.action = 'board.php';
+	paramFormObject.action = 'boardDtl.php';
 	paramFormObject.submit();
 }
 function goDelete(){
 	if(confirm('삭제 하시겠습니까?')){
 		actionParamFormObject.actionString.value = 'delete';
-		actionParamFormObject.action = 'boardProc.php';
+		actionParamFormObject.action = 'boardDtlProc.php';
 		actionParamFormObject.submit();
 	}//if
 }

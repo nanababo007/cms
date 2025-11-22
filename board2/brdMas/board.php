@@ -18,7 +18,6 @@ $sqlBodyPart = "
 $sqlCount = "
 	SELECT count(*)
 	${sqlBodyPart}
-	order by a.regdate desc
 ";
 $boardListTotalCount = fnDBGetIntValue($sqlCount);
 #$boardListTotalCount = 328; #test
@@ -63,7 +62,7 @@ fnCloseDB();
 <tr>
 	<th>번호</th>
 	<th>게시판 이름</th>
-	<th>게시글 목록</th>
+	<th>게시글 제목</th>
 	<th>등록자</th>
 	<th>등록일</th>
 </tr>
@@ -84,7 +83,7 @@ if($boardListTotalCount > 0){
 ?>
 <?php if($boardListTotalCount == 0){ ?>
 <tr>
-	<td align="center" colspan="4">등록된 게시글이 없습니다.</td>
+	<td align="center" colspan="5">등록된 게시판이 없습니다.</td>
 </tr>
 <?php }//if ?>
 </table>
