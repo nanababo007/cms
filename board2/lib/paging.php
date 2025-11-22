@@ -49,8 +49,11 @@ function fnGetPagingQuery($sqlString="",&$pagingInfoMap=null,$limitStartVarName=
 	}
 	return $sqlString;
 }
-function fnPrintPagingHtml(&$pagingInfoMap=null){
+function fnPrintPagingHtml(&$pagingInfoMap=null,$scriptFuncName="goPage"){
 	$printPageNumber = 0;
+	#---
+	$totalListCount = intval(nvl(getArrayValue($pagingInfoMap,"totalListCount"),"0"));
+	if($totalListCount==0){return;}#if
 	#---
 	if($pagingInfoMap!=null){
 		?>
@@ -61,26 +64,32 @@ function fnPrintPagingHtml(&$pagingInfoMap=null){
     /* paging : 이전 페이지 */
     if($pagingInfoMap["pageNumber"] <= 1){
     ?>
-    <td><a href="javascript:goPage(1);">이전</a> | </td>
-    <?php } else{ ?>
+    <td><a href="javascript:<?php echo $scriptFuncName; ?>(1);">이전</a> | </td>
+    <?php }else{ ?>
     <td><a href="javascript:goPage(<?php echo $pagingInfoMap["prevBlockPageNumber"]; ?>);">이전</a> | </td>
-    <?php };?>
+    <?php } ?>
 
     <?php
     /* pager : 페이지 번호 출력 */
     for($printPageNumber = $pagingInfoMap["startPageNumberOfBlock"]; $printPageNumber <= $pagingInfoMap["endPageNumberOfBlock"]; $printPageNumber++){
+		if($printPageNumber==$pagingInfoMap["pageNumber"]){
     ?>
-    <td><a href="javascript:goPage(<?php echo $printPageNumber; ?>);"><?php echo $printPageNumber; ?></a></td>
-    <?php };?>
+    <td><a href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $printPageNumber; ?>);"><strong><?php echo $printPageNumber; ?></strong></a>&nbsp;</td>
+    <?php }else{ ?>
+    <td><a href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $printPageNumber; ?>);"><?php echo $printPageNumber; ?></a>&nbsp;</td>
+    <?php
+		}#if
+	}#for
+	?>
 
     <?php
     /* paging : 다음 페이지 */
     if($pagingInfoMap["pageNumber"] >= $pagingInfoMap["totalPageNumber"]){
     ?>
-    <td> | <a href="javascript:goPage(<?php echo $pagingInfoMap["totalPageNumber"]; ?>);">다음</a></td>
-    <?php } else{ ?>
-    <td> | <a href="javascript:goPage(<?php echo $pagingInfoMap["nextBlockPageNumber"]; ?>);">다음</a></td>
-    <?php };?>
+    <td> | <a href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $pagingInfoMap["totalPageNumber"]; ?>);">다음</a></td>
+    <?php }else{ ?>
+    <td> | <a href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $pagingInfoMap["nextBlockPageNumber"]; ?>);">다음</a></td>
+    <?php } ?>
 
 </tr>
 </table>

@@ -38,6 +38,7 @@ function fnCloseDB(){
 	
 	if($dbCon!=null){
 		mysqli_close($dbCon);
+		$dbCon = null;
 	}
 }
 # $listArray = fnDBGetList("SELECT * FROM tb_board");
@@ -142,7 +143,19 @@ function fnDBUpdate($sql=""){
 	return $returnCount;
 }
 function fnExit(){
+	global $globalResourceArray;
+	#---
+	$globalResourceArrayIndex = 0;
+	$globalResourceArrayItemObject = null;
+	$globalResourceArrayCount = getArrayCount($globalResourceArray);
+	#---
 	fnCloseDB();
+	for($globalResourceArrayIndex=0;$globalResourceArrayIndex<$globalResourceArrayCount;$globalResourceArrayIndex++){
+		$globalResourceArrayItemObject = $globalResourceArray[$globalResourceArrayIndex];
+		if($globalResourceArrayItemObject!=null){
+			$globalResourceArray[$globalResourceArrayIndex] = null;
+		}#if
+	}#for
 	exit();
 }
 function nvl($stringValue="",$defaultValue=""){
@@ -201,6 +214,111 @@ function getArrayCount(&$array=null){
 		return count($array);
 	}else{
 		return 0;
+	}#if
+}
+function alertBack($msg="",$isExit=true){
+	echo "
+		<html lang='ko'>
+		<head>
+			<meta charset='utf-8'>
+			<title>멀티게시판</title>
+			<script>
+				alert('${msg}');
+				history.back();
+			</script>
+		</head>
+		</html>
+	";
+	#---
+	if($isExit){fnExit();}#if
+}
+function alertGo($msg="",$url="",$isExit=true){
+	echo "
+		<html lang='ko'>
+		<head>
+			<meta charset='utf-8'>
+			<title>멀티게시판</title>
+			<script>
+				alert('${msg}');
+				location.href = '${url}';
+			</script>
+		</head>
+		</html>
+	";
+	#---
+	if($isExit){fnExit();}#if
+}
+function pageGo($url="",$isExit=true){
+	echo "
+		<html lang='ko'>
+		<head>
+			<meta charset='utf-8'>
+			<title>멀티게시판</title>
+			<script>
+				location.href = '${url}';
+			</script>
+		</head>
+		</html>
+	";
+	#---
+	if($isExit){fnExit();}#if
+}
+function getRequestValue($keyString=""){
+	if($keyString==""){return "";}#if
+	$valueString = nvl(getArrayValue($_REQUEST,$keyString));
+	$valueString = getInjectString($valueString);
+	return $valueString;
+}
+function getPostValue($keyString=""){
+	if($keyString==""){return "";}#if
+	$valueString = nvl(getArrayValue($_POST,$keyString));
+	$valueString = getInjectString($valueString);
+	return $valueString;
+}
+function getGetValue($keyString=""){
+	if($keyString==""){return "";}#if
+	$valueString = nvl(getArrayValue($_GET,$keyString));
+	$valueString = getInjectString($valueString);
+	return $valueString;
+}
+function getInjectString($valueString=""){
+	$valueString = nvl($valueString);
+	$valueString = str_replace("'","''",$valueString);
+	$valueString = str_replace("<","&lt;",$valueString);
+	$valueString = str_replace(">","&gt;",$valueString);
+	$valueString = str_ireplace("onclick","",$valueString);
+	$valueString = str_ireplace("ondblclick","",$valueString);
+	$valueString = str_ireplace("onmouseover","",$valueString);
+	$valueString = str_ireplace("onmouseout","",$valueString);
+	$valueString = str_ireplace("onmousedown","",$valueString);
+	$valueString = str_ireplace("onmouseup","",$valueString);
+	$valueString = str_ireplace("onmousemove","",$valueString);
+	$valueString = str_ireplace("onkeydown","",$valueString);
+	$valueString = str_ireplace("onkeypress","",$valueString);
+	$valueString = str_ireplace("onkeyup","",$valueString);
+	$valueString = str_ireplace("onsubmit","",$valueString);
+	$valueString = str_ireplace("onreset","",$valueString);
+	$valueString = str_ireplace("onchange","",$valueString);
+	$valueString = str_ireplace("onfocus","",$valueString);
+	$valueString = str_ireplace("onblur","",$valueString);
+	$valueString = str_ireplace("oninput","",$valueString);
+	$valueString = str_ireplace("onload","",$valueString);
+	$valueString = str_ireplace("onunload","",$valueString);
+	$valueString = str_ireplace("onresize","",$valueString);
+	$valueString = str_ireplace("onscroll","",$valueString);
+	$valueString = str_ireplace("onerror","",$valueString);
+	return $valueString;
+}
+function getDecodeHtmlString($valueString=""){
+	$valueString = nvl($valueString);
+	$valueString = str_replace("\n","<br />",$valueString);
+	return $valueString;
+}
+function addGlobalResource(&$globalResourceObject=null){
+	global $globalResourceArray;
+	#---
+	if($globalResourceObject!=null){
+		array_push($globalResourceArray,$globalResourceObject);
 	}#if
 }
 ?>

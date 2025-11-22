@@ -81,4 +81,14 @@ table.board-table-class {
 table.board-table-class td, 
 table.board-table-class th {
   border: 1px solid black;
+  padding: 5px 10px 5px 10px;
+}
+table.board-write-table-class {
+  border-collapse: collapse;
+  width: 100%;
+}
+table.board-write-table-class td, 
+table.board-write-table-class th {
+  border: 1px solid black;
+  padding: 5px 10px 5px 10px;
 }

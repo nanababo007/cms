@@ -34,7 +34,6 @@ $sqlMain = "
 		,a.regdate
 		,a.reguser
 	${sqlBodyPart}
-	ORDER BY a.bd_seq DESC
 	LIMIT {{limitStartNumber}}, {{limitEndNumber}}
 ";
 $sqlMain = fnGetPagingQuery($sqlMain,$pagingInfoMap);
@@ -56,14 +55,12 @@ fnCloseDB();
 <colgroup>
 	<col width="10%" />
 	<col width="*" />
-	<col width="18%" />
-	<col width="18%" />
-	<col width="18%" />
+	<col width="20%" />
+	<col width="20%" />
 </colgroup>
 <tr>
 	<th>번호</th>
 	<th>게시판 이름</th>
-	<th>게시글 목록</th>
 	<th>등록자</th>
 	<th>등록일</th>
 </tr>
@@ -74,7 +71,6 @@ if($boardListTotalCount > 0){
 <tr>
 	<td align="center"><?php echo $row["bd_seq"]; ?></td>
 	<td align="left"><a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a></td>
-	<td align="center"><a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a></td>
 	<td align="center"><?php echo $row["regdate_str"]; ?></td>
 	<td align="center"><?php echo $row["reguser"]; ?></td>
 </tr>
@@ -119,14 +115,6 @@ function goWrite(bdSeq=''){
 	paramFormObject.bdSeq.value = bdSeq;
 	paramFormObject.action = 'boardWrite.php';
 	paramFormObject.submit();
-}
-function goBoardArticleList(bdSeq=''){
-	var openWin = null;
-	var url = '';
-	url += '../brdDtl/boardDtl.php';
-	url += '?bdSeq='+bdSeq;
-	openWin = window.open(url,'_blank');
-	openWin.focus();
 }
 </script>
 
