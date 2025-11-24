@@ -11,10 +11,13 @@ function fnCalcPaging($pageNumber=1,$totalListCount=0,$pageSizeNumber=10,$blockS
 	$currentBlockNumber = 0;
 	$startPageNumberOfBlock = 0;
 	$startNumberOfThisPage = 0;
+	$startRowNumberForPage = 0;
+	$listRestCount = 0;
 	#---
 	$totalPageNumber = ceil($totalListCount / $pageSizeNumber);
 	$totalBlockNumber = ceil($totalPageNumber / $blockSizeNumber);
 	$currentBlockNumber = ceil($pageNumber / $blockSizeNumber);
+	$listRestCount = $totalListCount % $pageSizeNumber;
 	# 블럭 당 시작 페이지 번호
 	$startPageNumberOfBlock = ($currentBlockNumber - 1) * $pageSizeNumber + 1;
 	$startPageNumberOfBlock = max($startPageNumberOfBlock,1);
@@ -27,6 +30,12 @@ function fnCalcPaging($pageNumber=1,$totalListCount=0,$pageSizeNumber=10,$blockS
 	$nextBlockPageNumber = min($currentBlockNumber * $pageSizeNumber + 1,$totalPageNumber);
 	# 시작 번호 (mysql limit $startNumberOfThisPage, $pageSizeNumber)
 	$startNumberOfThisPage = ($pageNumber - 1) * $pageSizeNumber;
+	# 페이지별 시작 행번호
+	if($pageNumber==$totalPageNumber and $listRestCount!=0){
+		$startRowNumberForPage = $listRestCount;
+	}else{
+		$startRowNumberForPage = (($totalPageNumber - $pageNumber) * $pageSizeNumber) + $listRestCount;
+	}#if
 	#---
 	$returnMap["pageNumber"] = $pageNumber;
 	$returnMap["totalListCount"] = $totalListCount;
@@ -40,6 +49,7 @@ function fnCalcPaging($pageNumber=1,$totalListCount=0,$pageSizeNumber=10,$blockS
 	$returnMap["startNumberOfThisPage"] = $startNumberOfThisPage;
 	$returnMap["prevBlockPageNumber"] = $prevBlockPageNumber;
 	$returnMap["nextBlockPageNumber"] = $nextBlockPageNumber;
+	$returnMap["startRowNumberForPage"] = $startRowNumberForPage;
 	return $returnMap;
 }
 function fnGetPagingQuery($sqlString="",&$pagingInfoMap=null,$limitStartVarName="{{limitStartNumber}}",$limitEndVarName="{{limitEndNumber}}"){

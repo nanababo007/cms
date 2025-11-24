@@ -321,4 +321,7 @@ function addGlobalResource(&$globalResourceObject=null){
 		array_push($globalResourceArray,$globalResourceObject);
 	}#if
 }
+function fnGetSqlWhereAndString($sqlSearchPartIndex=0){
+	return $sqlSearchPartIndex==0 ? " where " : " and ";
+}
 ?>

@@ -2,13 +2,15 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 #---
+$boardArticleInfo = null;
+$boardInfo = null;
 $bdSeq = nvl(getRequestValue("bdSeq"));
 $bdaSeq = nvl(getRequestValue("bdaSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
-$boardArticleInfo = null;
-$boardInfo = null;
+$schTitle = nvl(getRequestValue("schTitle"),"");
+$schContent = nvl(getRequestValue("schContent"),"");
 #---
 fnOpenDB();
 #---
@@ -58,6 +60,9 @@ fnCloseDB();
 	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/head.php'); ?>
 </head>
 <body>
+<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
+<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
+
 <h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>)</h2>
 
 <table class="board-write-table-class">
@@ -97,6 +102,8 @@ fnCloseDB();
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
+<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
+<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
 </form>
 
 <form name="actionParamForm" method="post">
@@ -106,7 +113,11 @@ fnCloseDB();
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
+<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
+<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
 </form>
+
+<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutEnd.php'); ?>
 
 <script>
 var paramFormObject = document.paramForm;

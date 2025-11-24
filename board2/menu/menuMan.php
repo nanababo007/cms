@@ -1,10 +1,12 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
-include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/menu/menuLibraryInclude.php');
 #---
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
-$bdSeq = nvl(getRequestValue("bdSeq"),"");
+$sqlSearchPart2 = "";
+$sqlSearchPart2Index = 0;
+$mnSeq = nvl(getRequestValue("mnSeq"),"");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
@@ -14,46 +16,72 @@ $schContent = nvl(getRequestValue("schContent"),"");
 fnOpenDB();
 #---
 if($schTitle!=""){
+	$sqlSearchPartIndex = 1;
 	$sqlSearchPart .= fnGetSqlWhereAndString($sqlSearchPartIndex);
-	$sqlSearchPart .= " a.bd_nm like '%${schTitle}%' ";
+	$sqlSearchPart .= " b.mn_del_yn = 'N' and a.mn_nm like '%${schTitle}%' ";
 	$sqlSearchPartIndex++;
 }#if
 if($schContent!=""){
-	$sqlSearchPart .= fnGetSqlWhereAndString($sqlSearchPartIndex);
-	$sqlSearchPart .= " a.bd_content like '%${schContent}%' ";
-	$sqlSearchPartIndex++;
+	$sqlSearchPart2Index = 1;
+	$sqlSearchPart2 .= fnGetSqlWhereAndString($sqlSearchPart2Index);
+	$sqlSearchPart2 .= " m.mn_del_yn = 'N' and m.mn_content like '%${schContent}%' ";
+	$sqlSearchPart2Index++;
 }#if
 #---
+$sqlHeadPart = "
+	WITH RECURSIVE menu_cte AS (
+		SELECT 
+			mn_seq, mn_nm, p_mn_seq, 0 AS mn_depth_no, 
+			mn_nm AS mn_path, mn_ord
+		FROM tb_menu_info
+		WHERE p_mn_seq = 0 /* 루트 메뉴 */
+		and mn_del_yn = 'N'
+		UNION ALL
+		SELECT 
+			m.mn_seq, m.mn_nm, m.p_mn_seq, c.mn_depth_no + 1 AS mn_depth_no,
+			CONCAT(c.mn_path, ' - ', m.mn_nm) AS mn_path,
+			CONCAT(c.mn_ord, '_', m.mn_ord) AS mn_ord
+		FROM tb_menu_info m
+		INNER JOIN menu_cte c 
+			 ON m.p_mn_seq = c.mn_seq
+		where m.mn_del_yn = 'N'
+		${sqlSearchPart2}
+	)
+";
 $sqlBodyPart = "
-	FROM tb_board_info a
+	FROM menu_cte a
+	inner join tb_menu_info b
+		on a.mn_seq = b.mn_seq
+	where b.mn_del_yn = 'N'
 	${sqlSearchPart}
 ";
 #---
 $sqlCount = "
+	${sqlHeadPart}
 	SELECT count(*)
 	${sqlBodyPart}
 ";
-$boardListTotalCount = fnDBGetIntValue($sqlCount);
-#$boardListTotalCount = 328; #test
+$menuListTotalCount = fnDBGetIntValue($sqlCount);
+#$menuListTotalCount = 328; #test
 #---
-$pagingInfoMap = fnCalcPaging($pageNumber,$boardListTotalCount,$pageSize,$blockSize);
+$pagingInfoMap = fnCalcPaging($pageNumber,$menuListTotalCount,$pageSize,$blockSize);
 debugArray("pagingInfoMap",$pagingInfoMap);
 #---
 $sqlMain = "
+	${sqlHeadPart}
 	SELECT
-		a.bd_seq
-		,a.bd_nm
-		,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
-		,a.regdate
-		,a.reguser
+		a.*,
+		b.mn_url,
+		b.mn_url_target,
+		b.mn_use_yn
 	${sqlBodyPart}
-	ORDER BY a.bd_seq DESC
+	ORDER BY mn_ord
 	LIMIT {{limitStartNumber}}, {{limitEndNumber}}
 ";
 $sqlMain = fnGetPagingQuery($sqlMain,$pagingInfoMap);
 debugString("sqlMain",str_replace("\n","<br />",$sqlMain));
-$boardList = fnDBGetList($sqlMain);
-$boardListCount = getArrayCount($boardList);
+$menuList = fnDBGetList($sqlMain);
+$menuListCount = getArrayCount($menuList);
 #---
 fnCloseDB();
 ?>
@@ -61,12 +89,13 @@ fnCloseDB();
 <html lang="ko">
 <head>
 	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/head.php'); ?>
+	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php'); ?>
 </head>
 <body>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>게시판 관리</h2>
+<h2>메뉴 관리</h2>
 
 <table class="search-table-class">
 <colgroup>
@@ -79,9 +108,9 @@ fnCloseDB();
 	<td colspan="4"><strong>검색</strong></td>
 </tr>
 <tr>
-	<th>게시판 이름</th>
+	<th>메뉴 이름</th>
 	<td><input type="text" id="schTitle" value="<?php echo $schTitle; ?>" /></td>
-	<th>게시판 내용</th>
+	<th>메뉴 내용</th>
 	<td><input type="text" id="schContent" value="<?php echo $schContent; ?>" /></td>
 </tr>
 <tr class="last-row-class">
@@ -98,38 +127,37 @@ fnCloseDB();
 <colgroup>
 	<col width="10%" />
 	<col width="*" />
-	<col width="18%" />
-	<col width="18%" />
-	<col width="18%" />
+	<col width="20%" />
 </colgroup>
 <tr>
 	<th>번호</th>
-	<th>게시판 이름</th>
-	<th>게시글 제목</th>
-	<th>등록자</th>
-	<th>등록일</th>
+	<th>메뉴명</th>
+	<th>기능</th>
 </tr>
 <?php
-if($boardListTotalCount > 0){
-	foreach ($boardList as $index => $row) {
+if($menuListTotalCount > 0){
+	foreach ($menuList as $index => $row) {
+		
 ?>
 <tr>
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
-	<td align="left"><a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a></td>
-	<td align="center">
-		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |
-		<a href="javascript:copyBoardArticleListUrl('<?php echo $row["bd_seq"]; ?>');">경로복사</a>
+	<td align="left">
+		<a href="javascript:goMenuLink('<?php echo $row["mn_url"]; ?>','_blank');"><?php echo fnMenuGetPrefixString($row["mn_depth_no"]).$row["mn_nm"]; ?></a>
+		<br /><?php echo nvl($row["mn_use_yn"],"Y")=="Y" ? "[사용]" : "[미사용]"; ?> 메뉴경로 : <?php echo $row["mn_path"]; ?>
 	</td>
-	<td align="center"><?php echo $row["regdate_str"]; ?></td>
-	<td align="center"><?php echo $row["reguser"]; ?></td>
+	<td align="center">
+		<a href="javascript:goWrite('<?php echo $row["mn_seq"]; ?>');">등록</a> | 
+		<a href="javascript:goWrite('','<?php echo $row["mn_seq"]; ?>');">하위등록</a> | 
+		<a href="javascript:goWrite('<?php echo $row["mn_seq"]; ?>');">수정</a>
+	</td>
 </tr>
 <?php
 	}#foreach
 }#if
 ?>
-<?php if($boardListTotalCount == 0){ ?>
+<?php if($menuListTotalCount == 0){ ?>
 <tr>
-	<td align="center" colspan="5">등록된 게시판이 없습니다.</td>
+	<td align="center" colspan="3">등록된 메뉴가 없습니다.</td>
 </tr>
 <?php }//if ?>
 </table>
@@ -141,7 +169,8 @@ if($boardListTotalCount > 0){
 <?php fnPrintPagingHtml($pagingInfoMap); ?>
 
 <form name="paramForm" method="get">
-<input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="subMnSeq" value="" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -156,39 +185,20 @@ var paramFormObject = document.paramForm;
 //---
 function goPage(pageNumber){
 	paramFormObject.pageNumber.value = pageNumber;
-	paramFormObject.action = 'board.php';
+	paramFormObject.action = 'menuMan.php';
 	paramFormObject.submit();
 }
-function goView(bdSeq=''){
-	paramFormObject.bdSeq.value = bdSeq;
-	paramFormObject.action = 'boardView.php';
+function goWrite(mnSeq='',subMnSeq=''){
+	paramFormObject.mnSeq.value = mnSeq;
+	paramFormObject.subMnSeq.value = subMnSeq;
+	paramFormObject.action = 'menuManWrite.php';
 	paramFormObject.submit();
-}
-function goWrite(bdSeq=''){
-	paramFormObject.bdSeq.value = bdSeq;
-	paramFormObject.action = 'boardWrite.php';
-	paramFormObject.submit();
-}
-function goBoardArticleList(bdSeq=''){
-	var openWin = null;
-	var url = '';
-	url += '../brdDtl/boardDtl.php';
-	url += '?bdSeq='+bdSeq;
-	openWin = window.open(url,'_blank');
-	openWin.focus();
-}
-function copyBoardArticleListUrl(bdSeq=''){
-	var url = '';
-	url += '<?php echo $envVarMap["appWebPath"]; ?>';
-	url += '/brdDtl/boardDtl.php';
-	url += '?bdSeq='+bdSeq;
-	prompt('게시글 관리 경로 문자열을 복사해 주세요.',url);
 }
 function goSearch(){
 	paramFormObject.schTitle.value = $('#schTitle').val();
 	paramFormObject.schContent.value = $('#schContent').val();
 	paramFormObject.pageNumber.value = '1';
-	paramFormObject.action = 'board.php';
+	paramFormObject.action = 'menuMan.php';
 	paramFormObject.submit();
 }
 function resetSearch(){
@@ -196,6 +206,17 @@ function resetSearch(){
 		$('#schTitle').val('');
 		$('#schContent').val('');
 		goSearch();
+	}//if
+}
+function goMenuLink(mnUrl='',mnUrlTarget=''){
+	if(mnUrl===''){return;}//if
+	//---
+	if(mnUrlTarget==='' || mnUrlTarget==='_self'){
+		location.href = mnUrl;
+	}else{
+		var popupWin = null;
+		popupWin = window.open(mnUrl,mnUrlTarget);
+		popupWin.focus();
 	}//if
 }
 </script>

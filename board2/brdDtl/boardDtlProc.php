@@ -2,24 +2,22 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 #---
+$boardInfo = null;
 $actionString = getRequestValue("actionString");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $bdSeq = nvl(getRequestValue("bdSeq"));
-$boardInfo = null;
+$schTitle = nvl(getRequestValue("schTitle"),"");
+$schContent = nvl(getRequestValue("schContent"),"");
 #---
 debugString("actionString",$actionString);
 debugString("pageNumber",$pageNumber);
 debugString("pageSize",$pageSize);
 debugString("blockSize",$blockSize);
 debugArray("request values",$_REQUEST);
-#---
-$moveUrlParam = "";
-$moveUrlParam .= "?pageNumber=".$pageNumber;
-$moveUrlParam .= "&pageSize=".$pageSize;
-$moveUrlParam .= "&blockSize=".$blockSize;
-$moveUrlParam .= "&bdSeq=".$bdSeq;
+debugString("schTitle",$schTitle);
+debugString("schContent",$schContent);
 #---
 fnOpenDB();
 #---
@@ -55,7 +53,14 @@ if($actionString=="write"){
 	$sql = "SELECT LAST_INSERT_ID()";
 	$bdaSeq = nvl(fnDBGetStringValue($sql));
 	#---
+	$moveUrlParam = "";
+	$moveUrlParam .= "?pageNumber=1";
+	$moveUrlParam .= "&pageSize=".$pageSize;
+	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&bdSeq=".$bdSeq;
 	$moveUrlParam .= "&bdaSeq=".$bdaSeq;
+	$moveUrlParam .= "&schTitle=".$schTitle;
+	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else if($actionString=="modify"){
 	$bdaSeq = nvl(getRequestValue("bdaSeq"));
@@ -80,6 +85,13 @@ if($actionString=="write"){
 	#---
 	fnDBUpdate($sql);
 	#---
+	$moveUrlParam = "";
+	$moveUrlParam .= "?pageNumber=".$pageNumber;
+	$moveUrlParam .= "&pageSize=".$pageSize;
+	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&bdSeq=".$bdSeq;
+	$moveUrlParam .= "&schTitle=".$schTitle;
+	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else if($actionString=="delete"){
 	$bdaSeq = nvl(getRequestValue("bdaSeq"));
@@ -93,6 +105,13 @@ if($actionString=="write"){
 	#---
 	fnDBUpdate($sql);
 	#---
+	$moveUrlParam = "";
+	$moveUrlParam .= "?pageNumber=".$pageNumber;
+	$moveUrlParam .= "&pageSize=".$pageSize;
+	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&bdSeq=".$bdSeq;
+	$moveUrlParam .= "&schTitle=".$schTitle;
+	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");

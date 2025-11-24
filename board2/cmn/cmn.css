@@ -1,3 +1,14 @@
+body, ul {
+	margin: 0;
+	padding: 0;
+}
+ul {
+	list-style: none;
+}
+a {
+	text-decoration: none; /* 밑줄 제거 */
+	/*color: inherit;*/        /* 글자색을 부모 요소와 동일하게 (선택 사항) */
+}
 .title_box {
 	display:inline-block; 
 	width:100%; 
@@ -47,6 +58,12 @@
 .textarea_cont:focus {
   outline: none;
 }
+.btn-default {
+	background-color: #000;
+	color: #fff;
+	border: 1px solid #000;
+}
+/*---*/
 .content-aside {
 	position: absolute;
 	bottom: 0;
@@ -69,11 +86,7 @@
 	border-radius: 20px;
 	border: 1px solid #d0d0d0;
 }
-.btn-default {
-	background-color: #000;
-	color: #fff;
-	border: 1px solid #000;
-}
+/*---*/
 table.board-table-class {
   border-collapse: collapse;
   width: 100%;
@@ -83,6 +96,7 @@ table.board-table-class th {
   border: 1px solid black;
   padding: 5px 10px 5px 10px;
 }
+/*---*/
 table.board-write-table-class {
   border-collapse: collapse;
   width: 100%;
@@ -91,4 +105,81 @@ table.board-write-table-class td,
 table.board-write-table-class th {
   border: 1px solid black;
   padding: 5px 10px 5px 10px;
+}
+/*---*/
+table.search-table-class {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom:20px;
+  border: 1px solid black;
+}
+table.search-table-class td, 
+table.search-table-class th {
+  border: 0;
+  padding: 5px 10px 5px 10px;
+}
+table.search-table-class input[type="text"] {
+	width:80%;
+	padding:4px;
+}
+table.search-table-class tr.last-row-class td {
+	padding:14px 10px 10px 10px;
+}
+/*---*/
+ul.top-menu-class {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+	display: flex;
+	justify-content: flex-end; /* 오른쪽 정렬 */
+}
+ul.top-menu-class:after{
+    content:'';
+    display: block;
+    clear:both;
+}
+ul.top-menu-class li {
+    float: right;
+}
+ul.top-menu-class li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+ul.top-menu-class li a:hover:not(.active) {
+    background-color: #111;
+}
+ul.top-menu-class .active {
+    background-color: #4CAF50;
+}
+/*---*/
+ul.left-menu-class {
+	float:left;
+    width: 200px;
+    background-color: #f1f1f1;
+	min-height: calc(100vh - 50px); /* 헤더 높이 제외 */
+}
+ul.left-menu-class li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+ul.left-menu-class li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+ul.left-menu-class li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+/*---*/
+main.content-area-class {
+	width: calc(100vw - 280px);
+	position: absolute;
+	left: 240px;       /* 메뉴 폭만큼 띄우기 */
+	top: 50px;
 }
