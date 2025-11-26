@@ -1,5 +1,6 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
 $sqlSearchPart = "";
@@ -12,6 +13,7 @@ $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
 #---
 fnOpenDB();
+setDisplayMenuList();
 #---
 if($schTitle!=""){
 	$sqlSearchPart .= fnGetSqlWhereAndString($sqlSearchPartIndex);

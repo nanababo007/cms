@@ -1,7 +1,9 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/menu/menuLibraryInclude.php');
 #---
+$thisPageMnSeq = 2;
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
 $sqlSearchPart2 = "";
@@ -14,6 +16,7 @@ $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
 #---
 fnOpenDB();
+setDisplayMenuList();
 #---
 if($schTitle!=""){
 	$sqlSearchPartIndex = 1;
@@ -33,7 +36,7 @@ $sqlHeadPart = "
 		SELECT 
 			mn_seq, mn_nm, p_mn_seq, 0 AS mn_depth_no, 
 			mn_nm AS mn_path, mn_ord
-		FROM tb_menu_info
+		FROM tb_board_menu_info
 		WHERE p_mn_seq = 0 /* 루트 메뉴 */
 		and mn_del_yn = 'N'
 		UNION ALL
@@ -41,7 +44,7 @@ $sqlHeadPart = "
 			m.mn_seq, m.mn_nm, m.p_mn_seq, c.mn_depth_no + 1 AS mn_depth_no,
 			CONCAT(c.mn_path, ' - ', m.mn_nm) AS mn_path,
 			CONCAT(c.mn_ord, '_', m.mn_ord) AS mn_ord
-		FROM tb_menu_info m
+		FROM tb_board_menu_info m
 		INNER JOIN menu_cte c 
 			 ON m.p_mn_seq = c.mn_seq
 		where m.mn_del_yn = 'N'
@@ -50,7 +53,7 @@ $sqlHeadPart = "
 ";
 $sqlBodyPart = "
 	FROM menu_cte a
-	inner join tb_menu_info b
+	inner join tb_board_menu_info b
 		on a.mn_seq = b.mn_seq
 	where b.mn_del_yn = 'N'
 	${sqlSearchPart}
@@ -95,7 +98,7 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>메뉴 관리</h2>
+<h2>메뉴 관리 <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
 <table class="search-table-class">
 <colgroup>
@@ -146,9 +149,9 @@ if($menuListTotalCount > 0){
 		<br /><?php echo nvl($row["mn_use_yn"],"Y")=="Y" ? "[사용]" : "[미사용]"; ?> 메뉴경로 : <?php echo $row["mn_path"]; ?>
 	</td>
 	<td align="center">
-		<a href="javascript:goWrite('<?php echo $row["mn_seq"]; ?>');">등록</a> | 
+		<a href="javascript:goWrite('<?php echo $row["p_mn_seq"]; ?>');">등록</a> | 
 		<a href="javascript:goWrite('','<?php echo $row["mn_seq"]; ?>');">하위등록</a> | 
-		<a href="javascript:goWrite('<?php echo $row["mn_seq"]; ?>');">수정</a>
+		<a href="javascript:goModify('<?php echo $row["mn_seq"]; ?>');">수정</a>
 	</td>
 </tr>
 <?php
@@ -169,8 +172,10 @@ if($menuListTotalCount > 0){
 <?php fnPrintPagingHtml($pagingInfoMap); ?>
 
 <form name="paramForm" method="get">
+<input type="hidden" name="regMnSeq" value="" />
+<input type="hidden" name="regSubMnSeq" value="" />
+<input type="hidden" name="modMnSeq" value="" />
 <input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
-<input type="hidden" name="subMnSeq" value="" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -188,9 +193,14 @@ function goPage(pageNumber){
 	paramFormObject.action = 'menuMan.php';
 	paramFormObject.submit();
 }
-function goWrite(mnSeq='',subMnSeq=''){
-	paramFormObject.mnSeq.value = mnSeq;
-	paramFormObject.subMnSeq.value = subMnSeq;
+function goWrite(regMnSeq='',regSubMnSeq=''){
+	paramFormObject.regMnSeq.value = regMnSeq;
+	paramFormObject.regSubMnSeq.value = regSubMnSeq;
+	paramFormObject.action = 'menuManWrite.php';
+	paramFormObject.submit();
+}
+function goModify(modMnSeq=''){
+	paramFormObject.modMnSeq.value = modMnSeq;
 	paramFormObject.action = 'menuManWrite.php';
 	paramFormObject.submit();
 }

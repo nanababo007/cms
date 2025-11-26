@@ -1,5 +1,6 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 #---
 $mnSeq = nvl(getRequestValue("mnSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
@@ -9,10 +10,11 @@ $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
 #---
 fnOpenDB();
+setDisplayMenuList();
 #---
 if($mnSeq!=""){
 	$sqlBodyPart = "
-		FROM tb_menu_info a
+		FROM tb_board_menu_info a
 		where mn_seq = ${mnSeq}
 	";
 	#---

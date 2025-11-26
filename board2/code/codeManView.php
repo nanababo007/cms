@@ -1,5 +1,6 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 #---
 $bdSeq = nvl(getRequestValue("bdSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
@@ -11,6 +12,7 @@ $schContent = nvl(getRequestValue("schContent"),"");
 if($bdSeq==""){alertBack("정보가 부족합니다.");}#if
 #---
 fnOpenDB();
+setDisplayMenuList();
 #---
 if($bdSeq!=""){
 	$sqlBodyPart = "

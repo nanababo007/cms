@@ -1,6 +1,8 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/brdDtl/boardDtlLibraryInclude.php');
 #---
 $boardArticleInfo = null;
 $boardInfo = null;
@@ -13,44 +15,45 @@ $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
 #---
 fnOpenDB();
+setDisplayMenuList();
 #---
 if($bdSeq==""){alertBack("정보가 부족합니다.");}#if
+if($bdaSeq==""){alertBack("정보가 부족합니다.");}#if
+#---
 $boardInfo = fnBoardGetInfo($bdSeq);
 if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
 debugArray("boardInfo",$boardInfo);
+if(!fnBoardArticleCheckInfo($bdaSeq)){alertBack("게시글 정보가 존재하지 않습니다.");}#if
 #---
-if($bdaSeq!=""){
-	$sql = "
-		update tb_board_article set
-			bda_view_cnt = bda_view_cnt + 1
-		where bda_seq = ${bdaSeq}
-	";
-	fnDBUpdate($sql);
-	#---
-	$sqlBodyPart = "
-		FROM tb_board_article a
-		where bda_seq = ${bdaSeq}
-	";
-	#---
-	$sqlMain = "
-		SELECT
-			a.bda_seq
-			,a.bd_seq
-			,a.bda_title
-			,a.bda_content
-			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
-			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
-			,a.regdate
-			,a.reguser
-			,a.moddate
-			,a.moduser
-		${sqlBodyPart}
-	";
-	debugString("sqlMain",getDecodeHtmlString($sqlMain));
-	$boardArticleInfo = fnDBGetRow($sqlMain);
-}else{
-	$boardArticleInfo = array();
-}#if
+$sql = "
+	update tb_board_article set
+		bda_view_cnt = bda_view_cnt + 1
+	where bda_seq = ${bdaSeq}
+";
+fnDBUpdate($sql);
+#---
+$sqlBodyPart = "
+	FROM tb_board_article a
+	where bda_seq = ${bdaSeq}
+";
+#---
+$sqlMain = "
+	SELECT
+		a.bda_seq
+		,a.bd_seq
+		,a.bda_title
+		,a.bda_content
+		,a.bda_view_cnt
+		,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+		,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
+		,a.regdate
+		,a.reguser
+		,a.moddate
+		,a.moduser
+	${sqlBodyPart}
+";
+debugString("sqlMain",getDecodeHtmlString($sqlMain));
+$boardArticleInfo = fnDBGetRow($sqlMain);
 #---
 fnCloseDB();
 ?>
@@ -58,6 +61,8 @@ fnCloseDB();
 <html lang="ko">
 <head>
 	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/head.php'); ?>
+	<script src="boardDtlReplyTemplate.js"></script>
+	<script src="boardDtlReplyFunction.js"></script>
 </head>
 <body>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
@@ -74,18 +79,12 @@ fnCloseDB();
 </colgroup>
 <tr>
 	<th>게시글 제목</th>
-	<td colspan="3"><?php echo getArrayValue($boardArticleInfo,"bda_title"); ?></td>
+	<td colspan="3"><?php echo getArrayValue($boardArticleInfo,"bda_title"); ?> (조회수 : <?php echo getArrayValue($boardArticleInfo,"bda_view_cnt"); ?>)</td>
 </tr>
 <tr>
 	<th>게시글 내용</th>
 	<td colspan="3"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></td>
 </tr>
-<!--<tr>
-	<th>게시판 이름</th>
-	<td>aaaaaaa</td>
-	<th>게시판 이름</th>
-	<td>aaaaaaa</td>
-</tr>-->
 </table>
 
 <div align="right" style="margin-top:10px;">
@@ -94,7 +93,12 @@ fnCloseDB();
 	<input type="button" value="목록" onclick="goList();" />
 </div>
 
-<?php fnPrintPagingHtml($pagingInfoMap); ?>
+<div class="reply-area-class">
+	<textarea style="width:99.4%;height:100px;margin-top:10px;" placeholder="댓글내용" id="replyContent"></textarea>
+	<button onclick="javascript:writeReply();">댓글등록</button>
+	<button onclick="javascript:cancelReply();">댓글취소</button>
+	<div class="reply-item-area-class"></div>
+</div>
 
 <form name="paramForm" method="get">
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />

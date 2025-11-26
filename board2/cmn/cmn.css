@@ -2,12 +2,15 @@ body, ul {
 	margin: 0;
 	padding: 0;
 }
+textarea, select, input {
+	margin: 0;
+}
 ul {
 	list-style: none;
 }
 a {
-	text-decoration: none; /* 밑줄 제거 */
-	/*color: inherit;*/        /* 글자색을 부모 요소와 동일하게 (선택 사항) */
+	text-decoration: none;		/* 밑줄 제거 */
+	/*color: inherit;*/			/* 글자색을 부모 요소와 동일하게 (선택 사항) */
 }
 .title_box {
 	display:inline-block; 
@@ -182,4 +185,11 @@ main.content-area-class {
 	position: absolute;
 	left: 240px;       /* 메뉴 폭만큼 띄우기 */
 	top: 50px;
+}
+.menu-navi-class {
+	font-weight:normal;
+	font-size:11pt;
+	position:relative;
+	float:right;
+	top:10px;
 }

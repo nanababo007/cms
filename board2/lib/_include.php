@@ -5,4 +5,5 @@
 	include $envVarMap["appPath"]."/lib/dateLibrary.php";
 	include $envVarMap["appPath"]."/lib/dbClassLibrary.php";
 	include $envVarMap["appPath"]."/lib/paging.php";
+	include $envVarMap["appPath"]."/lib/responseLibrary.php";
 ?>

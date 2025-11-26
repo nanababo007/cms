@@ -1,5 +1,6 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
@@ -22,6 +23,7 @@ $schContent = nvl(getRequestValue("schContent"),"");
 debugString("bdSeq",$bdSeq);
 #---
 fnOpenDB();
+setDisplayMenuList();
 #---
 $boardInfo = fnBoardGetInfo($bdSeq);
 if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
