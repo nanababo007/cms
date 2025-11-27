@@ -49,8 +49,10 @@ if(!isset($isLeftMenuDisplay)){$isLeftMenuDisplay = true;}#if
 					$mnNmString = nvl($menuInfo["mn_nm"]);
 					$mnDepthNo = intval(nvl($menuInfo["mn_depth_no"],"0"));
 					#---
+					if($mnDepthNo==0){continue;}#if
+					#---
 					$mnUrlString = getMenuUrlAppendMnSeq($mnUrlString,(string)$mnSeq);
-					$prefixString = $mnDepthNo > 0 ? "- " : "";
+					$prefixString = $mnDepthNo > 1 ? "- " : "";
 					#---
 					if($currentTopMenuSeq==$topMnSeq){
 						?><li><a href="<?php echo $mnUrlString; ?>" target="<?php echo $mnUrlTargetString; ?>"><?php echo $prefixString; ?><?php echo nvl($menuInfo["mn_nm"]); ?></a></li><?php

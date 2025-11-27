@@ -151,6 +151,7 @@ function getMenuPathString($mnSeq=""){
 		foreach($displayMenuList as $index => $menuInfo){
 			if($mnSeq==$menuInfo["mn_seq"]){
 				$mnPathString = nvl($menuInfo["mn_path"]);
+				break;
 			}#if
 		}#foreach
 	}#if

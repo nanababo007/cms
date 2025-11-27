@@ -83,8 +83,7 @@ fnCloseDB();
 	<td colspan="3"><?php echo getArrayValue($boardArticleInfo,"bda_title"); ?> (조회수 : <?php echo getArrayValue($boardArticleInfo,"bda_view_cnt"); ?>)</td>
 </tr>
 <tr>
-	<th>게시글 내용</th>
-	<td colspan="3"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></td>
+	<td colspan="4"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></td>
 </tr>
 </table>
 

@@ -138,7 +138,10 @@ if($boardFixListCount > 0){
 ?>
 <tr>
 	<td align="center">고정</td>
-	<td align="left"><a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a></td>
+	<td align="left">
+		<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
+		<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+	</td>
 	<td align="center">
 		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |
 		<a href="javascript:copyBoardArticleListUrl('<?php echo $row["bd_seq"]; ?>');">경로복사</a>
@@ -156,7 +159,10 @@ if($boardListTotalCount > 0){
 ?>
 <tr>
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
-	<td align="left"><a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a></td>
+	<td align="left">
+		<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
+		<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+	</td>
 	<td align="center">
 		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |
 		<a href="javascript:copyBoardArticleListUrl('<?php echo $row["bd_seq"]; ?>');">경로복사</a>
@@ -238,6 +244,9 @@ function resetSearch(){
 		$('#schContent').val('');
 		goSearch();
 	}//if
+}
+function copyBoardSeq(bdSeq=''){
+	prompt('게시판 번호를 복사해 주세요.',bdSeq);
 }
 </script>
 

@@ -22,7 +22,7 @@ function fnTopPrintDisplayMenu(){
 		$mnUrlString = getMenuUrlAppendMnSeq($mnUrlString,(string)$mnSeq);
 		#---
 		if($pMnSeq==0){
-			if($currentMenuSeq==$mnSeq){
+			if($currentTopMenuSeq==$mnSeq){
 				$activeClassString = " class='active' ";
 			}else{
 				$activeClassString = "";
