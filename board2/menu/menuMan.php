@@ -141,13 +141,18 @@ fnCloseDB();
 <?php
 if($menuListTotalCount > 0){
 	foreach ($menuList as $index => $row) {
-		
+		#--- 행 스타일 문자열
+		$rowStyleString = "";
+		if(nvl($row["mn_use_yn"],"Y")!="Y"){
+			$rowStyleString = "color:gray;";
+		}//if
 ?>
 <tr>
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
 	<td align="left">
-		<a href="javascript:goModify('<?php echo $row["mn_seq"]; ?>');"><?php echo fnMenuGetPrefixString($row["mn_depth_no"]).$row["mn_nm"]; ?></a>
-		<br /><?php echo nvl($row["mn_use_yn"],"Y")=="Y" ? "[사용]" : "[미사용]"; ?> 메뉴경로 : <?php echo $row["mn_path"]; ?>
+		<a href="javascript:goModify('<?php echo $row["mn_seq"]; ?>');" style="<?php echo $rowStyleString; ?>"><?php echo fnMenuGetPrefixString($row["mn_depth_no"]).$row["mn_nm"]; ?></a> 
+		<a href="javascript:copyMnSeq('<?php echo $row["mn_seq"]; ?>');" style="color:gray;">(메뉴번호 : <?php echo $row["mn_seq"]; ?>)</a>
+		<br /><span style="<?php echo $rowStyleString; ?>"><?php echo nvl($row["mn_use_yn"],"Y")=="Y" ? "[사용]" : "[미사용]"; ?> 메뉴경로 : <?php echo $row["mn_path"]; ?></span>
 	</td>
 	<td align="center">
 		<a href="javascript:goWrite('<?php echo $row["p_mn_seq"]; ?>');">등록</a> | 
@@ -247,6 +252,9 @@ function goMenuLink(mnUrl='',mnUrlTarget=''){
 		popupWin = window.open(mnUrl,mnUrlTarget);
 		popupWin.focus();
 	}//if
+}
+function copyMnSeq(mnSeq=''){
+	prompt('메뉴번호를 복사해 주세요.',mnSeq);
 }
 </script>
 

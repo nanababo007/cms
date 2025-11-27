@@ -1,5 +1,6 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 #---
 $actionString = getRequestValue("actionString");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
