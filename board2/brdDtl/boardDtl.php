@@ -4,6 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
+$thisPageMnSeq = 17;
 $pageTitleString = "";
 $boardInfo = null;
 $boardListTotalCount = 0;
@@ -19,6 +20,8 @@ $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+$boardDtlFixList = null;
+$boardDtlFixListCount = 0;
 #---
 debugString("bdSeq",$bdSeq);
 #---
@@ -46,12 +49,35 @@ if($schContent!=""){
 #---
 $sqlBodyPart = "
 	FROM tb_board_article a
-	${sqlSearchPart}
 ";
+#---
+$sqlFix = "
+	select
+		a.*
+	from (
+		SELECT
+			a.bda_seq
+			,a.bd_seq
+			,a.bda_title
+			,a.bda_view_cnt
+			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
+			,a.regdate
+			,a.reguser
+			,a.moddate
+			,a.moduser
+		${sqlBodyPart}
+		where bda_fix_yn = 'Y'
+	) a
+	ORDER BY a.bda_seq DESC
+";
+$boardDtlFixList = fnDBGetList($sqlFix);
+$boardDtlFixListCount = getArrayCount($boardDtlFixList);
 #---
 $sqlCount = "
 	SELECT count(*)
 	${sqlBodyPart}
+	${sqlSearchPart}
 ";
 $boardListTotalCount = fnDBGetIntValue($sqlCount);
 #$boardListTotalCount = 328; #test
@@ -72,6 +98,7 @@ $sqlMain = "
 		,a.moddate
 		,a.moduser
 	${sqlBodyPart}
+	${sqlSearchPart}
 	order by a.bda_seq desc
 	LIMIT {{limitStartNumber}}, {{limitEndNumber}}
 ";
@@ -91,7 +118,7 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>)</h2>
+<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>) <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
 <table class="search-table-class">
 <colgroup>
@@ -134,6 +161,21 @@ fnCloseDB();
 	<th>등록자</th>
 	<th>등록일</th>
 </tr>
+<?php
+if($boardDtlFixListCount > 0){
+	foreach ($boardDtlFixList as $index => $row) {
+?>
+<tr>
+	<td align="center">고정</td>
+	<td align="left"><a href="javascript:goView('<?php echo $row["bda_seq"]; ?>');"><?php echo $row["bda_title"]; ?></a></td>
+	<td align="center"><?php echo $row["bda_view_cnt"]; ?></td>
+	<td align="center"><?php echo $row["regdate_str"]; ?></td>
+	<td align="center"><?php echo $row["reguser"]; ?></td>
+</tr>
+<?php
+	}#foreach
+}#if
+?>
 <?php
 if($boardListTotalCount > 0){
 	foreach ($boardList as $index => $row) {

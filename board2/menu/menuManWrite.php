@@ -2,7 +2,10 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 #---
+$thisPageMnSeq = 2;
 $mnSeq = nvl(getRequestValue("mnSeq"));
+$regMnSeq = nvl(getRequestValue("regMnSeq"));
+$modMnSeq = nvl(getRequestValue("modMnSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
@@ -12,10 +15,11 @@ $schContent = nvl(getRequestValue("schContent"),"");
 fnOpenDB();
 setDisplayMenuList();
 #---
-if($mnSeq!=""){
+if($modMnSeq!=""){
 	$sqlBodyPart = "
 		FROM tb_board_menu_info a
-		where mn_seq = ${mnSeq}
+		where mn_seq = ${modMnSeq}
+		and mn_del_yn = 'N'
 	";
 	#---
 	$sqlMain = "
@@ -26,13 +30,16 @@ if($mnSeq!=""){
 			,a.mn_content
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,a.mn_ord
+			,a.mn_url
+			,a.mn_url_target
+			,a.mn_use_yn
 			,a.regdate
 			,a.reguser
 		${sqlBodyPart}
 	";
-	$boardInfo = fnDBGetRow($sqlMain);
+	$menuInfo = fnDBGetRow($sqlMain);
 }else{
-	$boardInfo = array();
+	$menuInfo = array();
 }#if
 #---
 fnCloseDB();
@@ -46,11 +53,13 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>메뉴 관리</h2>
+<h2>메뉴 관리 <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
-<form name="writeForm" method="post" action="boardProc.php">
+<form name="writeForm" method="post" action="menuManProc.php">
 <input type="hidden" name="actionString" value="write" />
 <input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="regMnSeq" value="<?php echo $regMnSeq; ?>" />
+<input type="hidden" name="modMnSeq" value="<?php echo $modMnSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -64,21 +73,37 @@ fnCloseDB();
 	<col width="30%" />
 </colgroup>
 <tr>
-	<th>메뉴 이름</th>
-	<td colspan="3"><input type="text" name="bdNm" value="<?php echo getArrayValue($boardInfo,"bd_nm"); ?>" style="width:90%;height:20px;" /></td>
+	<th align="center">메뉴 이름</th>
+	<td colspan="3"><input type="text" name="mnNm" value="<?php echo getArrayValue($menuInfo,"mn_nm"); ?>" style="width:90%;height:20px;" /></td>
 </tr>
 <tr>
-	<th>메뉴 설명</th>
+	<th align="center">메뉴 설명</th>
 	<td colspan="3">
-		<textarea name="bdContent" style="width:90%;height:200px;"><?php echo getArrayValue($boardInfo,"bd_content"); ?></textarea>
+		<textarea name="mnContent" style="width:90%;height:200px;"><?php echo getArrayValue($menuInfo,"mn_content"); ?></textarea>
 	</td>
 </tr>
-<!--<tr>
-	<th>게시판 이름</th>
-	<td>aaaaaaa</td>
-	<th>게시판 이름</th>
-	<td>aaaaaaa</td>
-</tr>-->
+<tr>
+	<th align="center">메뉴 URL</th>
+	<td colspan="3">
+		<input type="text" name="mnUrl" value="<?php echo nvl(getArrayValue($menuInfo,"mn_url"),"http://"); ?>" style="width:90%;height:20px;" />
+	</td>
+</tr>
+<tr>
+	<th align="center">메뉴 URL TARGET</th>
+	<td>
+		<select id="mnUrlTargetCombo" style="padding:2px 4px;margin-bottom:6px;">
+		<option value="">TARGET 선택</option>
+		<option value="_self">_self</option>
+		<option value="_blank">_blank</option>
+		</select>
+		<input type="text" name="mnUrlTarget" value="<?php echo getArrayValue($menuInfo,"mn_url_target"); ?>" style="width:90%;height:20px;" />
+	</td>
+	<th align="center">메뉴 사용 여부</th>
+	<td>
+		<input type="radio" id="mnUseY" name="mnUseYn" value="Y" <?php echo nvl(getArrayValue($menuInfo,"mn_use_yn"),"Y")=="Y" ? " checked " : ""; ?> /> <label for="mnUseY">사용</label>
+		<input type="radio" id="mnUseN" name="mnUseYn" value="N" <?php echo nvl(getArrayValue($menuInfo,"mn_use_yn"),"Y")!="Y" ? " checked " : ""; ?> /> <label for="mnUseN">미사용</label>
+	</td>
+</tr>
 </table>
 </form>
 
@@ -91,6 +116,8 @@ fnCloseDB();
 
 <form name="paramForm" method="get">
 <input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="regMnSeq" value="<?php echo $regMnSeq; ?>" />
+<input type="hidden" name="modMnSeq" value="<?php echo $modMnSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -104,17 +131,23 @@ fnCloseDB();
 var paramFormObject = document.paramForm;
 var writeFormObject = document.writeForm;
 //---
-function goSave(pageNumber){
-	if(writeFormObject.mnSeq.value!==''){
+$(function(){
+	$('#mnUrlTargetCombo').click(function(e){
+		writeFormObject.mnUrlTarget.value = this.value;
+	});
+});
+//---
+function goSave(){
+	if(writeFormObject.modMnSeq.value!==''){
 		writeFormObject.actionString.value = 'modify';
 	}else{
 		writeFormObject.actionString.value = 'write';
 	}//if
-	if(writeFormObject.bdNm.value===''){alert('메뉴 이름을 입력해주세요.');writeFormObject.bdNm.focus();return;}//if
+	if(writeFormObject.mnNm.value===''){alert('메뉴 이름을 입력해주세요.');writeFormObject.mnNm.focus();return;}//if
 	writeFormObject.submit();
 }
 function goCancel(){
-	paramFormObject.action = 'board.php';
+	paramFormObject.action = 'menuMan.php';
 	paramFormObject.submit();
 }
 </script>

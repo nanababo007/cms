@@ -3,6 +3,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
+$thisPageMnSeq = 16;
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
 $bdSeq = nvl(getRequestValue("bdSeq"),"");
@@ -11,6 +12,8 @@ $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+$boardFixList = null;
+$boardFixListCount = 0;
 #---
 fnOpenDB();
 setDisplayMenuList();
@@ -30,6 +33,24 @@ $sqlBodyPart = "
 	FROM tb_board_info a
 	${sqlSearchPart}
 ";
+#---
+$sqlFix = "
+	select
+		a.*
+	from (
+		SELECT
+			a.bd_seq
+			,a.bd_nm
+			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+			,a.regdate
+			,a.reguser
+		${sqlBodyPart}
+		where bd_fix_yn = 'Y'
+	) a
+	ORDER BY a.bd_seq DESC
+";
+$boardFixList = fnDBGetList($sqlFix);
+$boardFixListCount = getArrayCount($boardFixList);
 #---
 $sqlCount = "
 	SELECT count(*)
@@ -68,7 +89,7 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>게시판 관리</h2>
+<h2>게시판 관리 <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
 <table class="search-table-class">
 <colgroup>
@@ -111,6 +132,24 @@ fnCloseDB();
 	<th>등록자</th>
 	<th>등록일</th>
 </tr>
+<?php
+if($boardFixListCount > 0){
+	foreach ($boardFixList as $index => $row) {
+?>
+<tr>
+	<td align="center">고정</td>
+	<td align="left"><a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a></td>
+	<td align="center">
+		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |
+		<a href="javascript:copyBoardArticleListUrl('<?php echo $row["bd_seq"]; ?>');">경로복사</a>
+	</td>
+	<td align="center"><?php echo $row["regdate_str"]; ?></td>
+	<td align="center"><?php echo $row["reguser"]; ?></td>
+</tr>
+<?php
+	}#foreach
+}#if
+?>
 <?php
 if($boardListTotalCount > 0){
 	foreach ($boardList as $index => $row) {

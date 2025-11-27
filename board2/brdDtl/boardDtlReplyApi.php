@@ -24,6 +24,26 @@ if($actionString=="GET_REPLY_LIST"){
 				a.bdr_seq
 				,a.bda_seq
 				,a.bdr_content
+				,ifnull(a.bdr_fix_yn,'N') as bdr_fix_yn
+				,'Y' as list_bdr_fix_yn
+				,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdatetime_str
+				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
+				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
+				,a.regdate
+				,a.reguser
+				,a.moddate
+				,a.moduser
+			from tb_board_reply a
+			where bda_seq = ${bdaSeq}
+			and a.bdr_fix_yn = 'Y'
+			union all
+			select
+				a.bdr_seq
+				,a.bda_seq
+				,a.bdr_content
+				,ifnull(a.bdr_fix_yn,'N') as bdr_fix_yn
+				,'N' as list_bdr_fix_yn
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdatetime_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
@@ -36,6 +56,7 @@ if($actionString=="GET_REPLY_LIST"){
 			where bda_seq = ${bdaSeq}
 		) a
 		order by 
+			case when a.list_bdr_fix_yn = 'Y' then 1 else 2 end asc,
 			a.bdr_seq desc
 	";
 	$listData = fnDBGetList($sql);
@@ -131,6 +152,27 @@ if($actionString=="GET_REPLY_LIST"){
 	#---
 	$sql = "
 		delete from tb_board_reply
+		where bdr_seq like '${bdrSeq}'
+	";
+	$affectedQueryCount = fnDBUpdate($sql);
+	#---
+	$responseData['affectedQueryCount'] = $affectedQueryCount;
+	#---
+	$responseLibraryObject->setResponseDataObject('data',$responseData);
+	$responseLibraryObject->setSuccessResponseData();
+	responseJson();
+}else if($actionString=="FIX_REPLY_DATA"){
+	$bdrSeq = nvl(getRequestValue("bdrSeq"),"");
+	$bdrFixYN = nvl(getRequestValue("bdrFixYN"),"N");
+	#---
+	if($bdrSeq==""){
+		$responseLibraryObject->setResponseUserErrorData("need_param");
+		responseJson();
+	}#if
+	#---
+	$sql = "
+		update tb_board_reply set
+			bdr_fix_yn = '${bdrFixYN}'
 		where bdr_seq like '${bdrSeq}'
 	";
 	$affectedQueryCount = fnDBUpdate($sql);

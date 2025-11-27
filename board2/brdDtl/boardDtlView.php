@@ -4,6 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdDtl/boardDtlLibraryInclude.php');
 #---
+$thisPageMnSeq = 17;
 $boardArticleInfo = null;
 $boardInfo = null;
 $bdSeq = nvl(getRequestValue("bdSeq"));
@@ -68,7 +69,7 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>)</h2>
+<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>) <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
 <table class="board-write-table-class">
 <colgroup>

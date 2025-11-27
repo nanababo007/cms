@@ -2,6 +2,7 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 #---
+$thisPageMnSeq = 16;
 $bdSeq = nvl(getRequestValue("bdSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
@@ -23,6 +24,7 @@ if($bdSeq!=""){
 			a.bd_seq
 			,a.bd_nm
 			,a.bd_content
+			,a.bd_fix_yn
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,a.regdate
 			,a.reguser
@@ -44,7 +46,7 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>게시판 관리</h2>
+<h2>게시판 관리 <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
 <form name="writeForm" method="post" action="boardProc.php">
 <input type="hidden" name="actionString" value="write" />
@@ -64,6 +66,13 @@ fnCloseDB();
 <tr>
 	<th>게시판 이름</th>
 	<td colspan="3"><input type="text" name="bdNm" value="<?php echo getArrayValue($boardInfo,"bd_nm"); ?>" style="width:90%;height:20px;" /></td>
+</tr>
+<tr>
+	<th align="center">게시판 고정 여부</th>
+	<td colspan="3">
+		<input type="radio" id="bdFixY" name="bdFixYn" value="Y" <?php echo nvl(getArrayValue($boardInfo,"bd_fix_yn"),"N")=="Y" ? " checked " : ""; ?> /> <label for="bdFixY">고정</label>
+		<input type="radio" id="bdFixN" name="bdFixYn" value="N" <?php echo nvl(getArrayValue($boardInfo,"bd_fix_yn"),"N")!="Y" ? " checked " : ""; ?> /> <label for="bdFixN">비고정</label>
+	</td>
 </tr>
 <tr>
 	<th>게시판 설명</th>

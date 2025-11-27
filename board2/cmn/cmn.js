@@ -11,3 +11,15 @@ function getDecodeHtmlString(stringValue=''){
 	returnString = editStringValue;
 	return returnString;
 }
+function getNvlString(stringValue='',defaultString=''){
+	var returnString = '';
+	var editStringValue = ''
+	//---
+	editStringValue = stringValue;
+	if(editStringValue===null || editStringValue===undefined || editStringValue==="" || 'string'!==typeof stringValue){
+		editStringValue = defaultString;
+	}//if
+	//---
+	returnString = editStringValue;
+	return returnString;
+}

@@ -85,6 +85,18 @@ function deleteReply(bdrSeq=''){
 		});
 	}//if
 }
+function fixReply(bdrSeq='',currentBdrFixYN='N'){
+	var editBdrFixYN = 'N';
+	//---
+	editBdrFixYN = currentBdrFixYN==='Y' ? 'N' : 'Y';
+	//---
+	if(confirm('댓글을 고정/고정해제 하시겠습니까?')){
+		fixReplyProc(bdrSeq,editBdrFixYN,function(data){
+			//console.info('deleteReply : data : ',data);
+			setThisReplyListHtml();
+		});
+	}//if
+}
 //--- etc functions
 function getReplyList(callbackFunc=null){
 	var paramsObject = {};
@@ -114,12 +126,21 @@ function setReplyListHtml(listData=null){
 }
 function getReplyItemHtml(rowData=null){
 	var replyItemString = '';
+	var bdrContentString = '';
+	//---
 	if(rowData){
+		bdrContentString = getDecodeHtmlString(getNvlString(rowData.bdr_content));
+		//---
 		replyItemString = replyItemTemplateString;
 		replyItemString = replyItemString.replaceAll('{{bdrSeq}}',$.trim(rowData.bdr_seq));
 		replyItemString = replyItemString.replaceAll('{{replyDatetime}}',$.trim(rowData.regdatetime_str));
-		replyItemString = replyItemString.replaceAll('{{replyContent}}',getDecodeHtmlString($.trim(rowData.bdr_content)));
-		replyItemString = replyItemString.replaceAll('{{orgReplyContent}}',$.trim(rowData.bdr_content));
+		if(rowData.list_bdr_fix_yn==='Y'){
+			replyItemString = replyItemString.replaceAll('{{replyContent}}','<span style="color:blue;">[고정]</span> '+bdrContentString);
+		}else{
+			replyItemString = replyItemString.replaceAll('{{replyContent}}',bdrContentString);
+		}//if
+		replyItemString = replyItemString.replaceAll('{{orgReplyContent}}',getNvlString(rowData.bdr_content));
+		replyItemString = replyItemString.replaceAll('{{bdrFixYN}}',$.trim(rowData.bdr_fix_yn));
 	}//if
 	return replyItemString;
 }
@@ -163,6 +184,18 @@ function deleteReplyProc(bdrSeq='',callbackFunc=null){
 	//---
 	paramsObject.actionString = 'DELETE_REPLY_DATA';
 	paramsObject.bdrSeq = bdrSeq;
+	//---
+	$.post(replyObjects.settingsObject.apiUrl,paramsObject,function(data){
+		//console.info('deleteReplyProc : data : ',data);
+		if($.isFunction(callbackFunc)){callbackFunc(data);}//if
+	});
+}
+function fixReplyProc(bdrSeq='',bdrFixYN='N',callbackFunc=null){
+	var paramsObject = {};
+	//---
+	paramsObject.actionString = 'FIX_REPLY_DATA';
+	paramsObject.bdrSeq = bdrSeq;
+	paramsObject.bdrFixYN = bdrFixYN;
 	//---
 	$.post(replyObjects.settingsObject.apiUrl,paramsObject,function(data){
 		//console.info('deleteReplyProc : data : ',data);

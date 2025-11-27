@@ -29,6 +29,7 @@ debugArray("boardInfo",$boardInfo);
 if($actionString=="write"){
 	$bdaTitle = nvl(getRequestValue("bdaTitle"));
 	$bdaContent = nvl(getRequestValue("bdaContent"));
+	$bdaFixYn = trim(nvl(getRequestValue("bdaFixYn"),"N"));
 	#---
 	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
@@ -37,12 +38,14 @@ if($actionString=="write"){
 			bda_title
 			,bda_content
 			,bd_seq
+			,bda_fix_yn
 			,regdate
 			,reguser
 		)values(
 			'${bdaTitle}'
 			,'${bdaContent}'
 			,'${bdSeq}'
+			,'${bdaFixYn}'
 			,NOW(3)
 			,'admin'
 		)
@@ -66,6 +69,7 @@ if($actionString=="write"){
 	$bdaSeq = nvl(getRequestValue("bdaSeq"));
 	$bdaTitle = nvl(getRequestValue("bdaTitle"));
 	$bdaContent = nvl(getRequestValue("bdaContent"));
+	$bdaFixYn = trim(nvl(getRequestValue("bdaFixYn"),"N"));
 	#---
 	debugString("bdaSeq",$bdaSeq);
 	debugString("bdaTitle",$bdaTitle);
@@ -78,6 +82,7 @@ if($actionString=="write"){
 		update tb_board_article set
 			bda_title = '${bdaTitle}'
 			,bda_content = '${bdaContent}'
+			,bda_fix_yn = '${bdaFixYn}'
 			,moddate = NOW(3)
 			,moduser = 'admin'
 		where bda_seq = ${bdaSeq}
@@ -97,6 +102,7 @@ if($actionString=="write"){
 	$bdaSeq = nvl(getRequestValue("bdaSeq"));
 	#---
 	if($bdaSeq==""){alertBack("정보가 부족 합니다.");}#if
+	#--- todo: 댓글 존재 시, 삭제 불가 처리.
 	#---
 	$sql = "
 		delete from tb_board_article

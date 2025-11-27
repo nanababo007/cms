@@ -8,9 +8,10 @@ function setDisplayMenuList(){
 	global $currentMenuInfo;
 	global $currentTopMenuSeq;
 	global $currentTopMenuInfo;
+	global $thisPageMnSeq;
 	#---
 	$displayMenuList = getDisplayMenuList();
-	$currentMenuSeq = intval(nvl(getRequestValue("mnSeq"),"0"));
+	$currentMenuSeq = intval(nvl(getRequestValue("mnSeq"),nvl((string)$thisPageMnSeq,"0")));
 	$currentTopMenuSeq = $currentMenuSeq!=0 ? intval(nvl(getMenuTopMnSeq((string)$currentMenuSeq),"0")) : 0;
 	$mnSeq = 0;
 	#---
@@ -156,5 +157,23 @@ function getMenuPathString($mnSeq=""){
 	#---
 	$returnString = $mnPathString;
 	return $returnString;
+}
+function getSubMenuCount($mnSeq=""){
+	$returnCount = "";
+	$menuCount = 0;
+	$sql = "";
+	#---
+	if($mnSeq==""){return "";}#if
+	#---
+	$sql = "
+		SELECT
+			count(*) as cnt
+		FROM tb_board_menu_info 
+		where p_mn_seq = ${mnSeq}
+	";
+	$menuCount = fnDBGetIntValue($sql);
+	#---
+	$returnCount = $menuCount;
+	return $returnCount;
 }
 ?>

@@ -1,65 +1,149 @@
-CREATE TABLE `tb_board_article` (
-	`bda_seq` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '게시글 번호',
-	`bd_seq` INT(11) NOT NULL DEFAULT '0' COMMENT '게시판 번호',
-	`bda_title` VARCHAR(2000) NULL DEFAULT NULL COMMENT '게시글 제목' COLLATE 'utf8mb4_general_ci',
-	`bda_content` LONGTEXT NULL DEFAULT NULL COMMENT '게시글 내용' COLLATE 'utf8mb4_general_ci',
-	`bda_view_cnt` INT(11) NULL DEFAULT '0' COMMENT '게시글 조회수',
-	`regdate` DATETIME NULL DEFAULT NULL COMMENT '등록일시',
-	`reguser` VARCHAR(100) NULL DEFAULT NULL COMMENT '등록자' COLLATE 'utf8mb4_general_ci',
-	`moddate` DATETIME NULL DEFAULT NULL COMMENT '수정일시',
-	`moduser` VARCHAR(100) NULL DEFAULT NULL COMMENT '수정자' COLLATE 'utf8mb4_general_ci',
-	PRIMARY KEY (`bda_seq`) USING BTREE
-)
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=8
-;
-CREATE TABLE `tb_board_info` (
-	`bd_seq` INT(11) NOT NULL AUTO_INCREMENT COMMENT '게시판 번호',
-	`bd_nm` VARCHAR(500) NULL DEFAULT NULL COMMENT '게시판 이름' COLLATE 'utf8mb4_general_ci',
-	`bd_content` LONGTEXT NULL DEFAULT NULL COMMENT '게시판 내용' COLLATE 'utf8mb4_general_ci',
-	`regdate` DATETIME NULL DEFAULT NULL COMMENT '등록일시',
-	`reguser` VARCHAR(50) NULL DEFAULT NULL COMMENT '등록자' COLLATE 'utf8mb4_general_ci',
-	`moddate` DATETIME NULL DEFAULT NULL COMMENT '수정일시',
-	`moduser` VARCHAR(50) NULL DEFAULT NULL COMMENT '수정자' COLLATE 'utf8mb4_general_ci',
-	PRIMARY KEY (`bd_seq`) USING BTREE
-)
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=5
-;
-CREATE TABLE `tb_menu_info` (
-	`mn_seq` INT(11) NOT NULL AUTO_INCREMENT COMMENT '메뉴 번호',
-	`p_mn_seq` INT(11) NOT NULL DEFAULT '0' COMMENT '상위 메뉴 번호',
-	`mn_nm` VARCHAR(500) NULL DEFAULT NULL COMMENT '메뉴 이름' COLLATE 'utf8mb4_general_ci',
-	`mn_content` LONGTEXT NULL DEFAULT NULL COMMENT '메뉴 내용' COLLATE 'utf8mb4_general_ci',
-	`mn_ord` VARCHAR(500) NULL DEFAULT NULL COMMENT '메뉴 정렬 순서' COLLATE 'utf8mb4_general_ci',
-	`mn_url` VARCHAR(2000) NULL DEFAULT NULL COMMENT '메뉴 URL' COLLATE 'utf8mb4_general_ci',
-	`mn_url_target` VARCHAR(200) NULL DEFAULT NULL COMMENT '메뉴 URL 타겟' COLLATE 'utf8mb4_general_ci',
-	`mn_use_yn` CHAR(1) NULL DEFAULT 'Y' COMMENT '메뉴 사용 여부' COLLATE 'utf8mb4_general_ci',
-	`mn_del_yn` CHAR(1) NULL DEFAULT 'N' COMMENT '메뉴 삭제 여부' COLLATE 'utf8mb4_general_ci',
-	`regdate` DATETIME NULL DEFAULT NULL COMMENT '등록일시',
-	`reguser` VARCHAR(50) NULL DEFAULT NULL COMMENT '등록자' COLLATE 'utf8mb4_general_ci',
-	`moddate` DATETIME NULL DEFAULT NULL COMMENT '수정일시',
-	`moduser` VARCHAR(50) NULL DEFAULT NULL COMMENT '수정자' COLLATE 'utf8mb4_general_ci',
-	PRIMARY KEY (`mn_seq`) USING BTREE
-)
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=6
-;
-CREATE TABLE `tb_board_reply` (
-	`bdr_seq` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '댓글 번호',
-	`bda_seq` BIGINT(20) NOT NULL DEFAULT '0' COMMENT '게시글 번호',
-	`bdr_content` TEXT NULL DEFAULT NULL COMMENT '댓글 내용' COLLATE 'utf8mb4_general_ci',
-	`regdate` DATETIME NULL DEFAULT NULL COMMENT '등록일시',
-	`reguser` VARCHAR(100) NULL DEFAULT NULL COMMENT '등록자' COLLATE 'utf8mb4_general_ci',
-	`moddate` DATETIME NULL DEFAULT NULL COMMENT '수정일시',
-	`moduser` VARCHAR(100) NULL DEFAULT NULL COMMENT '수정자' COLLATE 'utf8mb4_general_ci',
-	PRIMARY KEY (`bdr_seq`) USING BTREE
-)
-COLLATE='utf8mb4_general_ci'
-ENGINE=InnoDB
-;
+-- --------------------------------------------------------
+-- 호스트:                          127.0.0.1
+-- 서버 버전:                        10.4.32-MariaDB - mariadb.org binary distribution
+-- 서버 OS:                        Win64
+-- HeidiSQL 버전:                  12.13.0.7147
+-- --------------------------------------------------------
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- 테이블 test.tb_board_article 구조 내보내기
+CREATE TABLE IF NOT EXISTS `tb_board_article` (
+  `bda_seq` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '게시글 번호',
+  `bd_seq` int(11) NOT NULL DEFAULT 0 COMMENT '게시판 번호',
+  `bda_title` varchar(2000) DEFAULT NULL COMMENT '게시글 제목',
+  `bda_content` longtext DEFAULT NULL COMMENT '게시글 내용',
+  `bda_view_cnt` int(11) DEFAULT 0 COMMENT '게시글 조회수',
+  `bda_fix_yn` char(1) DEFAULT 'N' COMMENT '게시글 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(100) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bda_seq`),
+  KEY `bd_seq` (`bd_seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.tb_board_article:~4 rows (대략적) 내보내기
+INSERT INTO `tb_board_article` (`bda_seq`, `bd_seq`, `bda_title`, `bda_content`, `bda_view_cnt`, `bda_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 1, 'sdf', 'sdfsdfsdf', 71, 'N', '2025-11-25 16:53:27', 'admin', NULL, NULL),
+	(2, 1, '222', 'ㅁㄴㅇㄻㅇㄹ', 5, 'N', '2025-11-26 00:24:22', 'admin', NULL, NULL),
+	(3, 2, '11', '22', 5, 'Y', '2025-11-27 13:05:19', 'admin', '2025-11-27 13:10:38', 'admin'),
+	(4, 2, 'ㅁㅁㅁ', 'ㄱㄱㄱ', 20, 'Y', '2025-11-27 13:10:19', 'admin', '2025-11-27 13:10:33', 'admin');
+
+-- 테이블 test.tb_board_info 구조 내보내기
+CREATE TABLE IF NOT EXISTS `tb_board_info` (
+  `bd_seq` int(11) NOT NULL AUTO_INCREMENT COMMENT '게시판 번호',
+  `bd_nm` varchar(500) DEFAULT NULL COMMENT '게시판 이름',
+  `bd_content` longtext DEFAULT NULL COMMENT '게시판 내용',
+  `bd_fix_yn` char(1) DEFAULT 'N' COMMENT '게시판 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(50) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bd_seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.tb_board_info:~2 rows (대략적) 내보내기
+INSERT INTO `tb_board_info` (`bd_seq`, `bd_nm`, `bd_content`, `bd_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, '일반 게시판', '일반 게시판 입니다.', 'N', '2025-11-25 16:53:04', 'admin', '2025-11-27 12:51:37', 'admin'),
+	(2, '뉴스 게시판', '뉴스 게시판 입니다.', 'Y', '2025-11-27 12:51:54', 'admin', '2025-11-27 12:52:01', 'admin');
+
+-- 테이블 test.tb_board_menu_info 구조 내보내기
+CREATE TABLE IF NOT EXISTS `tb_board_menu_info` (
+  `mn_seq` int(11) NOT NULL AUTO_INCREMENT COMMENT '메뉴 번호',
+  `p_mn_seq` int(11) NOT NULL DEFAULT 0 COMMENT '상위 메뉴 번호',
+  `mn_nm` varchar(500) DEFAULT NULL COMMENT '메뉴 이름',
+  `mn_content` longtext DEFAULT NULL COMMENT '메뉴 내용',
+  `mn_ord` varchar(500) DEFAULT NULL COMMENT '메뉴 정렬 순서',
+  `mn_url` varchar(2000) DEFAULT NULL COMMENT '메뉴 URL',
+  `mn_url_target` varchar(200) DEFAULT NULL COMMENT '메뉴 URL 타겟',
+  `mn_use_yn` char(1) DEFAULT 'Y' COMMENT '메뉴 사용 여부',
+  `mn_del_yn` char(1) DEFAULT 'N' COMMENT '메뉴 삭제 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(50) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`mn_seq`) USING BTREE,
+  KEY `p_mn_seq` (`p_mn_seq`),
+  KEY `mn_ord` (`mn_ord`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.tb_board_menu_info:~7 rows (대략적) 내보내기
+INSERT INTO `tb_board_menu_info` (`mn_seq`, `p_mn_seq`, `mn_nm`, `mn_content`, `mn_ord`, `mn_url`, `mn_url_target`, `mn_use_yn`, `mn_del_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 0, '환경 관리', '환경 관리 메뉴 입니다.', '0000000001', '/board2/menu/menuMan.php', '_self', 'Y', 'N', '2025-11-24 16:41:18', 'admin', '2025-11-27 12:30:46', 'admin'),
+	(2, 1, '메뉴 관리', '메뉴 관리 입니다.', '000001', '/board2/menu/menuMan.php', '_self', 'Y', 'N', '2025-11-24 17:37:50', 'admin', '2025-11-27 12:30:13', 'admin'),
+	(3, 1, '코드 관리', '코드 관리 입니다.', '000002', '/board2/code/codeMan.php', '_self', 'Y', 'N', '2025-11-24 17:39:14', 'admin', '2025-11-27 12:30:24', 'admin'),
+	(4, 0, '게시판 관리', '메뉴2 입니다.', '0000000002', '/board2/brdMas/board.php', '', 'Y', 'N', '2025-11-24 17:39:55', 'admin', '2025-11-27 12:29:32', 'admin'),
+	(15, 1, '용어사전 관리', '용어사전 관리 입니다.', '000003', '/board2/word/wordMan.php', '_self', 'Y', 'N', '2025-11-27 12:28:31', 'admin', '2025-11-27 12:30:36', 'admin'),
+	(16, 4, '게시판 관리', '게시판 관리 입니다.', '000001', '/board2/brdMas/board.php', '', 'Y', 'N', '2025-11-27 14:09:20', 'admin', '2025-11-27 14:10:17', 'admin'),
+	(17, 4, '뉴스 게시글 관리', '게시글 관리 입니다.', '000002', '/board2/brdDtl/boardDtl.php?bdSeq=2', '', 'Y', 'N', '2025-11-27 14:09:37', 'admin', '2025-11-27 14:25:21', 'admin'),
+	(18, 4, '일반 게시글 관리', '일반 게시글 관리 입니다.', '000003', '/board2/brdDtl/boardDtl.php?bdSeq=1', '', 'Y', 'N', '2025-11-27 14:25:40', 'admin', '2025-11-27 14:25:54', 'admin');
+
+-- 테이블 test.tb_board_menu_info_default 구조 내보내기
+CREATE TABLE IF NOT EXISTS `tb_board_menu_info_default` (
+  `mnf_seq` int(11) NOT NULL AUTO_INCREMENT COMMENT '기본 메뉴 번호',
+  `mn_seq` int(11) NOT NULL COMMENT '메뉴 번호',
+  `p_mn_seq` int(11) NOT NULL DEFAULT 0 COMMENT '상위 메뉴 번호',
+  `mn_nm` varchar(500) DEFAULT NULL COMMENT '메뉴 이름',
+  `mn_content` longtext DEFAULT NULL COMMENT '메뉴 내용',
+  `mn_ord` varchar(500) DEFAULT NULL COMMENT '메뉴 정렬 순서',
+  `mn_url` varchar(2000) DEFAULT NULL COMMENT '메뉴 URL',
+  `mn_url_target` varchar(200) DEFAULT NULL COMMENT '메뉴 URL 타겟',
+  `mn_use_yn` char(1) DEFAULT 'Y' COMMENT '메뉴 사용 여부',
+  `mn_del_yn` char(1) DEFAULT 'N' COMMENT '메뉴 삭제 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(50) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`mnf_seq`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.tb_board_menu_info_default:~5 rows (대략적) 내보내기
+INSERT INTO `tb_board_menu_info_default` (`mnf_seq`, `mn_seq`, `p_mn_seq`, `mn_nm`, `mn_content`, `mn_ord`, `mn_url`, `mn_url_target`, `mn_use_yn`, `mn_del_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 1001, 0, '환경 관리', '환경 관리 메뉴 입니다.', '0000000001', '/board2/menu/menuMan.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL),
+	(2, 1002, 1001, '메뉴 관리', '메뉴 관리 입니다.', '000001', '/board2/menu/menuMan.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL),
+	(3, 1003, 1001, '코드 관리', '코드 관리 입니다.', '000002', '/board2/code/codeMan.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL),
+	(4, 1004, 0, '게시판 관리', '메뉴2 입니다.', '0000000002', '/board2/brdMas/board.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL),
+	(5, 1005, 1001, '용어사전 관리', '용어사전 관리 입니다.', '000003', '/board2/word/wordMan.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL);
+
+-- 테이블 test.tb_board_reply 구조 내보내기
+CREATE TABLE IF NOT EXISTS `tb_board_reply` (
+  `bdr_seq` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '댓글 번호',
+  `bda_seq` bigint(20) NOT NULL DEFAULT 0 COMMENT '게시글 번호',
+  `bdr_content` text DEFAULT NULL COMMENT '댓글 내용',
+  `bdr_fix_yn` char(50) DEFAULT 'N' COMMENT '댓글 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(100) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bdr_seq`) USING BTREE,
+  KEY `bda_seq` (`bda_seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.tb_board_reply:~12 rows (대략적) 내보내기
+INSERT INTO `tb_board_reply` (`bdr_seq`, `bda_seq`, `bdr_content`, `bdr_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 1, 'aaa', 'N', '2025-11-25 21:35:53', 'admin', NULL, NULL),
+	(2, 1, 'bbbb', 'N', '2025-11-25 21:42:14', 'admin', NULL, NULL),
+	(4, 1, 'asdf1111\nasd\nf\nasdfasdf', 'N', '2025-11-25 21:43:11', 'admin', '2025-11-26 00:13:22', 'admin'),
+	(6, 1, '&lt;asdfasd&gt;asdkfasld&lt;/basdfa&gt;\nasdfasdf\n111\n', 'N', '2025-11-25 21:50:38', 'admin', '2025-11-26 00:13:17', 'admin'),
+	(7, 1, '&lt;asdfasd&gt;asdkfasld&lt;/basdfa&gt;\n\n\nadef\n\nasdfasdf\n\n\nfdasdfsdf', 'N', '2025-11-25 21:50:52', 'admin', NULL, NULL),
+	(8, 1, '한국 현대사 주요 흐름 정리\n\n순서 상관없이, 항목 하나하나 게시글로 등록해서, 관련 자료 수집, 댓글 내용등, 링크 등, \n\n순서를 추후에, url 링크로, 다른 게시판이나, 연대표에서, 링크를 순서대로 나열하고, \n기본적인 설명등을 요약 입력해서 출력처리.\n\n', 'N', '2025-11-25 22:45:48', 'admin', NULL, NULL),
+	(10, 1, '111111111111\n\n2222222\n\n\n333333', 'N', '2025-11-26 00:23:00', 'admin', '2025-11-26 00:23:22', 'admin'),
+	(11, 2, 'ㅁㄴㅇㄻㄴㅇㄹ', 'Y', '2025-11-26 00:24:34', 'admin', NULL, NULL),
+	(13, 4, 'ㅁㅁㅁㅁㅁ\n\n\nsdf\nsd\nf\n\n\nefefe', 'Y', '2025-11-27 13:11:40', 'admin', '2025-11-27 13:37:27', 'admin'),
+	(14, 4, '111111222333\n\nasdf\n\n\nefefasdfasdfasd\nefefe\n\n', 'N', '2025-11-27 13:11:44', 'admin', '2025-11-27 13:37:16', 'admin'),
+	(15, 4, 'eeee 1112222', 'Y', '2025-11-27 13:37:36', 'admin', '2025-11-27 13:57:40', 'admin'),
+	(16, 3, '1112222', 'Y', '2025-11-27 13:43:52', 'admin', '2025-11-27 13:44:02', 'admin');
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

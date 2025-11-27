@@ -2,6 +2,7 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 #---
+$thisPageMnSeq = 16;
 $bdSeq = nvl(getRequestValue("bdSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
@@ -46,7 +47,7 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>게시판 관리</h2>
+<h2>게시판 관리 <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
 <table class="board-write-table-class">
 <colgroup>
@@ -60,15 +61,15 @@ fnCloseDB();
 	<td colspan="3"><?php echo getArrayValue($boardInfo,"bd_nm"); ?></td>
 </tr>
 <tr>
+	<th>게시판 보기</th>
+	<td><a href="javascript:goBoardArticleList('<?php echo getArrayValue($boardInfo,"bd_seq"); ?>');">보기</a></td>
+	<th>게시판 경로</th>
+	<td><a href="javascript:copyBoardArticleListUrl('<?php echo getArrayValue($boardInfo,"bd_seq"); ?>');">경로복사</a></td>
+</tr>
+<tr>
 	<th>게시판 설명</th>
 	<td colspan="3"><?php echo getDecodeHtmlString(getArrayValue($boardInfo,"bd_content")); ?></td>
 </tr>
-<!--<tr>
-	<th>게시판 이름</th>
-	<td>aaaaaaa</td>
-	<th>게시판 이름</th>
-	<td>aaaaaaa</td>
-</tr>-->
 </table>
 
 <div align="right" style="margin-top:10px;">
@@ -118,6 +119,21 @@ function goDelete(){
 		actionParamFormObject.action = 'boardProc.php';
 		actionParamFormObject.submit();
 	}//if
+}
+function goBoardArticleList(bdSeq=''){
+	var openWin = null;
+	var url = '';
+	url += '../brdDtl/boardDtl.php';
+	url += '?bdSeq='+bdSeq;
+	openWin = window.open(url,'_blank');
+	openWin.focus();
+}
+function copyBoardArticleListUrl(bdSeq=''){
+	var url = '';
+	url += '<?php echo $envVarMap["appWebPath"]; ?>';
+	url += '/brdDtl/boardDtl.php';
+	url += '?bdSeq='+bdSeq;
+	prompt('게시글 관리 경로 문자열을 복사해 주세요.',url);
 }
 </script>
 

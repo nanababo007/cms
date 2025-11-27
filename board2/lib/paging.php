@@ -31,7 +31,9 @@ function fnCalcPaging($pageNumber=1,$totalListCount=0,$pageSizeNumber=10,$blockS
 	# 시작 번호 (mysql limit $startNumberOfThisPage, $pageSizeNumber)
 	$startNumberOfThisPage = ($pageNumber - 1) * $pageSizeNumber;
 	# 페이지별 시작 행번호
-	if($pageNumber==$totalPageNumber and $listRestCount!=0){
+	if($pageNumber==1 and $totalListCount==$pageSizeNumber){
+		$startRowNumberForPage = $totalListCount;
+	}else if($pageNumber==$totalPageNumber and $listRestCount!=0){
 		$startRowNumberForPage = $listRestCount;
 	}else{
 		$startRowNumberForPage = (($totalPageNumber - $pageNumber) * $pageSizeNumber) + $listRestCount;

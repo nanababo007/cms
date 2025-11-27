@@ -3,6 +3,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 #---
+$thisPageMnSeq = 17;
 $boardInfo = null;
 $boardArticleInfo = null;
 $pageTitleString = "";
@@ -35,6 +36,7 @@ if($bdaSeq!=""){
 			,a.bd_seq
 			,a.bda_title
 			,a.bda_content
+			,a.bda_fix_yn
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 			,a.regdate
@@ -59,7 +61,7 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>)</h2>
+<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>) <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
 <form name="writeForm" method="post" action="boardDtlProc.php">
 <input type="hidden" name="actionString" value="write" />
@@ -80,6 +82,13 @@ fnCloseDB();
 <tr>
 	<th>게시글 제목</th>
 	<td colspan="3"><input type="text" name="bdaTitle" value="<?php echo getArrayValue($boardArticleInfo,"bda_title"); ?>" style="width:90%;height:20px;" /></td>
+</tr>
+<tr>
+	<th align="center">게시글 고정 여부</th>
+	<td colspan="3">
+		<input type="radio" id="bdaFixY" name="bdaFixYn" value="Y" <?php echo nvl(getArrayValue($boardArticleInfo,"bda_fix_yn"),"N")=="Y" ? " checked " : ""; ?> /> <label for="bdaFixY">고정</label>
+		<input type="radio" id="bdaFixN" name="bdaFixYn" value="N" <?php echo nvl(getArrayValue($boardArticleInfo,"bda_fix_yn"),"N")!="Y" ? " checked " : ""; ?> /> <label for="bdaFixN">비고정</label>
+	</td>
 </tr>
 <tr>
 	<th>게시글 내용</th>

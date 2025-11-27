@@ -20,6 +20,7 @@ fnOpenDB();
 if($actionString=="write"){
 	$bdNm = nvl(getRequestValue("bdNm"));
 	$bdContent = nvl(getRequestValue("bdContent"));
+	$bdFixYn = trim(nvl(getRequestValue("bdFixYn"),"N"));
 	#---
 	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
 	#---
@@ -27,11 +28,13 @@ if($actionString=="write"){
 		insert into tb_board_info (
 			bd_nm
 			,bd_content
+			,bd_fix_yn
 			,regdate
 			,reguser
 		)values(
 			'${bdNm}'
 			,'${bdContent}'
+			,'${bdFixYn}'
 			,NOW(3)
 			,'admin'
 		)
@@ -54,6 +57,7 @@ if($actionString=="write"){
 	$bdSeq = nvl(getRequestValue("bdSeq"));
 	$bdNm = nvl(getRequestValue("bdNm"));
 	$bdContent = nvl(getRequestValue("bdContent"));
+	$bdFixYn = trim(nvl(getRequestValue("bdFixYn"),"N"));
 	#---
 	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
@@ -62,6 +66,7 @@ if($actionString=="write"){
 		update tb_board_info set
 			bd_nm = '${bdNm}'
 			,bd_content = '${bdContent}'
+			,bd_fix_yn = '${bdFixYn}'
 			,moddate = NOW(3)
 			,moduser = 'admin'
 		where bd_seq = ${bdSeq}

@@ -130,7 +130,7 @@ fnCloseDB();
 <colgroup>
 	<col width="10%" />
 	<col width="*" />
-	<col width="20%" />
+	<col width="25%" />
 </colgroup>
 <tr>
 	<th>번호</th>
@@ -145,13 +145,14 @@ if($menuListTotalCount > 0){
 <tr>
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
 	<td align="left">
-		<a href="javascript:goMenuLink('<?php echo $row["mn_url"]; ?>','_blank');"><?php echo fnMenuGetPrefixString($row["mn_depth_no"]).$row["mn_nm"]; ?></a>
+		<a href="javascript:goModify('<?php echo $row["mn_seq"]; ?>');"><?php echo fnMenuGetPrefixString($row["mn_depth_no"]).$row["mn_nm"]; ?></a>
 		<br /><?php echo nvl($row["mn_use_yn"],"Y")=="Y" ? "[사용]" : "[미사용]"; ?> 메뉴경로 : <?php echo $row["mn_path"]; ?>
 	</td>
 	<td align="center">
 		<a href="javascript:goWrite('<?php echo $row["p_mn_seq"]; ?>');">등록</a> | 
-		<a href="javascript:goWrite('','<?php echo $row["mn_seq"]; ?>');">하위등록</a> | 
-		<a href="javascript:goModify('<?php echo $row["mn_seq"]; ?>');">수정</a>
+		<a href="javascript:goWrite('<?php echo $row["mn_seq"]; ?>');">하위등록</a> | 
+		<a href="javascript:goMenuLink('<?php echo $row["mn_url"]; ?>','_blank');">링크</a> | 
+		<a href="javascript:goDelete('<?php echo $row["mn_seq"]; ?>');" style="color:red;">삭제</a>
 	</td>
 </tr>
 <?php
@@ -173,8 +174,18 @@ if($menuListTotalCount > 0){
 
 <form name="paramForm" method="get">
 <input type="hidden" name="regMnSeq" value="" />
-<input type="hidden" name="regSubMnSeq" value="" />
 <input type="hidden" name="modMnSeq" value="" />
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
+<input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
+<input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
+<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
+<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+</form>
+
+<form name="procForm" method="post" action="menuManProc.php">
+<input type="hidden" name="actionString" value="" />
+<input type="hidden" name="delMnSeq" value="" />
 <input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
@@ -187,15 +198,15 @@ if($menuListTotalCount > 0){
 
 <script>
 var paramFormObject = document.paramForm;
+var procFormObject = document.procForm;
 //---
 function goPage(pageNumber){
 	paramFormObject.pageNumber.value = pageNumber;
 	paramFormObject.action = 'menuMan.php';
 	paramFormObject.submit();
 }
-function goWrite(regMnSeq='',regSubMnSeq=''){
+function goWrite(regMnSeq=''){
 	paramFormObject.regMnSeq.value = regMnSeq;
-	paramFormObject.regSubMnSeq.value = regSubMnSeq;
 	paramFormObject.action = 'menuManWrite.php';
 	paramFormObject.submit();
 }
@@ -203,6 +214,13 @@ function goModify(modMnSeq=''){
 	paramFormObject.modMnSeq.value = modMnSeq;
 	paramFormObject.action = 'menuManWrite.php';
 	paramFormObject.submit();
+}
+function goDelete(mnSeq=''){
+	if(confirm('삭제 하시겠습니까?')){
+		procFormObject.actionString.value = 'delete';
+		procFormObject.delMnSeq.value = mnSeq;
+		procFormObject.submit();
+	}//if
 }
 function goSearch(){
 	paramFormObject.schTitle.value = $('#schTitle').val();
