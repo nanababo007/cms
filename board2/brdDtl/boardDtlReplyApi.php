@@ -6,6 +6,8 @@ $responseLibraryObject = new ResponseLibraryClass();
 $responseData = array();
 $actionString = nvl(getRequestValue("actionString"),"");
 #---
+include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLoginApi.php');
+#---
 fnOpenDB();
 #---
 if($actionString=="GET_REPLY_LIST"){
