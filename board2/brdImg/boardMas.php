@@ -2,54 +2,37 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
-include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
-$thisPageMnSeq = 17;
-$pageTitleString = "";
-$boardInfo = null;
-$boardListTotalCount = 0;
-$pagingInfoMap = null;
-$boardList = null;
-$boardListCount = null;
+$thisPageMnSeq = 24;
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
 $bdSeq = nvl(getRequestValue("bdSeq"),"");
-$bdaSeq = nvl(getRequestValue("bdaSeq"),"");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
-$boardDtlFixList = null;
-$boardDtlFixListCount = 0;
-#---
-debugString("bdSeq",$bdSeq);
+$boardFixList = null;
+$boardFixListCount = 0;
 #---
 fnOpenDB();
 setDisplayMenuList();
 #---
-$boardInfo = fnBoardGetInfo($bdSeq);
-if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
-debugArray("boardInfo",$boardInfo);
-#---
-$pageTitleString = getArrayValue($boardInfo,"bd_nm")." | 멀티게시판";
-#---
-$sqlSearchPart .= "where a.bd_seq = ${bdSeq} ";
-$sqlSearchPartIndex = 1;
 if($schTitle!=""){
 	$sqlSearchPart .= fnGetSqlWhereAndString($sqlSearchPartIndex);
-	$sqlSearchPart .= " a.bda_title like '%${schTitle}%' ";
+	$sqlSearchPart .= " a.bd_nm like '%${schTitle}%' ";
 	$sqlSearchPartIndex++;
 }#if
 if($schContent!=""){
 	$sqlSearchPart .= fnGetSqlWhereAndString($sqlSearchPartIndex);
-	$sqlSearchPart .= " a.bda_content like '%${schContent}%' ";
+	$sqlSearchPart .= " a.bd_content like '%${schContent}%' ";
 	$sqlSearchPartIndex++;
 }#if
 #---
 $sqlBodyPart = "
-	FROM tb_board_article a
+	FROM tb_board_img_info a
+	${sqlSearchPart}
 ";
 #---
 $sqlFix = "
@@ -57,29 +40,22 @@ $sqlFix = "
 		a.*
 	from (
 		SELECT
-			a.bda_seq
-			,a.bd_seq
-			,a.bda_title
-			,a.bda_view_cnt
+			a.bd_seq
+			,a.bd_nm
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
-			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 			,a.regdate
 			,a.reguser
-			,a.moddate
-			,a.moduser
 		${sqlBodyPart}
-		where a.bd_seq = ${bdSeq}
-		and bda_fix_yn = 'Y'
+		where bd_fix_yn = 'Y'
 	) a
-	ORDER BY a.bda_seq DESC
+	ORDER BY a.bd_seq DESC
 ";
-$boardDtlFixList = fnDBGetList($sqlFix);
-$boardDtlFixListCount = getArrayCount($boardDtlFixList);
+$boardFixList = fnDBGetList($sqlFix);
+$boardFixListCount = getArrayCount($boardFixList);
 #---
 $sqlCount = "
 	SELECT count(*)
 	${sqlBodyPart}
-	${sqlSearchPart}
 ";
 $boardListTotalCount = fnDBGetIntValue($sqlCount);
 #$boardListTotalCount = 328; #test
@@ -88,24 +64,14 @@ $pagingInfoMap = fnCalcPaging($pageNumber,$boardListTotalCount,$pageSize,$blockS
 debugArray("pagingInfoMap",$pagingInfoMap);
 #---
 $sqlMain = "
-	select
-		a.*
-	from (
-		SELECT
-			a.bda_seq
-			,a.bd_seq
-			,a.bda_title
-			,a.bda_view_cnt
-			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
-			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
-			,a.regdate
-			,a.reguser
-			,a.moddate
-			,a.moduser
-		${sqlBodyPart}
-		${sqlSearchPart}
-	) a
-	order by a.bda_seq desc
+	SELECT
+		a.bd_seq
+		,a.bd_nm
+		,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+		,a.regdate
+		,a.reguser
+	${sqlBodyPart}
+	ORDER BY a.bd_seq DESC
 	LIMIT {{limitStartNumber}}, {{limitEndNumber}}
 ";
 $sqlMain = fnGetPagingQuery($sqlMain,$pagingInfoMap);
@@ -124,7 +90,7 @@ fnCloseDB();
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStart.php'); ?>
 
-<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>) <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
+<h2>이미지 게시판 관리 <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
 <table class="search-table-class">
 <colgroup>
@@ -137,9 +103,9 @@ fnCloseDB();
 	<td colspan="4"><strong>검색</strong></td>
 </tr>
 <tr>
-	<th>게시글 제목</th>
+	<th>게시판 이름</th>
 	<td><input type="text" id="schTitle" value="<?php echo $schTitle; ?>" /></td>
-	<th>게시글 내용</th>
+	<th>게시판 내용</th>
 	<td><input type="text" id="schContent" value="<?php echo $schContent; ?>" /></td>
 </tr>
 <tr class="last-row-class">
@@ -156,25 +122,31 @@ fnCloseDB();
 <colgroup>
 	<col width="10%" />
 	<col width="*" />
-	<col width="20%" />
-	<col width="20%" />
-	<col width="20%" />
+	<col width="18%" />
+	<col width="18%" />
+	<col width="18%" />
 </colgroup>
 <tr>
 	<th>번호</th>
-	<th>제목</th>
-	<th>조회수</th>
+	<th>게시판 이름</th>
+	<th>게시글 제목</th>
 	<th>등록자</th>
 	<th>등록일</th>
 </tr>
 <?php
-if($boardDtlFixListCount > 0){
-	foreach ($boardDtlFixList as $index => $row) {
+if($boardFixListCount > 0){
+	foreach ($boardFixList as $index => $row) {
 ?>
 <tr>
 	<td align="center">고정</td>
-	<td align="left"><a href="javascript:goView('<?php echo $row["bda_seq"]; ?>');"><?php echo $row["bda_title"]; ?></a></td>
-	<td align="center"><?php echo $row["bda_view_cnt"]; ?></td>
+	<td align="left">
+		<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
+		<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+	</td>
+	<td align="center">
+		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |
+		<a href="javascript:copyBoardArticleListUrl('<?php echo $row["bd_seq"]; ?>');">경로복사</a>
+	</td>
 	<td align="center"><?php echo $row["regdate_str"]; ?></td>
 	<td align="center"><?php echo $row["reguser"]; ?></td>
 </tr>
@@ -188,8 +160,14 @@ if($boardListTotalCount > 0){
 ?>
 <tr>
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
-	<td align="left"><a href="javascript:goView('<?php echo $row["bda_seq"]; ?>');"><?php echo $row["bda_title"]; ?></a></td>
-	<td align="center"><?php echo $row["bda_view_cnt"]; ?></td>
+	<td align="left">
+		<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
+		<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+	</td>
+	<td align="center">
+		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |
+		<a href="javascript:copyBoardArticleListUrl('<?php echo $row["bd_seq"]; ?>');">경로복사</a>
+	</td>
 	<td align="center"><?php echo $row["regdate_str"]; ?></td>
 	<td align="center"><?php echo $row["reguser"]; ?></td>
 </tr>
@@ -199,7 +177,7 @@ if($boardListTotalCount > 0){
 ?>
 <?php if($boardListTotalCount == 0){ ?>
 <tr>
-	<td align="center" colspan="5">등록된 게시글이 없습니다.</td>
+	<td align="center" colspan="5">등록된 게시판이 없습니다.</td>
 </tr>
 <?php }//if ?>
 </table>
@@ -212,7 +190,6 @@ if($boardListTotalCount > 0){
 
 <form name="paramForm" method="get">
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
-<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
@@ -227,24 +204,39 @@ var paramFormObject = document.paramForm;
 //---
 function goPage(pageNumber){
 	paramFormObject.pageNumber.value = pageNumber;
-	paramFormObject.action = 'boardDtl.php';
+	paramFormObject.action = 'boardMas.php';
 	paramFormObject.submit();
 }
-function goView(bdaSeq=''){
-	paramFormObject.bdaSeq.value = bdaSeq;
-	paramFormObject.action = 'boardDtlView.php';
+function goView(bdSeq=''){
+	paramFormObject.bdSeq.value = bdSeq;
+	paramFormObject.action = 'boardMasView.php';
 	paramFormObject.submit();
 }
-function goWrite(bdaSeq=''){
-	paramFormObject.bdaSeq.value = bdaSeq;
-	paramFormObject.action = 'boardDtlWrite.php';
+function goWrite(bdSeq=''){
+	paramFormObject.bdSeq.value = bdSeq;
+	paramFormObject.action = 'boardMasWrite.php';
 	paramFormObject.submit();
+}
+function goBoardArticleList(bdSeq=''){
+	var openWin = null;
+	var url = '';
+	url += 'boardDtl.php';
+	url += '?bdSeq='+bdSeq;
+	openWin = window.open(url,'_blank');
+	openWin.focus();
+}
+function copyBoardArticleListUrl(bdSeq=''){
+	var url = '';
+	url += '<?php echo $envVarMap["appWebPath"]; ?>';
+	url += '/brdImg/boardDtl.php';
+	url += '?bdSeq='+bdSeq;
+	prompt('게시글 관리 경로 문자열을 복사해 주세요.',url);
 }
 function goSearch(){
 	paramFormObject.schTitle.value = $('#schTitle').val();
 	paramFormObject.schContent.value = $('#schContent').val();
 	paramFormObject.pageNumber.value = '1';
-	paramFormObject.action = 'boardDtl.php';
+	paramFormObject.action = 'boardMas.php';
 	paramFormObject.submit();
 }
 function resetSearch(){
@@ -253,6 +245,9 @@ function resetSearch(){
 		$('#schContent').val('');
 		goSearch();
 	}//if
+}
+function copyBoardSeq(bdSeq=''){
+	prompt('게시판 번호를 복사해 주세요.',bdSeq);
 }
 </script>
 

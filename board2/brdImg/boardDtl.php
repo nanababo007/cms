@@ -2,10 +2,10 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
-include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardMasLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
-$thisPageMnSeq = 17;
+$thisPageMnSeq = 25;
 $pageTitleString = "";
 $boardInfo = null;
 $boardListTotalCount = 0;
@@ -49,7 +49,7 @@ if($schContent!=""){
 }#if
 #---
 $sqlBodyPart = "
-	FROM tb_board_article a
+	FROM tb_board_img_article a
 ";
 #---
 $sqlFix = "

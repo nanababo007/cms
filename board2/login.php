@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<?php include $_SERVER['DOCUMENT_ROOT']."/inc/head.php"; ?>
+	<?php include $_SERVER['DOCUMENT_ROOT']."/board2/inc/head.php"; ?>
 </head>
 <body>
 <form name="formLogin" method="post" action="loginP.php">
@@ -19,10 +19,10 @@
 <input type="hidden" name="from" value="<?php echo $fromParameterValue; ?>" />
 <table>
 <tr>
-	<td align="center" valign="middle"><input type="text" id="userId" name="userId" value="test" placeholder="User id" class="input-text" onclick="this.select();" /></td>
+	<td align="center" valign="middle"><input type="text" id="userId" name="userId" value="" placeholder="User id" class="input-text" onclick="this.select();" /></td>
 </tr>
 <tr>
-	<td align="center" valign="middle"><input type="password" id="userPassword" name="userPassword" value="1234" placeholder="User password" class="input-password" onclick="this.select();" /></td>
+	<td align="center" valign="middle"><input type="password" id="userPassword" name="userPassword" value="" placeholder="User password" class="input-password" onclick="this.select();" /></td>
 </tr>
 <tr>
 	<td align="center" valign="middle" height="100"><a href="javascript:fnGoLogin();"  style="font-size:20pt;text-decoration:none;">로그인</a></td>

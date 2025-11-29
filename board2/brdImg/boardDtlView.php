@@ -2,10 +2,10 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
-include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
-include($_SERVER["DOCUMENT_ROOT"].'/board2/brdDtl/boardDtlLibraryInclude.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardMasLibraryInclude.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardDtlLibraryInclude.php');
 #---
-$thisPageMnSeq = 17;
+$thisPageMnSeq = 24;
 $boardArticleInfo = null;
 $boardInfo = null;
 $bdSeq = nvl(getRequestValue("bdSeq"));
@@ -28,14 +28,14 @@ debugArray("boardInfo",$boardInfo);
 if(!fnBoardArticleCheckInfo($bdaSeq)){alertBack("게시글 정보가 존재하지 않습니다.");}#if
 #---
 $sql = "
-	update tb_board_article set
+	update tb_board_img_article set
 		bda_view_cnt = bda_view_cnt + 1
 	where bda_seq = ${bdaSeq}
 ";
 fnDBUpdate($sql);
 #---
 $sqlBodyPart = "
-	FROM tb_board_article a
+	FROM tb_board_img_article a
 	where bda_seq = ${bdaSeq}
 ";
 #---
@@ -84,14 +84,7 @@ fnCloseDB();
 	<td colspan="3"><?php echo getArrayValue($boardArticleInfo,"bda_title"); ?> (조회수 : <?php echo getArrayValue($boardArticleInfo,"bda_view_cnt"); ?>)</td>
 </tr>
 <tr>
-	<td colspan="4">
-		<div align="right" style="margin-top:10px;">
-			<input type="button" value="수정" onclick="goModify();" />
-			<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
-			<input type="button" value="목록" onclick="goList();" />
-		</div>
-		<?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?>
-	</td>
+	<td colspan="4"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></td>
 </tr>
 </table>
 

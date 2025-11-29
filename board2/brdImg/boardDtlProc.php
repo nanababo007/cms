@@ -1,7 +1,7 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
-include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
+include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardMasLibraryInclude.php');
 #---
 $boardInfo = null;
 $actionString = getRequestValue("actionString");
@@ -11,7 +11,6 @@ $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $bdSeq = nvl(getRequestValue("bdSeq"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
-$replyCount = 0;
 #---
 debugString("actionString",$actionString);
 debugString("pageNumber",$pageNumber);
@@ -36,7 +35,7 @@ if($actionString=="write"){
 	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		insert into tb_board_article (
+		insert into tb_board_img_article (
 			bda_title
 			,bda_content
 			,bd_seq
@@ -81,7 +80,7 @@ if($actionString=="write"){
 	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		update tb_board_article set
+		update tb_board_img_article set
 			bda_title = '${bdaTitle}'
 			,bda_content = '${bdaContent}'
 			,bda_fix_yn = '${bdaFixYn}'
@@ -107,14 +106,14 @@ if($actionString=="write"){
 	#---
 	$sql = "
 		select count(*) as cnt
-		from tb_board_reply
+		from tb_board_img_reply
 		where bda_seq = ${bdaSeq}
 	";
 	$replyCount = fnDBGetIntValue($sql);
 	if($replyCount > 0){alertBack("댓글이 존재 합니다.\\n댓글을 모두 삭제 해주세요.");}#if
 	#---
 	$sql = "
-		delete from tb_board_article
+		delete from tb_board_img_article
 		where bda_seq = ${bdaSeq}
 	";
 	#---

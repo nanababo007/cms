@@ -131,10 +131,12 @@ function getMenuUrlAppendMnSeq($mnUrlString="",$mnSeq=""){
 	$editMnUrlString = $mnUrlString;
 	#---
 	if($editMnUrlString!=""){
-		if(strpos($editMnUrlString,"?")!==false){
-			$editMnUrlString = $editMnUrlString."&mnSeq=".$mnSeq;
-		}else{
-			$editMnUrlString = $editMnUrlString."?mnSeq=".$mnSeq;
+		if(strpos($editMnUrlString,"mnSeq=")===false){
+			if(strpos($editMnUrlString,"?")!==false){
+				$editMnUrlString = $editMnUrlString."&mnSeq=".$mnSeq;
+			}else{
+				$editMnUrlString = $editMnUrlString."?mnSeq=".$mnSeq;
+			}#if
 		}#if
 	}#if
 	#---
