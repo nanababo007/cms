@@ -5,7 +5,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
-$thisPageMnSeq = 17;
+$thisPageMnSeq = getThisPageMnSeq("23","17");
 $pageTitleString = "";
 $boardInfo = null;
 $boardListTotalCount = 0;

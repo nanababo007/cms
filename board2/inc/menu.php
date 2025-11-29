@@ -2,6 +2,15 @@
 /*
 setDisplayMenuList();
 */
+function getThisPageMnSeq($serverMnSeq="",$localMnSeq=""){
+	global $modeString;
+	#---
+	if($modeString=="server"){
+		return $serverMnSeq;
+	}else{
+		return $localMnSeq;
+	}#if
+}
 function setDisplayMenuList(){
 	global $displayMenuList;
 	global $currentMenuSeq;
