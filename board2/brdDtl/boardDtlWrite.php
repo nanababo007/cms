@@ -4,7 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 #---
-$thisPageMnSeq = 17;
+$thisPageMnSeq = getThisPageMnSeq("23","17");
 $boardInfo = null;
 $boardArticleInfo = null;
 $pageTitleString = "";
