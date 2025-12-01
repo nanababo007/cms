@@ -5,6 +5,9 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardMasLibraryInclude.php');
 #---
 $thisPageMnSeq = 24;
+$bdaFileCount = 12;
+$bdaFileIndex = 0;
+$bdaFileNumber = 0;
 $boardInfo = null;
 $boardArticleInfo = null;
 $pageTitleString = "";
@@ -97,6 +100,24 @@ fnCloseDB();
 		<textarea name="bdaContent" style="width:90%;height:200px;"><?php echo getArrayValue($boardArticleInfo,"bda_content"); ?></textarea>
 	</td>
 </tr>
+<tr>
+	<th>게시글 첨부파일</th>
+	<td colspan="3">
+		<?php
+			for($bdaFileIndex=0;$bdaFileIndex<$bdaFileCount;$bdaFileIndex++){
+				$bdaFileNumber = $bdaFileIndex+1;
+				?>
+				<div style="margin:5px 0;">
+					<?php echo $bdaFileNumber; ?>. 첨부파일 : 
+					<input type="file" name="file<?php echo $bdaFileNumber; ?>" value="" /> | 
+					<a href="downFile(1);">filename1.txt</a> | 
+					<a href="deleteFile(1);">파일삭제</a>
+				</div>
+				<?php
+			}#for
+		?>
+	</td>
+</tr>
 <!--<tr>
 	<th>게시판 이름</th>
 	<td>aaaaaaa</td>
@@ -141,6 +162,10 @@ function goSave(pageNumber){
 function goCancel(){
 	paramFormObject.action = 'boardDtl.php';
 	paramFormObject.submit();
+}
+function downFile(bdafSeq=''){
+}
+function deleteFile(bdafSeq=''){
 }
 </script>
 

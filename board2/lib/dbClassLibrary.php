@@ -63,10 +63,10 @@ class DBLibraryClass {
 		$this->dbCon = mysqli_connect($host, $user, $pass);
 
 		//데이터베이스 설치 및 클라이언트 접속 캐릭터셋 설정
-		mysqli_query($this->dbCon, "set session character_set_connection=utf8;");
-		mysqli_query($this->dbCon, "set session character_set_results=utf8;");
-		mysqli_query($this->dbCon, "set session character_set_client=utf8;");
-		mysqli_query($this->dbCon, "set names utf8");
+		mysqli_query($this->dbCon, "set session character_set_connection=utf8mb4;");
+		mysqli_query($this->dbCon, "set session character_set_results=utf8mb4;");
+		mysqli_query($this->dbCon, "set session character_set_client=utf8mb4;");
+		mysqli_query($this->dbCon, "set names utf8mb4");
 
 		//데이터베이스 접속정보 확인
 		if(!$this->dbCon){

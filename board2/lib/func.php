@@ -12,10 +12,10 @@ function fnOpenDB(){
 	$dbCon = mysqli_connect($host, $user, $pass);
 
 	//데이터베이스 설치 및 클라이언트 접속 캐릭터셋 설정
-	mysqli_query($dbCon, "set session character_set_connection=utf8;");
-	mysqli_query($dbCon, "set session character_set_results=utf8;");
-	mysqli_query($dbCon, "set session character_set_client=utf8;");
-	mysqli_query($dbCon, "set names utf8");
+	mysqli_query($dbCon, "set session character_set_connection=utf8mb4;");
+	mysqli_query($dbCon, "set session character_set_results=utf8mb4;");
+	mysqli_query($dbCon, "set session character_set_client=utf8mb4;");
+	mysqli_query($dbCon, "set names utf8mb4");
 
 	//데이터베이스 접속정보 확인
 	if(!$dbCon){
@@ -283,7 +283,7 @@ function getGetValue($keyString=""){
 }
 function getInjectString($valueString=""){
 	$valueString = nvl($valueString);
-	$valueString = str_replace("'","''",$valueString);
+	#$valueString = str_replace("'","''",$valueString);
 	$valueString = str_replace("<","&lt;",$valueString);
 	$valueString = str_replace(">","&gt;",$valueString);
 	$valueString = str_ireplace("onclick","",$valueString);
@@ -307,6 +307,8 @@ function getInjectString($valueString=""){
 	$valueString = str_ireplace("onresize","",$valueString);
 	$valueString = str_ireplace("onscroll","",$valueString);
 	$valueString = str_ireplace("onerror","",$valueString);
+	$valueString = str_ireplace("\"","&quot;",$valueString);
+	$valueString = str_ireplace("'","&#39;",$valueString);
 	return $valueString;
 }
 function getDecodeHtmlString($valueString=""){
