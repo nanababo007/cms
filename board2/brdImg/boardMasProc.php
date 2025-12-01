@@ -8,6 +8,7 @@ $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+$mnSeq = nvl(getRequestValue("mnSeq"),"");
 #---
 debugString("actionString",$actionString);
 debugString("pageNumber",$pageNumber);
@@ -50,6 +51,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&pageSize=".$pageSize;
 	$moveUrlParam .= "&blockSize=".$blockSize;
 	$moveUrlParam .= "&bdSeq=".$bdSeq;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","boardMas.php".$moveUrlParam);
@@ -80,6 +82,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&blockSize=".$blockSize;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	alertGo("처리 되었습니다.","boardMas.php".$moveUrlParam);
 }else if($actionString=="delete"){
 	$bdSeq = nvl(getRequestValue("bdSeq"));
@@ -99,6 +102,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&blockSize=".$blockSize;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	alertGo("처리 되었습니다.","boardMas.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");

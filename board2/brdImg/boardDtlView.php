@@ -8,6 +8,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardDtlLibraryInclude.php');
 $thisPageMnSeq = 24;
 $boardArticleInfo = null;
 $boardInfo = null;
+$mnSeq = nvl(getRequestValue("mnSeq"),"");
 $bdSeq = nvl(getRequestValue("bdSeq"));
 $bdaSeq = nvl(getRequestValue("bdaSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
@@ -102,6 +103,7 @@ fnCloseDB();
 </div>
 
 <form name="paramForm" method="get">
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
 <input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
@@ -113,6 +115,7 @@ fnCloseDB();
 
 <form name="actionParamForm" method="post">
 <input type="hidden" name="actionString" value="" />
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
 <input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />

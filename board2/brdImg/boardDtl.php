@@ -14,6 +14,7 @@ $boardList = null;
 $boardListCount = null;
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
+$mnSeq = nvl(getRequestValue("mnSeq"),"");
 $bdSeq = nvl(getRequestValue("bdSeq"),"");
 $bdaSeq = nvl(getRequestValue("bdaSeq"),"");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
@@ -211,6 +212,7 @@ if($boardListTotalCount > 0){
 <?php fnPrintPagingHtml($pagingInfoMap); ?>
 
 <form name="paramForm" method="get">
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
 <input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />

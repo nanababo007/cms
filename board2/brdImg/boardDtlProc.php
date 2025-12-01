@@ -8,6 +8,7 @@ $actionString = getRequestValue("actionString");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
+$mnSeq = nvl(getRequestValue("mnSeq"),"");
 $bdSeq = nvl(getRequestValue("bdSeq"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
@@ -61,6 +62,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "?pageNumber=1";
 	$moveUrlParam .= "&pageSize=".$pageSize;
 	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "&bdSeq=".$bdSeq;
 	$moveUrlParam .= "&bdaSeq=".$bdaSeq;
 	$moveUrlParam .= "&schTitle=".$schTitle;
@@ -95,6 +97,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "?pageNumber=".$pageNumber;
 	$moveUrlParam .= "&pageSize=".$pageSize;
 	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "&bdSeq=".$bdSeq;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
@@ -123,6 +126,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "?pageNumber=".$pageNumber;
 	$moveUrlParam .= "&pageSize=".$pageSize;
 	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "&bdSeq=".$bdSeq;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;

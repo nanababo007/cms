@@ -7,6 +7,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 $thisPageMnSeq = 24;
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
+$mnSeq = nvl(getRequestValue("mnSeq"),"");
 $bdSeq = nvl(getRequestValue("bdSeq"),"");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
@@ -189,6 +190,7 @@ if($boardListTotalCount > 0){
 <?php fnPrintPagingHtml($pagingInfoMap); ?>
 
 <form name="paramForm" method="get">
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />

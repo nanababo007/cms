@@ -4,6 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 #---
 $thisPageMnSeq = 24;
+$mnSeq = nvl(getRequestValue("mnSeq"),"");
 $bdSeq = nvl(getRequestValue("bdSeq"));
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
@@ -51,6 +52,7 @@ fnCloseDB();
 
 <form name="writeForm" method="post" action="boardMasProc.php">
 <input type="hidden" name="actionString" value="write" />
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
@@ -98,6 +100,7 @@ fnCloseDB();
 <?php fnPrintPagingHtml($pagingInfoMap); ?>
 
 <form name="paramForm" method="get">
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
