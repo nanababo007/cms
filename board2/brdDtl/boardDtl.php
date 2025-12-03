@@ -227,6 +227,15 @@ if($boardListTotalCount > 0){
 <script>
 var paramFormObject = document.paramForm;
 //---
+$(function(){
+	initPage();
+});
+//---
+function initPage(){
+	setSearchEnter($('#schTitle, #schContent'),function(){
+		goSearch();
+	});
+}
 function goPage(pageNumber){
 	paramFormObject.pageNumber.value = pageNumber;
 	paramFormObject.action = 'boardDtl.php';

@@ -23,3 +23,14 @@ function getNvlString(stringValue='',defaultString=''){
 	returnString = editStringValue;
 	return returnString;
 }
+function setSearchEnter(targetJqueryObject=null,fnSearchCb=null){
+	if(targetJqueryObject){
+		targetJqueryObject.keydown(function(e){
+			if(e.key==='Enter'){
+				if($.isFunction(fnSearchCb)){
+					fnSearchCb();
+				}//if
+			}//if
+		});
+	}//if
+}

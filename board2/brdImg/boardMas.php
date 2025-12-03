@@ -46,7 +46,7 @@ $sqlFix = "
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,a.regdate
 			,a.reguser
-		${sqlBodyPart}
+		FROM tb_board_img_info a
 		where bd_fix_yn = 'Y'
 	) a
 	ORDER BY a.bd_seq DESC
@@ -204,6 +204,15 @@ if($boardListTotalCount > 0){
 <script>
 var paramFormObject = document.paramForm;
 //---
+$(function(){
+	initPage();
+});
+//---
+function initPage(){
+	setSearchEnter($('#schTitle, #schContent'),function(){
+		goSearch();
+	});
+}
 function goPage(pageNumber){
 	paramFormObject.pageNumber.value = pageNumber;
 	paramFormObject.action = 'boardMas.php';
