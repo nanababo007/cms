@@ -1,7 +1,7 @@
 <?php
 /*
 ResponseLibraryClass::setHeaderJson();
-ResponseLibraryClass::setDisplayAllError(); 	# ¼­¹ö¿¡¼­ ¿À·ù È®ÀÎ ½Ã, ÀÓ½Ã ¼³Á¤
+ResponseLibraryClass::setDisplayAllError(); 	# ì„œë²„ì—ì„œ ì˜¤ë¥˜ í™•ì¸ ì‹œ, ìž„ì‹œ ì„¤ì •
 */
 class ResponseLibraryClass
 {

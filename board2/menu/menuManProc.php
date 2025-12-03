@@ -186,6 +186,8 @@ if($actionString=="write"){
 		where mn_seq = '${moveMnSeq}'
 	";
 	$pMoveMnSeq = fnDBGetValue($sql);
+	debugString("pMoveMnSeq sql",$sql);
+	debugString("pMoveMnSeq",$pMoveMnSeq);
 	## B = A값이 전체 메뉴에서 부모메뉴번호와 일치하는 목록 구함.
 	#   (B - $moveDepthMenuList)
 	$sql = "
@@ -204,6 +206,9 @@ if($actionString=="write"){
 	";
 	$moveDepthMenuList = fnDBGetList($sql);
 	$moveDepthMenuListCount = getArrayCount($moveDepthMenuList);
+	debugString("moveDepthMenuList sql",$sql);
+	debugArray("moveDepthMenuList",$moveDepthMenuList);
+	debugString("moveDepthMenuListCount",$moveDepthMenuListCount);
 	## C,D = B 목록 루프에서, M 과 일치하는 메뉴번호의 정보(=C)를 구하고, 이전순서의 메뉴번호에 해당하는 정보(=D)를 구함.
 	#   (C - $moveMnInfo, D - $prevMnInfo)
 	if($moveDepthMenuListCount > 0){
@@ -215,16 +220,20 @@ if($actionString=="write"){
 			$prevMnInfo = $moveMnInfo;
 		}#for
 	}#if
+	debugArray("moveMnInfo",$moveMnInfo);
+	debugArray("prevMnInfo",$prevMnInfo);
 	## E = C 메뉴정보의 미래 정렬순서 정보변수(=E)에, D 메뉴정보의 정렬순서값 셋팅.
 	#   (E - $moveMnNewOrd)
 	if($moveMnInfo!=null){
-		$moveMnNewOrd = nvl($moveMnInfo["mn_ord"]);
+		$moveMnNewOrd = nvl($prevMnInfo["mn_ord"]);
 	}#if
 	## F = D 메뉴정보의 미래 정렬순서 정보변수(=F)에, C 메뉴정보의 정렬순서값 셋팅.
 	#   (F - $prevMnNewOrd)
 	if($prevMnInfo!=null){
-		$prevMnNewOrd = nvl($prevMnInfo["mn_ord"]);
+		$prevMnNewOrd = nvl($moveMnInfo["mn_ord"]);
 	}#if
+	debugString("moveMnNewOrd",$moveMnNewOrd);
+	debugString("prevMnNewOrd",$prevMnNewOrd);
 	##
 	if($moveMnInfo!=null && $prevMnInfo!=null){
 		## C 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, E 값을 업데이트.
@@ -233,17 +242,18 @@ if($actionString=="write"){
 				mn_ord = '${moveMnNewOrd}'
 			where mn_seq = '".nvl($moveMnInfo["mn_seq"])."'
 		";
-		#fnDBUpdate($sql);
+		debugString("moveMnNewOrd update sql",$sql);
+		fnDBUpdate($sql);
 		## D 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, F 값을 업데이트.
 		$sql = "
 			update tb_board_menu_info set
 				mn_ord = '${prevMnNewOrd}'
 			where mn_seq = '".nvl($prevMnInfo["mn_seq"])."'
 		";
-		#fnDBUpdate($sql);
+		debugString("prevMnNewOrd update sql",$sql);
+		fnDBUpdate($sql);
 	}#if
 	# ※ 이전 메뉴정보가 없으면, 아무처리없이, 다음 실행으로 넘어감.
-	
 	#---
 	$moveUrlParam = "";
 	$moveUrlParam .= "?pageNumber=".$pageNumber;
@@ -252,9 +262,17 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
-	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
+	pageGo("menuMan.php".$moveUrlParam);
 }else if($actionString=="menuMoveDown"){
 	$moveMnSeq = nvl(getPostValue("moveMnSeq"));
+	$pMoveMnSeq = "";
+	$moveDepthMenuList = null;
+	$moveDepthMenuListCount = 0;
+	$moveDepthMenuListIndex = 0;
+	$moveMnInfo = null;
+	$nextMnInfo = null;
+	$moveMnNewOrd = "";
+	$nextMnNewOrd = "";
 	#---
 	if($moveMnSeq==""){alertBack("정보가 부족 합니다.");}#if
 	#---
@@ -262,23 +280,83 @@ if($actionString=="write"){
 	#   (M - $moveMnSeq)
 	## A = M의 부모 메뉴번호를 구함.
 	#   (A - $pMoveMnSeq)
+	$sql = "
+		SELECT p_mn_seq 
+		FROM tb_board_menu_info
+		where mn_seq = '${moveMnSeq}'
+	";
+	$pMoveMnSeq = fnDBGetValue($sql);
+	debugString("pMoveMnSeq sql",$sql);
+	debugString("pMoveMnSeq",$pMoveMnSeq);
 	## B = A값이 전체 메뉴에서 부모메뉴번호와 일치하는 목록 구함.
 	#   (B - $moveDepthMenuList)
+	$sql = "
+		select
+			a.*
+		from (
+			SELECT
+				a.mn_seq
+				,a.p_mn_seq
+				,a.mn_nm
+				,a.mn_ord
+			from tb_board_menu_info a
+			where a.p_mn_seq = ${pMoveMnSeq}
+		) a
+		ORDER BY a.mn_ord asc
+	";
+	$moveDepthMenuList = fnDBGetList($sql);
+	$moveDepthMenuListCount = getArrayCount($moveDepthMenuList);
+	debugString("moveDepthMenuList sql",$sql);
+	debugArray("moveDepthMenuList",$moveDepthMenuList);
+	debugString("moveDepthMenuListCount",$moveDepthMenuListCount);
 	## C,D = B 목록 루프에서, M 과 일치하는 메뉴번호의 정보(=C)를 구하고, 다음순서의 메뉴번호에 해당하는 정보(=D)를 구함.
 	#   (C - $moveMnInfo, D - $nextMnInfo)
+	if($moveDepthMenuListCount > 0){
+		for($moveDepthMenuListIndex=0;$moveDepthMenuListIndex < $moveDepthMenuListCount;$moveDepthMenuListIndex++){
+			$moveMnInfo = $moveDepthMenuList[$moveDepthMenuListIndex];
+			#---
+			if($moveMnSeq==nvl($moveMnInfo["mn_seq"])){
+				if(($moveDepthMenuListIndex + 1) < $moveDepthMenuListCount){
+					$nextMnInfo = $moveDepthMenuList[$moveDepthMenuListIndex + 1];
+				}#if
+				break;
+			}#if
+		}#for
+	}#if
+	debugArray("moveMnInfo",$moveMnInfo);
+	debugArray("nextMnInfo",$nextMnInfo);
 	## E = C 메뉴정보의 미래 정렬순서 정보변수(=E)에, D 메뉴정보의 정렬순서값 셋팅.
 	#   (E - $moveMnNewOrd)
+	if($moveMnInfo!=null){
+		$moveMnNewOrd = nvl($nextMnInfo["mn_ord"]);
+	}#if
 	## F = D 메뉴정보의 미래 정렬순서 정보변수(=F)에, C 메뉴정보의 정렬순서값 셋팅.
 	#   (F - $nextMnNewOrd)
-	## C 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, E 값을 업데이트.
-	## D 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, F 값을 업데이트.
+	if($nextMnInfo!=null){
+		$nextMnNewOrd = nvl($moveMnInfo["mn_ord"]);
+	}#if
+	debugString("moveMnNewOrd",$moveMnNewOrd);
+	debugString("nextMnNewOrd",$nextMnNewOrd);
+	##
+	if($moveMnInfo!=null && $nextMnInfo!=null){
+		## C 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, E 값을 업데이트.
+		$sql = "
+			update tb_board_menu_info set
+				mn_ord = '${moveMnNewOrd}'
+			where mn_seq = '".nvl($moveMnInfo["mn_seq"])."'
+		";
+		debugString("moveMnNewOrd update sql",$sql);
+		fnDBUpdate($sql);
+		## D 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, F 값을 업데이트.
+		$sql = "
+			update tb_board_menu_info set
+				mn_ord = '${nextMnNewOrd}'
+			where mn_seq = '".nvl($nextMnInfo["mn_seq"])."'
+		";
+		debugString("nextMnNewOrd update sql",$sql);
+		fnDBUpdate($sql);
+	}#if
 	# ※ 다음 메뉴정보가 없으면, 아무처리없이, 다음 실행으로 넘어감.
-	
-	$sql = "
-		aaaa from tb_board_menu_info
-		where mn_seq = ${moveMnSeq}
-	";
-	fnDBUpdate($sql);
 	#---
 	$moveUrlParam = "";
 	$moveUrlParam .= "?pageNumber=".$pageNumber;
@@ -287,7 +365,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
-	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
+	pageGo("menuMan.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
 }#if
