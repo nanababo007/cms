@@ -1,6 +1,7 @@
 <?php
 /*
 ResponseLibraryClass::setHeaderJson();
+ResponseLibraryClass::setDisplayAllError();
 */
 class ResponseLibraryClass
 {
@@ -58,6 +59,11 @@ class ResponseLibraryClass
 	#---
 	public static function setHeaderJson(){
 		header('Content-Type: application/json');
+	}
+	public static function setDisplayAllError(){
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		error_reporting(E_ALL);
 	}
 }
 ?>
