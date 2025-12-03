@@ -19,6 +19,10 @@ $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+$boardDtlFileList = null;
+$boardDtlFileListCount = 0;
+$boardDtlFileInfo = null;
+$bdafKindName = "";
 #---
 fnOpenDB();
 setDisplayMenuList();
@@ -51,6 +55,31 @@ if($bdaSeq!=""){
 		${sqlBodyPart}
 	";
 	$boardArticleInfo = fnDBGetRow($sqlMain);
+	#---
+	$sqlFile = "
+		select
+			a.*
+		from (
+			SELECT
+				a.bdaf_seq
+				,a.bda_seq
+				,a.bdaf_filename
+				,a.bdaf_save_filename
+				,a.bdaf_save_thumbnail
+				,a.bdaf_kind_name
+				,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
+				,a.regdate
+				,a.reguser
+				,a.moddate
+				,a.moduser
+			from tb_board_img_article_file a
+			where a.bda_seq = ${bdaSeq}
+		) a
+		ORDER BY a.bda_seq DESC
+	";
+	$boardDtlFileList = fnDBGetList($sqlFile);
+	$boardDtlFileListCount = getArrayCount($boardDtlFileList);
 }else{
 	$boardArticleInfo = array();
 }#if
@@ -68,7 +97,7 @@ fnCloseDB();
 
 <h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>) <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
 
-<form name="writeForm" method="post" action="boardDtlProc.php">
+<form name="writeForm" method="post" action="boardDtlProc.php" enctype="multipart/form-data">
 <input type="hidden" name="actionString" value="write" />
 <input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
@@ -108,12 +137,16 @@ fnCloseDB();
 		<?php
 			for($bdaFileIndex=0;$bdaFileIndex<$bdaFileCount;$bdaFileIndex++){
 				$bdaFileNumber = $bdaFileIndex+1;
+				$bdafKindName = "file".$bdaFileNumber;
+				$boardDtlFileInfo = getBoardDtlFileInfo($bdafKindName);
+				#---
+				$boardDtlFileInfo = $boardDtlFileInfo==null ? array() : $boardDtlFileInfo;
 				?>
 				<div style="margin:5px 0;">
 					<?php echo $bdaFileNumber; ?>. 첨부파일 : 
-					<input type="file" name="file<?php echo $bdaFileNumber; ?>" value="" /> | 
-					<a href="downFile(1);">filename1.txt</a> | 
-					<a href="deleteFile(1);">파일삭제</a>
+					<input type="file" name="file<?php echo $bdaFileNumber; ?>" value="" />&nbsp;&nbsp;
+					<a href="<?php echo getArrayValue($boardDtlFileInfo,"bdaf_save_filename"); ?>"><?php echo getArrayValue($boardDtlFileInfo,"bdaf_filename"); ?></a><!-- | -->
+					<!--<a href="deleteFile(1);">파일삭제</a>-->
 				</div>
 				<?php
 			}#for
@@ -174,3 +207,30 @@ function deleteFile(bdafSeq=''){
 
 </body>
 </html>
+<?php 
+function getBoardDtlFileInfo($bdafKindName=""){
+	global $boardDtlFileList;
+	global $boardDtlFileListCount;
+	#---
+	$returnMap = null;
+	#---
+	$boardDtlFileInfo = null;
+	$boardDtlFileListIndex = 0;
+	$boardDtlFileListNumber = 0;
+	#---
+	if($bdafKindName==""){return null;}#if
+	#---
+	if($boardDtlFileListCount > 0){
+		for($boardDtlFileListIndex=0;$boardDtlFileListIndex<$boardDtlFileListCount;$boardDtlFileListIndex++){
+			$boardDtlFileListNumber = $boardDtlFileListIndex+1;
+			$boardDtlFileInfo = $boardDtlFileList[$boardDtlFileListIndex];
+			if($bdafKindName==trim(nvl($boardDtlFileInfo["bdaf_kind_name"]))){
+				$returnMap = $boardDtlFileInfo;
+				break;
+			}#if
+		}#for
+	}#if
+	#---
+	return $returnMap;
+}		
+?>

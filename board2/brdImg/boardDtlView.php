@@ -16,6 +16,11 @@ $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+$boardDtlFileList = null;
+$boardDtlFileInfo = null;
+$boardDtlFileListCount = 0;
+$boardDtlFileListIndex = 0;
+$boardDtlFileListNumber = 0;
 #---
 fnOpenDB();
 setDisplayMenuList();
@@ -58,6 +63,31 @@ $sqlMain = "
 debugString("sqlMain",getDecodeHtmlString($sqlMain));
 $boardArticleInfo = fnDBGetRow($sqlMain);
 #---
+$sqlFile = "
+	select
+		a.*
+	from (
+		SELECT
+			a.bdaf_seq
+			,a.bda_seq
+			,a.bdaf_filename
+			,a.bdaf_save_filename
+			,a.bdaf_save_thumbnail
+			,a.bdaf_kind_name
+			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
+			,a.regdate
+			,a.reguser
+			,a.moddate
+			,a.moduser
+		from tb_board_img_article_file a
+		where a.bda_seq = ${bdaSeq}
+	) a
+	ORDER BY a.bda_seq DESC
+";
+$boardDtlFileList = fnDBGetList($sqlFile);
+$boardDtlFileListCount = getArrayCount($boardDtlFileList);
+#---
 fnCloseDB();
 ?>
 <!doctype html>
@@ -85,7 +115,30 @@ fnCloseDB();
 	<td colspan="3"><?php echo getArrayValue($boardArticleInfo,"bda_title"); ?> (조회수 : <?php echo getArrayValue($boardArticleInfo,"bda_view_cnt"); ?>)</td>
 </tr>
 <tr>
-	<td colspan="4"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></td>
+	<td colspan="4">
+		<div align="right" style="margin-top:10px;">
+			<input type="button" value="수정" onclick="goModify();" />
+			<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
+			<input type="button" value="목록" onclick="goList();" />
+		</div>
+		<?php if($boardDtlFileListCount > 0){ ?>
+		<div align="left" style="margin-top:10px;">
+			<?php
+				for($boardDtlFileListIndex=0;$boardDtlFileListIndex<$boardDtlFileListCount;$boardDtlFileListIndex++){
+					$boardDtlFileListNumber = $boardDtlFileListIndex+1;
+					$boardDtlFileInfo = $boardDtlFileList[$boardDtlFileListIndex];
+					$boardDtlFileType = FileUtilLibraryClass::getFileTypeString($boardDtlFileInfo["bdaf_save_thumbnail"]);
+					if($boardDtlFileType=="img"){
+						?><br /><img src="<?php echo $boardDtlFileInfo["bdaf_save_thumbnail"]; ?>" /><?php
+					}else{
+						?><br /><a href="<?php echo $boardDtlFileInfo["bdaf_save_filename"]; ?>" target="_blank"><?php echo $boardDtlFileInfo["bdaf_filename"]; ?></a><?php
+					}#if
+				}#for
+			?>
+		</div>
+		<?php }#if ?>
+		<div style="margin-top:10px;"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></div>
+	</td>
 </tr>
 </table>
 

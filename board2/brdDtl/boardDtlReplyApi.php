@@ -4,14 +4,14 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 ResponseLibraryClass::setHeaderJson();
 $responseLibraryObject = new ResponseLibraryClass();
 $responseData = array();
-$actionString = nvl(getRequestValue("actionString"),"");
+$actionString = nvl(getPostValue("actionString"),"");
 #---
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLoginApi.php');
 #---
 fnOpenDB();
 #---
 if($actionString=="GET_REPLY_LIST"){
-	$bdaSeq = nvl(getRequestValue("bdaSeq"),"");
+	$bdaSeq = nvl(getPostValue("bdaSeq"),"");
 	#---
 	if($bdaSeq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
@@ -69,7 +69,7 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="GET_REPLY_ROW"){
-	$bdrSeq = nvl(getRequestValue("bdrSeq"),"");
+	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
 	#---
 	if($bdrSeq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
@@ -89,8 +89,8 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="INSERT_REPLY_DATA"){
-	$bdaSeq = nvl(getRequestValue("bdaSeq"),"");
-	$bdrContent = nvl(getRequestValue("bdrContent"),"");
+	$bdaSeq = nvl(getPostValue("bdaSeq"),"");
+	$bdrContent = nvl(getPostValue("bdrContent"),"");
 	#---
 	if($bdaSeq=="" or $bdrContent==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
@@ -122,8 +122,8 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="UPDATE_REPLY_DATA"){
-	$bdrSeq = nvl(getRequestValue("bdrSeq"),"");
-	$bdrContent = nvl(getRequestValue("bdrContent"),"");
+	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
+	$bdrContent = nvl(getPostValue("bdrContent"),"");
 	#---
 	if($bdrSeq=="" or $bdrContent==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
@@ -145,7 +145,7 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="DELETE_REPLY_DATA"){
-	$bdrSeq = nvl(getRequestValue("bdrSeq"),"");
+	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
 	#---
 	if($bdrSeq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
@@ -164,8 +164,8 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="FIX_REPLY_DATA"){
-	$bdrSeq = nvl(getRequestValue("bdrSeq"),"");
-	$bdrFixYN = nvl(getRequestValue("bdrFixYN"),"N");
+	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
+	$bdrFixYN = nvl(getPostValue("bdrFixYN"),"N");
 	#---
 	if($bdrSeq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");

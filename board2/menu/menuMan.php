@@ -146,8 +146,13 @@ if($menuListTotalCount > 0){
 		if(nvl($row["mn_use_yn"],"Y")!="Y"){
 			$rowStyleString = "color:gray;";
 		}//if
+		#--- 단계 1인 메뉴의 행 배경색 설정
+		$depth1RowStyle = "";
+		if(intval(nvl($row["mn_depth_no"],"0"))==0){
+			$depth1RowStyle = "background-color:#eaeaea;";
+		}#if
 ?>
-<tr>
+<tr style="<?php echo $depth1RowStyle; ?>">
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
 	<td align="left">
 		<a href="javascript:goModify('<?php echo $row["mn_seq"]; ?>');" style="<?php echo $rowStyleString; ?>"><?php echo fnMenuGetPrefixString($row["mn_depth_no"]).$row["mn_nm"]; ?></a> 
@@ -159,6 +164,8 @@ if($menuListTotalCount > 0){
 		<a href="javascript:goWrite('<?php echo $row["mn_seq"]; ?>');">하위등록</a> | 
 		<a href="javascript:goMenuLink('<?php echo $row["mn_url"]; ?>','_blank');">링크</a> | 
 		<a href="javascript:goDelete('<?php echo $row["mn_seq"]; ?>');" style="color:red;">삭제</a>
+		<br /><a href="javascript:goMoveUp('<?php echo $row["mn_seq"]; ?>');">상위이동</a> | 
+		<a href="javascript:goMoveDown('<?php echo $row["mn_seq"]; ?>');">하위이동</a>
 	</td>
 </tr>
 <?php
@@ -192,6 +199,7 @@ if($menuListTotalCount > 0){
 <form name="procForm" method="post" action="menuManProc.php">
 <input type="hidden" name="actionString" value="" />
 <input type="hidden" name="delMnSeq" value="" />
+<input type="hidden" name="moveMnSeq" value="" />
 <input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
 <input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
 <input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
@@ -255,6 +263,24 @@ function goMenuLink(mnUrl='',mnUrlTarget=''){
 }
 function copyMnSeq(mnSeq=''){
 	prompt('메뉴번호를 복사해 주세요.',mnSeq);
+}
+function goMoveUp(mnSeq=''){
+	if(mnSeq===''){return;}//if
+	//---
+	if(confirm('메뉴를 상위로 이동하시겠습니까?')){
+		procFormObject.actionString.value = 'menuMoveUp';
+		procFormObject.moveMnSeq.value = mnSeq;
+		procFormObject.submit();
+	}//if
+}
+function goMoveDown(mnSeq=''){
+	if(mnSeq===''){return;}//if
+	//---
+	if(confirm('메뉴를 하위로 이동하시겠습니까?')){
+		procFormObject.actionString.value = 'menuMoveDown';
+		procFormObject.moveMnSeq.value = mnSeq;
+		procFormObject.submit();
+	}//if
 }
 </script>
 

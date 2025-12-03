@@ -3,15 +3,15 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 #---
-$actionString = getRequestValue("actionString");
-$pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
-$pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
-$blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
-$schTitle = nvl(getRequestValue("schTitle"),"");
-$schContent = nvl(getRequestValue("schContent"),"");
-$mnSeq = nvl(getRequestValue("mnSeq"));
-$regMnSeq = nvl(getRequestValue("regMnSeq"));
-$modMnSeq = nvl(getRequestValue("modMnSeq"));
+$actionString = getPostValue("actionString");
+$pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
+$pageSize = intval(nvl(getPostValue("pageSize"),"10"));
+$blockSize = intval(nvl(getPostValue("blockSize"),"10"));
+$schTitle = nvl(getPostValue("schTitle"),"");
+$schContent = nvl(getPostValue("schContent"),"");
+$mnSeq = nvl(getPostValue("mnSeq"));
+$regMnSeq = nvl(getPostValue("regMnSeq"));
+$modMnSeq = nvl(getPostValue("modMnSeq"));
 $pMnSeq = "";
 $mnOrd = "";
 #---
@@ -28,11 +28,11 @@ debugString("modMnSeq",$modMnSeq);
 fnOpenDB();
 #---
 if($actionString=="write"){
-	$mnNm = nvl(getRequestValue("mnNm"));
-	$mnContent = nvl(getRequestValue("mnContent"));
-	$mnUrl = nvl(getRequestValue("mnUrl"));
-	$mnUrlTarget = nvl(getRequestValue("mnUrlTarget"));
-	$mnUseYn = nvl(getRequestValue("mnUseYn"),"N");
+	$mnNm = nvl(getPostValue("mnNm"));
+	$mnContent = nvl(getPostValue("mnContent"));
+	$mnUrl = nvl(getPostValue("mnUrl"));
+	$mnUrlTarget = nvl(getPostValue("mnUrlTarget"));
+	$mnUseYn = nvl(getPostValue("mnUseYn"),"N");
 	#---
 	if($regMnSeq==""){
 		$pMnSeq = "0";
@@ -111,12 +111,12 @@ if($actionString=="write"){
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
 }else if($actionString=="modify"){
-	$modMnSeq = nvl(getRequestValue("modMnSeq"));
-	$mnNm = nvl(getRequestValue("mnNm"));
-	$mnContent = nvl(getRequestValue("mnContent"));
-	$mnUrl = nvl(getRequestValue("mnUrl"));
-	$mnUrlTarget = nvl(getRequestValue("mnUrlTarget"));
-	$mnUseYn = nvl(getRequestValue("mnUseYn"),"N");
+	$modMnSeq = nvl(getPostValue("modMnSeq"));
+	$mnNm = nvl(getPostValue("mnNm"));
+	$mnContent = nvl(getPostValue("mnContent"));
+	$mnUrl = nvl(getPostValue("mnUrl"));
+	$mnUrlTarget = nvl(getPostValue("mnUrlTarget"));
+	$mnUseYn = nvl(getPostValue("mnUseYn"),"N");
 	#---
 	if($modMnSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($mnNm==""){alertBack("정보가 부족 합니다.");}#if
@@ -144,7 +144,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&editedMnSeq=".$modMnSeq;
 	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
 }else if($actionString=="delete"){
-	$delMnSeq = nvl(getRequestValue("delMnSeq"));
+	$delMnSeq = nvl(getPostValue("delMnSeq"));
 	#---
 	if($delMnSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if(getSubMenuCount($delMnSeq) > 0){alertBack("하위 메뉴가 존재 합니다.\\n하위 메뉴를 삭제해야, 상위메뉴가 삭제 가능합니다.");}#if
@@ -152,6 +152,131 @@ if($actionString=="write"){
 	$sql = "
 		delete from tb_board_menu_info
 		where mn_seq = ${delMnSeq}
+	";
+	fnDBUpdate($sql);
+	#---
+	$moveUrlParam = "";
+	$moveUrlParam .= "?pageNumber=".$pageNumber;
+	$moveUrlParam .= "&pageSize=".$pageSize;
+	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&schTitle=".$schTitle;
+	$moveUrlParam .= "&schContent=".$schContent;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
+	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
+}else if($actionString=="menuMoveUp"){
+	$moveMnSeq = nvl(getPostValue("moveMnSeq"));
+	$pMoveMnSeq = "";
+	$moveDepthMenuList = null;
+	$moveDepthMenuListCount = 0;
+	$moveDepthMenuListIndex = 0;
+	$moveMnInfo = null;
+	$prevMnInfo = null;
+	$moveMnNewOrd = "";
+	$prevMnNewOrd = "";
+	#---
+	if($moveMnSeq==""){alertBack("정보가 부족 합니다.");}#if
+	#---
+	## M = 이동대상 메뉴번호.
+	#   (M - $moveMnSeq)
+	## A = M의 부모 메뉴번호를 구함.
+	#   (A - $pMoveMnSeq)
+	$sql = "
+		SELECT p_mn_seq 
+		FROM tb_board_menu_info
+		where mn_seq = '${moveMnSeq}'
+	";
+	$pMoveMnSeq = fnDBGetValue($sql);
+	## B = A값이 전체 메뉴에서 부모메뉴번호와 일치하는 목록 구함.
+	#   (B - $moveDepthMenuList)
+	$sql = "
+		select
+			a.*
+		from (
+			SELECT
+				a.mn_seq
+				,a.p_mn_seq
+				,a.mn_nm
+				,a.mn_ord
+			from tb_board_menu_info a
+			where a.p_mn_seq = ${pMoveMnSeq}
+		) a
+		ORDER BY a.mn_ord asc
+	";
+	$moveDepthMenuList = fnDBGetList($sql);
+	$moveDepthMenuListCount = getArrayCount($moveDepthMenuList);
+	## C,D = B 목록 루프에서, M 과 일치하는 메뉴번호의 정보(=C)를 구하고, 이전순서의 메뉴번호에 해당하는 정보(=D)를 구함.
+	#   (C - $moveMnInfo, D - $prevMnInfo)
+	if($moveDepthMenuListCount > 0){
+		for($moveDepthMenuListIndex=0;$moveDepthMenuListIndex < $moveDepthMenuListCount;$moveDepthMenuListIndex++){
+			$moveMnInfo = $moveDepthMenuList[$moveDepthMenuListIndex];
+			#---
+			if($moveMnSeq==nvl($moveMnInfo["mn_seq"])){break;}#if
+			#---
+			$prevMnInfo = $moveMnInfo;
+		}#for
+	}#if
+	## E = C 메뉴정보의 미래 정렬순서 정보변수(=E)에, D 메뉴정보의 정렬순서값 셋팅.
+	#   (E - $moveMnNewOrd)
+	if($moveMnInfo!=null){
+		$moveMnNewOrd = nvl($moveMnInfo["mn_ord"]);
+	}#if
+	## F = D 메뉴정보의 미래 정렬순서 정보변수(=F)에, C 메뉴정보의 정렬순서값 셋팅.
+	#   (F - $prevMnNewOrd)
+	if($prevMnInfo!=null){
+		$prevMnNewOrd = nvl($prevMnInfo["mn_ord"]);
+	}#if
+	##
+	if($moveMnInfo!=null && $prevMnInfo!=null){
+		## C 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, E 값을 업데이트.
+		$sql = "
+			update tb_board_menu_info set
+				mn_ord = '${moveMnNewOrd}'
+			where mn_seq = '".nvl($moveMnInfo["mn_seq"])."'
+		";
+		#fnDBUpdate($sql);
+		## D 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, F 값을 업데이트.
+		$sql = "
+			update tb_board_menu_info set
+				mn_ord = '${prevMnNewOrd}'
+			where mn_seq = '".nvl($prevMnInfo["mn_seq"])."'
+		";
+		#fnDBUpdate($sql);
+	}#if
+	# ※ 이전 메뉴정보가 없으면, 아무처리없이, 다음 실행으로 넘어감.
+	
+	#---
+	$moveUrlParam = "";
+	$moveUrlParam .= "?pageNumber=".$pageNumber;
+	$moveUrlParam .= "&pageSize=".$pageSize;
+	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&schTitle=".$schTitle;
+	$moveUrlParam .= "&schContent=".$schContent;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
+	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
+}else if($actionString=="menuMoveDown"){
+	$moveMnSeq = nvl(getPostValue("moveMnSeq"));
+	#---
+	if($moveMnSeq==""){alertBack("정보가 부족 합니다.");}#if
+	#---
+	## M = 이동대상 메뉴번호.
+	#   (M - $moveMnSeq)
+	## A = M의 부모 메뉴번호를 구함.
+	#   (A - $pMoveMnSeq)
+	## B = A값이 전체 메뉴에서 부모메뉴번호와 일치하는 목록 구함.
+	#   (B - $moveDepthMenuList)
+	## C,D = B 목록 루프에서, M 과 일치하는 메뉴번호의 정보(=C)를 구하고, 다음순서의 메뉴번호에 해당하는 정보(=D)를 구함.
+	#   (C - $moveMnInfo, D - $nextMnInfo)
+	## E = C 메뉴정보의 미래 정렬순서 정보변수(=E)에, D 메뉴정보의 정렬순서값 셋팅.
+	#   (E - $moveMnNewOrd)
+	## F = D 메뉴정보의 미래 정렬순서 정보변수(=F)에, C 메뉴정보의 정렬순서값 셋팅.
+	#   (F - $nextMnNewOrd)
+	## C 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, E 값을 업데이트.
+	## D 메뉴정보의 메뉴번호에 해당하는 메뉴의 디비정렬필드에, F 값을 업데이트.
+	# ※ 다음 메뉴정보가 없으면, 아무처리없이, 다음 실행으로 넘어감.
+	
+	$sql = "
+		aaaa from tb_board_menu_info
+		where mn_seq = ${moveMnSeq}
 	";
 	fnDBUpdate($sql);
 	#---

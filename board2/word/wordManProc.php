@@ -2,12 +2,12 @@
 include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 #---
-$actionString = getRequestValue("actionString");
-$pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
-$pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
-$blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
-$schTitle = nvl(getRequestValue("schTitle"),"");
-$schContent = nvl(getRequestValue("schContent"),"");
+$actionString = getPostValue("actionString");
+$pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
+$pageSize = intval(nvl(getPostValue("pageSize"),"10"));
+$blockSize = intval(nvl(getPostValue("blockSize"),"10"));
+$schTitle = nvl(getPostValue("schTitle"),"");
+$schContent = nvl(getPostValue("schContent"),"");
 #---
 debugString("actionString",$actionString);
 debugString("pageNumber",$pageNumber);
@@ -19,8 +19,8 @@ debugString("schContent",$schContent);
 fnOpenDB();
 #---
 if($actionString=="write"){
-	$bdNm = nvl(getRequestValue("bdNm"));
-	$bdContent = nvl(getRequestValue("bdContent"));
+	$bdNm = nvl(getPostValue("bdNm"));
+	$bdContent = nvl(getPostValue("bdContent"));
 	#---
 	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
 	#---
@@ -52,9 +52,9 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","board.php".$moveUrlParam);
 }else if($actionString=="modify"){
-	$bdSeq = nvl(getRequestValue("bdSeq"));
-	$bdNm = nvl(getRequestValue("bdNm"));
-	$bdContent = nvl(getRequestValue("bdContent"));
+	$bdSeq = nvl(getPostValue("bdSeq"));
+	$bdNm = nvl(getPostValue("bdNm"));
+	$bdContent = nvl(getPostValue("bdContent"));
 	#---
 	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
@@ -78,7 +78,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","board.php".$moveUrlParam);
 }else if($actionString=="delete"){
-	$bdSeq = nvl(getRequestValue("bdSeq"));
+	$bdSeq = nvl(getPostValue("bdSeq"));
 	#---
 	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
 	#---

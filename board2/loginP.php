@@ -1,7 +1,7 @@
 <?php include $_SERVER['DOCUMENT_ROOT']."/board2/lib/_include.php"; ?>
 <?php
-	$userId = nvl(getRequestValue("userId"));
-	$userPassword = nvl(getRequestValue("userPassword"));
+	$userId = nvl(getPostValue("userId"));
+	$userPassword = nvl(getPostValue("userPassword"));
 	#---
 	$userId = substr($userId,0,50);
 	$userPassword = substr($userPassword,0,50);

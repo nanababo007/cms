@@ -4,14 +4,14 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 #---
 $boardInfo = null;
-$actionString = getRequestValue("actionString");
-$pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
-$pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
-$blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
-$mnSeq = nvl(getRequestValue("mnSeq"));
-$bdSeq = nvl(getRequestValue("bdSeq"));
-$schTitle = nvl(getRequestValue("schTitle"),"");
-$schContent = nvl(getRequestValue("schContent"),"");
+$actionString = getPostValue("actionString");
+$pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
+$pageSize = intval(nvl(getPostValue("pageSize"),"10"));
+$blockSize = intval(nvl(getPostValue("blockSize"),"10"));
+$mnSeq = nvl(getPostValue("mnSeq"));
+$bdSeq = nvl(getPostValue("bdSeq"));
+$schTitle = nvl(getPostValue("schTitle"),"");
+$schContent = nvl(getPostValue("schContent"),"");
 $replyCount = 0;
 #---
 debugString("actionString",$actionString);
@@ -30,9 +30,9 @@ if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.")
 debugArray("boardInfo",$boardInfo);
 #---
 if($actionString=="write"){
-	$bdaTitle = nvl(getRequestValue("bdaTitle"));
-	$bdaContent = nvl(getRequestValue("bdaContent"));
-	$bdaFixYn = trim(nvl(getRequestValue("bdaFixYn"),"N"));
+	$bdaTitle = nvl(getPostValue("bdaTitle"));
+	$bdaContent = nvl(getPostValue("bdaContent"));
+	$bdaFixYn = trim(nvl(getPostValue("bdaFixYn"),"N"));
 	#---
 	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
@@ -70,10 +70,10 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else if($actionString=="modify"){
-	$bdaSeq = nvl(getRequestValue("bdaSeq"));
-	$bdaTitle = nvl(getRequestValue("bdaTitle"));
-	$bdaContent = nvl(getRequestValue("bdaContent"));
-	$bdaFixYn = trim(nvl(getRequestValue("bdaFixYn"),"N"));
+	$bdaSeq = nvl(getPostValue("bdaSeq"));
+	$bdaTitle = nvl(getPostValue("bdaTitle"));
+	$bdaContent = nvl(getPostValue("bdaContent"));
+	$bdaFixYn = trim(nvl(getPostValue("bdaFixYn"),"N"));
 	#---
 	debugString("bdaSeq",$bdaSeq);
 	debugString("bdaTitle",$bdaTitle);
@@ -104,7 +104,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else if($actionString=="delete"){
-	$bdaSeq = nvl(getRequestValue("bdaSeq"));
+	$bdaSeq = nvl(getPostValue("bdaSeq"));
 	#---
 	if($bdaSeq==""){alertBack("정보가 부족 합니다.");}#if
 	#---

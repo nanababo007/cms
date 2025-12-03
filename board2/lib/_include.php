@@ -6,4 +6,7 @@
 	include $envVarMap["appPath"]."/lib/dbClassLibrary.php";
 	include $envVarMap["appPath"]."/lib/paging.php";
 	include $envVarMap["appPath"]."/lib/responseLibrary.php";
+	include $envVarMap["appPath"]."/lib/exceptionLibrary.php";
+	include $envVarMap["appPath"]."/lib/FileUtilLibrary.php";
+	include $envVarMap["appPath"]."/lib/FileUploadLibrary.php";
 ?>
