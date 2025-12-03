@@ -1,7 +1,7 @@
 <?php
 /*
 ResponseLibraryClass::setHeaderJson();
-ResponseLibraryClass::setDisplayAllError();
+ResponseLibraryClass::setDisplayAllError(); 	# 서버에서 오류 확인 시, 임시 설정
 */
 class ResponseLibraryClass
 {
