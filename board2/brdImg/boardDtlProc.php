@@ -141,6 +141,27 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
+}else if($actionString=="deleteFile"){
+	$bdafSeq = nvl(getPostValue("bdafSeq"));
+	#---
+	if($bdafSeq==""){alertBack("정보가 부족 합니다.");}#if
+	#---
+	$sql = "
+		delete from tb_board_img_article_file
+		where bdaf_seq = ${bdafSeq}
+	";
+	fnDBUpdate($sql);
+	#---
+	$moveUrlParam = "";
+	$moveUrlParam .= "?pageNumber=".$pageNumber;
+	$moveUrlParam .= "&pageSize=".$pageSize;
+	$moveUrlParam .= "&blockSize=".$blockSize;
+	$moveUrlParam .= "&mnSeq=".$mnSeq;
+	$moveUrlParam .= "&bdSeq=".$bdSeq;
+	$moveUrlParam .= "&bdaSeq=".nvl(getPostValue("bdaSeq"));;
+	$moveUrlParam .= "&schTitle=".$schTitle;
+	$moveUrlParam .= "&schContent=".$schContent;
+	alertGo("처리 되었습니다.","boardDtlWrite.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
 }#if

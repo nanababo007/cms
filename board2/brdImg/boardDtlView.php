@@ -129,7 +129,7 @@ fnCloseDB();
 					$boardDtlFileInfo = $boardDtlFileList[$boardDtlFileListIndex];
 					$boardDtlFileType = FileUtilLibraryClass::getFileTypeString($boardDtlFileInfo["bdaf_save_thumbnail"]);
 					if($boardDtlFileType=="img"){
-						?><br /><img src="<?php echo $boardDtlFileInfo["bdaf_save_thumbnail"]; ?>" /><?php
+						?><br /><a href="<?php echo $boardDtlFileInfo["bdaf_save_filename"]; ?>" target="_blank"><img src="<?php echo $boardDtlFileInfo["bdaf_save_thumbnail"]; ?>" /></a><?php
 					}else{
 						?><br /><a href="<?php echo $boardDtlFileInfo["bdaf_save_filename"]; ?>" target="_blank"><?php echo $boardDtlFileInfo["bdaf_filename"]; ?></a><?php
 					}#if

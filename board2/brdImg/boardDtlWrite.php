@@ -145,8 +145,10 @@ fnCloseDB();
 				<div style="margin:5px 0;">
 					<?php echo $bdaFileNumber; ?>. 첨부파일 : 
 					<input type="file" name="file<?php echo $bdaFileNumber; ?>" value="" />&nbsp;&nbsp;
-					<a href="<?php echo getArrayValue($boardDtlFileInfo,"bdaf_save_filename"); ?>"><?php echo getArrayValue($boardDtlFileInfo,"bdaf_filename"); ?></a><!-- | -->
-					<!--<a href="deleteFile(1);">파일삭제</a>-->
+					<a href="<?php echo getArrayValue($boardDtlFileInfo,"bdaf_save_filename"); ?>" target="_blank"><?php echo getArrayValue($boardDtlFileInfo,"bdaf_filename"); ?></a>
+					<?php if(nvl(getArrayValue($boardDtlFileInfo,"bdaf_seq"))!=""){ ?>
+					&nbsp;|&nbsp;<a href="javascript:deleteFile(<?php echo getArrayValue($boardDtlFileInfo,"bdaf_seq"); ?>);">파일삭제</a>
+					<?php }//if ?>
 				</div>
 				<?php
 			}#for
@@ -180,11 +182,25 @@ fnCloseDB();
 <input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
 </form>
 
+<form name="postForm" method="post" action="boardDtlProc.php">
+<input type="hidden" name="actionString" value="" />
+<input type="hidden" name="bdafSeq" value="" />
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
+<input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
+<input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
+<input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
+<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
+<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+</form>
+
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutEnd.php'); ?>
 
 <script>
 var paramFormObject = document.paramForm;
 var writeFormObject = document.writeForm;
+var postFormObject = document.postForm;
 //---
 function goSave(pageNumber){
 	if(writeFormObject.bdaSeq.value!==''){
@@ -199,9 +215,12 @@ function goCancel(){
 	paramFormObject.action = 'boardDtl.php';
 	paramFormObject.submit();
 }
-function downFile(bdafSeq=''){
-}
 function deleteFile(bdafSeq=''){
+	if(confirm("파일을 삭제 하시겠습니까?")){
+		postFormObject.actionString.value = "deleteFile";
+		postFormObject.bdafSeq.value = bdafSeq;
+		postFormObject.submit();
+	}//if
 }
 </script>
 
