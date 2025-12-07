@@ -14,9 +14,9 @@
 	$templateFileText = FileUtilLibraryClass::getFileContentTextByFilepathAndFilename("c:\\folderpath\\","a.txt");
 	FileUtilLibraryClass::writeFileContentText("c:\\a.txt","file write content");
 	FileUtilLibraryClass::writeFileContentTextByFilepathAndFilename("c:\\folderpath\\","a.txt","file write content");
-	$editFolderPath = FileUtilLibraryClass::getCombinedSubFoldersPath("c:\\folderpath\\","subFolderName1","subFolderName2");
+	$editFolderPath = FileUtilLibraryClass::getCombinedSubFoldersPath("c:\\folderpath\\","subFolderName1","subFolderName2"); # 경로 체크 함 (상대경로에서 사용하면 빈값반환)
 	FileUtilLibraryClass::makeFolderPath("c:\\folderpath\\","subFolderName1","subFolderName2");
-	$editFolderPath = FileUtilLibraryClass::getForceCombinedSubFoldersPath("c:\\folderpath\\","subFolderName1","subFolderName2");
+	$editFolderPath = FileUtilLibraryClass::getForceCombinedSubFoldersPath("c:\\folderpath\\","subFolderName1","subFolderName2"); # 경로 체크 안함
 	FileUtilLibraryClass::makeForceFolderPath("c:\\folderpath\\","subFolderName1","subFolderName2");
 	FileUtilLibraryClass::copyFile("c:\\folderpath\\orgFile.txt","c:\\folderpath2\\destFile.txt");
 */
@@ -258,7 +258,7 @@ class FileUtilLibraryClass
 			$templatePathString = $templateFolderPathString."/".$templateFilenameString;
 		}#if
 		if(!file_exists($templatePathString)){return $errorReturnText;}#if
-		$templateFileText = AppFileCopyLibraryClass::getFileContentText($templatePathString);
+		$templateFileText = self::getFileContentText($templatePathString);
 		#---
 		$returnText = $templateFileText;
 		return $returnText;
@@ -296,7 +296,7 @@ class FileUtilLibraryClass
 			$templatePathString = $templateFolderPathString."/".$templateFilenameString;
 		}#if
 		if(!file_exists($templateFolderPathString)){return;}#if
-		AppFileCopyLibraryClass::writeFileContentText($templatePathString,$templateFileText);
+		self::writeFileContentText($templatePathString,$templateFileText);
 	}
 	public static function writeFileContentText($templateFilePathString="",$templateFileText="",$charset="utf-8"){
 		$editTemplateFilePathString = "";
@@ -315,7 +315,7 @@ class FileUtilLibraryClass
 	){
 		$templatePathString = "";
 		#---
-		$templatePathString = AppFileCopyLibraryClass::getCombinedSubFoldersPath(
+		$templatePathString = self::getCombinedSubFoldersPath(
 			$templateFolderPathString,$templateSub1FolderPath,$templateSub2FolderPath
 			,$templateSub3FolderPath,$templateSub4FolderPath,$templateSub5FolderPath
 			,$templateSub6FolderPath,$templateSub7FolderPath,$templateSub8FolderPath
@@ -381,7 +381,7 @@ class FileUtilLibraryClass
 	){
 		$templatePathString = "";
 		#---
-		$templatePathString = AppFileCopyLibraryClass::getForceCombinedSubFoldersPath(
+		$templatePathString = self::getForceCombinedSubFoldersPath(
 			$templateFolderPathString,$templateSub1FolderPath,$templateSub2FolderPath
 			,$templateSub3FolderPath,$templateSub4FolderPath,$templateSub5FolderPath
 			,$templateSub6FolderPath,$templateSub7FolderPath,$templateSub8FolderPath
@@ -547,10 +547,9 @@ class FileUtilLibraryClass
 		$fileTypeString = self::getFileTypeString($filePathString);
 		if($fileTypeString=="img"){
 			$fileNewPathNamyOnly = self::getForceCombinedSubFoldersPath($fileFilePathOnlyString,$fileNameOnlyString);
-			$thumbnailPathString = "{{fileNewPathNamyOnly}}_{{thumbnailSizeString}}x{{thumbnailSizeString}}.{{fileFileExtString}}";
+			$thumbnailPathString = "{{fileNewPathNamyOnly}}_{{thumbnailSizeString}}x{{thumbnailSizeString}}.jpg";
 			$thumbnailPathString = str_replace("{{fileNewPathNamyOnly}}",$fileNewPathNamyOnly,$thumbnailPathString);
 			$thumbnailPathString = str_replace("{{thumbnailSizeString}}",$thumbnailSizeString,$thumbnailPathString);
-			$thumbnailPathString = str_replace("{{fileFileExtString}}",$fileFileExtString,$thumbnailPathString);
 		}#if
 		#---
 		$returnString = trim(nvl($thumbnailPathString));

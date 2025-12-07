@@ -3,6 +3,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardMasLibraryInclude.php');
 #---
+#ResponseLibraryClass::setDisplayAllError();
 $boardInfo = null;
 $actionString = getPostValue("actionString");
 $pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
@@ -261,12 +262,18 @@ function uploadFileOfThisPage($fileFormName="",$saveFolderName=""){
 	$thumbnailImageHeight = 0;
 	$thumbnailImageNewWidth = 0;
 	$thumbnailImageDebugOption = false;
-	$filePathString = "";
-	$fileWebPathString = "";
 	$fileUploadItemName = "";
 	$thumbnailPathString = "";
 	$thumbnailWebPathString = "";
 	$thumbnailImageResultArray = null;
+	$filePathString = "";
+	$filePathDirString = "";
+	$filePathFileName = "";
+	$newFilePathString = "";
+	$fileWebPathString = "";
+	$fileWebPathDirString = "";
+	$fileWebPathFileName = "";
+	$newFileWebPathString = "";
 	#---
 	if($fileFormName==""){return null;}#if
 	if($saveFolderName==""){return null;}#if
@@ -275,6 +282,9 @@ function uploadFileOfThisPage($fileFormName="",$saveFolderName=""){
 	$executeFileUploadResultAllObject = $fileUploadLibraryObject->executeFileUpload();
 	$executeFileUploadProcedureResultObject = $executeFileUploadResultAllObject['executeProcedureResultObject'];
 	$executeFileUploadResultObject = $executeFileUploadResultAllObject['executeUploadResultObject'];
+	debugString("uploadFileOfThisPage","========== executeFileUploadProcedureResultObject");
+	debugArray("uploadFileOfThisPage executeFileUploadProcedureResultObject 1",$executeFileUploadProcedureResultObject);
+	debugArray("uploadFileOfThisPage executeFileUploadResultObject 1",$executeFileUploadResultObject);
 	#---
 	if($executeFileUploadProcedureResultObject->getResultFlagString()=="success"){
 		$thumbnailImageNewWidth = 300;

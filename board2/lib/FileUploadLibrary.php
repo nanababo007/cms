@@ -187,6 +187,9 @@ class FileUploadLibraryClass
 						$uploadExecuteResultObject['fileUploadImagesFileSaveDirectory'] = $fileUploadItemResultFileSaveDirectory;
 						$uploadExecuteResultObject['fileUploadImagesFileSaveDirectoryPath'] = $fileUploadItemResultFileSaveDirectoryPath;
 						#---
+						$uploadExecuteResultObject['fileUploadItemSaveName'] = $fileUploadItemResultFileSaveDirectoryPath;
+						$uploadExecuteResultObject['fileUploadItemSaveWebPath'] = $fileUploadItemResultFileSaveWebPath;
+						#---
 						$exceptionLibraryObject->setErrorInformation('success', '', '파일 업로드 성공');
 						return $exceptionLibraryObject;
 					} else {
