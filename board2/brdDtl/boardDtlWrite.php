@@ -16,6 +16,7 @@ $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+$schReply = nvl(getRequestValue("schReply"),"");
 #---
 fnOpenDB();
 setDisplayMenuList();
@@ -75,6 +76,7 @@ fnCloseDB();
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
 <input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
 <input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
 <table class="board-write-table-class">
 <colgroup>
 	<col width="20%" />
@@ -124,6 +126,7 @@ fnCloseDB();
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
 <input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
 <input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
 </form>
 
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutEnd.php'); ?>

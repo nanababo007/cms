@@ -326,25 +326,4 @@ function addGlobalResource(&$globalResourceObject=null){
 function fnGetSqlWhereAndString($sqlSearchPartIndex=0){
 	return $sqlSearchPartIndex==0 ? " where " : " and ";
 }
-# $str = "HelloWorldExample";
-# list($before,$after) = splitBySubstring($str,"World");
-function splitBySubstring($text="",$substring="") {
-	$text = nvl($text);
-	$substring = nvl($substring);
-	#---
-	if($text==""){return "";}#if
-	if($substring==""){return [$text,""];}#if
-	#--- 특정 문자열의 시작 위치 찾기
-	$pos = strpos($text, $substring);
-	if ($pos === false) {
-		# 문자열이 없으면 원본 그대로 반환
-		return [$text,""];
-	}#if
-	#---
-	# 앞부분: 기준 문자열 이전
-	$before = substr($text, 0, $pos);
-	# 뒷부분: 기준 문자열 이후
-	$after = substr($text, $pos + strlen($substring));
-	return [$before, $after];
-}
 ?>

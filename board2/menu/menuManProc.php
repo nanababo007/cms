@@ -262,6 +262,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
+	$moveUrlParam .= "#mnSeqPos".$moveMnSeq;
 	pageGo("menuMan.php".$moveUrlParam);
 }else if($actionString=="menuMoveDown"){
 	$moveMnSeq = nvl(getPostValue("moveMnSeq"));
@@ -365,6 +366,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
+	$moveUrlParam .= "#mnSeqPos".$moveMnSeq;
 	pageGo("menuMan.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");

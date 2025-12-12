@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>board 설치</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="ins_cmn.js"></script>
+  <script src="ins_status.js"></script>
+</head>
+<body>
+
+<div>
+	<input type="button" value="처리" onclick="startProc();" style="padding:2px 6px;" />
+	<input type="button" value="일시중지" onclick="pauseProc();" style="padding:2px 6px;" />
+	<input type="button" value="중지" onclick="stopProc();" style="padding:2px 6px;" />
+</div>
+
+<table>
+<tr>
+	<th>입력값</th>
+	<th></th>
+	<th>대상파일목록 <span id="procDisplayArea">(0/0건, 0%)</span></th>
+</tr>
+<tr>
+	<td colspan="3"><div id="procStatusDisplayArea">진행상태 : </div></td>
+</tr>
+<tr>
+	<td valign="top">
+		<textarea id="varList" style="width:300px;height:400px;">proc.saveFolderPath=c:\savefolder\
+proc.sourceFolderPath=c:\aaaa\
+replace.varName3=varValue3
+replace.varName4=varValue4</textarea>
+	</td>
+	<td width="10"></td>
+	<td valign="top">
+		<textarea id="tgtFileList" style="width:300px;height:400px;">c:\aaaa\bbb.txt
+c:\aaaa\ccc.txt</textarea>
+	</td>
+</tr>
+</table>
+
+<script>
+var varListJqueryObject = $('#varList');
+var tgtFileListJqueryObject = $('#tgtFileList');
+var procDisplayAreaJqueryObject = $('#procDisplayArea');
+var procStatusDisplayAreaJqueryObject = $('#procStatusDisplayArea');
+var procStatusObject = null;
+var procDataObject = null;
+//---
+procStatusObject = new procStatusNewObject();
+//---
+function startProc(){
+	var varListString = '';
+	var varListArray = null;
+	var varListArrayLength = 0;
+	var editVarListArray = null;
+	var editVarListString = '';
+	var tgtFileListString = '';
+	var tgtFileListArray = null;
+	var tgtFileListArrayLength = 0;
+	var editTgtFileListArray = null;
+	var editTgtFileListString = '';
+	//---
+	varListString = varListJqueryObject.val().replaceAll('\r\n','\n');
+	varListArray = varListString.split('\n');
+	varListArrayLength = varListArray.length;
+	tgtFileListString = tgtFileListJqueryObject.val().replaceAll('\r\n','\n');
+	tgtFileListArray = tgtFileListString.split('\n');
+	tgtFileListArrayLength = tgtFileListArray.length;
+	//---
+	editVarListArray = [];
+	$.each(varListArray,function(index,varString){
+		if($.trim(varString)!==''){
+			editVarListArray.push(varString);
+		}//if
+	});
+	editVarListString = editVarListArray.join('\n');
+	varListJqueryObject.val(editVarListString);
+	//---
+	editTgtFileListArray = [];
+	$.each(tgtFileListArray,function(index,tgtFileString){
+		tgtFileString = $.trim(tgtFileString);
+		//---
+		if(tgtFileString!==''){
+			editTgtFileListArray.push(tgtFileString);
+		}//if
+	});
+	editTgtFileListString = editTgtFileListArray.join('\n');
+	tgtFileListJqueryObject.val(editTgtFileListString);
+	//---
+	varListArray = editVarListString.split('\n');
+	varListArrayLength = varListArray.length;
+	tgtFileListArray = editTgtFileListString.split('\n');
+	tgtFileListArrayLength = tgtFileListArray.length;
+	//---
+	if($.trim(editVarListString)===''){
+		alert('변수 목록을 등록 해주세요.');
+		varListJqueryObject.focus();
+		return;
+	}//if
+	if($.trim(editTgtFileListString)===''){
+		alert('처리파일경로 목록을 등록 해주세요.');
+		tgtFileListJqueryObject.focus();
+		return;
+	}//if
+	//---
+	if(confirm('처리를 시작 하시겠습니까?')){
+		procDataObject = null;
+		procDataObject = {};
+		procDataObject.varListString = varListString;
+		procDataObject.varListArray = varListArray;
+		procDataObject.varListArrayLength = varListArrayLength;
+		procDataObject.tgtFileListString = tgtFileListString;
+		procDataObject.tgtFileListArray = tgtFileListArray;
+		procDataObject.tgtFileListArrayLength = tgtFileListArrayLength;
+		//---
+		procStatusObject.runStatus(tgtFileListArrayLength);
+	}//if
+}
+function stopProc(){
+	if(procStatusObject===null){alert('처리를 시작 해주세요.');return;}//if
+	//---
+	if(confirm('처리를 종료 하시겠습니까?')){
+		procStatusObject.stopStatus();
+	}//if
+}
+function pauseProc(){
+	if(procStatusObject===null){alert('처리를 시작 해주세요.');return;}//if
+	//---
+	if(confirm('처리를 일시중지 하시겠습니까?')){
+		procStatusObject.pauseStatus();
+	}//if
+}
+function goStepProc(){
+	console.info('=== '+procStatusObject.procNumber+' 번째 실행');
+	console.info('index : ',procStatusObject.procIndex);
+	console.info(procStatusObject.getDisplayText());
+	console.info(procStatusObject.getDisplayStatusText());
+	//---
+	var tgtFilePathString = getNvlString(procDataObject.tgtFileListArray[procStatusObject.procIndex]);
+	//---
+	var urlString = 'insApi.php';
+	var paramObject = {};
+	paramObject.actionString = 'CREATE_FILE';
+	paramObject.varList = varListJqueryObject.val();
+	paramObject.tgtFilePathString = tgtFilePathString;
+	$.post(urlString,paramObject,function(data){
+		console.info('data : ',data);
+		displayProc(procStatusObject);
+	});
+	//---
+}
+function displayProc(procStatusObject=null){
+	if(procStatusObject!==null && procDataObject!==null){
+		var tgtFilePathString = getNvlString(procDataObject.tgtFileListArray[procStatusObject.procIndex]);
+		//---
+		procStatusObject.procFilePath = tgtFilePathString;
+		//---
+		procDisplayAreaJqueryObject.html(procStatusObject.getDisplayText());
+		procStatusDisplayAreaJqueryObject.html(procStatusObject.getDisplayStatusText());
+	}//if
+}
+</script>
+
+</body>
+</html>

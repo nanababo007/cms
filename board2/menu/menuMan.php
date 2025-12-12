@@ -155,6 +155,7 @@ if($menuListTotalCount > 0){
 <tr style="<?php echo $depth1RowStyle; ?>">
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
 	<td align="left">
+		<a name="mnSeqPos<?php echo $row["mn_seq"]; ?>"></a>
 		<a href="javascript:goModify('<?php echo $row["mn_seq"]; ?>');" style="<?php echo $rowStyleString; ?>"><?php echo fnMenuGetPrefixString($row["mn_depth_no"]).$row["mn_nm"]; ?></a> 
 		<a href="javascript:copyMnSeq('<?php echo $row["mn_seq"]; ?>');" style="color:gray;">(메뉴번호 : <?php echo $row["mn_seq"]; ?>)</a>
 		<br /><span style="<?php echo $rowStyleString; ?>"><?php echo nvl($row["mn_use_yn"],"Y")=="Y" ? "[사용]" : "[미사용]"; ?> 메뉴경로 : <?php echo $row["mn_path"]; ?></span>

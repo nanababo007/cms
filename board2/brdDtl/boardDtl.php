@@ -22,6 +22,7 @@ $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+$schReply = nvl(getRequestValue("schReply"),"");
 $boardDtlFixList = null;
 $boardDtlFixListCount = 0;
 #---
@@ -46,6 +47,16 @@ if($schTitle!=""){
 if($schContent!=""){
 	$sqlSearchPart .= fnGetSqlWhereAndString($sqlSearchPartIndex);
 	$sqlSearchPart .= " a.bda_content like '%${schContent}%' ";
+	$sqlSearchPartIndex++;
+}#if
+if($schReply!=""){
+	$sqlSearchPart .= fnGetSqlWhereAndString($sqlSearchPartIndex);
+	$sqlSearchPart .= " exists (
+		select bdr_seq 
+		from tb_board_reply 
+		where bda_seq = a.bda_seq
+		and bdr_content like '%${schReply}%')
+	";
 	$sqlSearchPartIndex++;
 }#if
 #---
@@ -143,6 +154,12 @@ fnCloseDB();
 	<th>게시글 내용</th>
 	<td><input type="text" id="schContent" value="<?php echo $schContent; ?>" /></td>
 </tr>
+<tr>
+	<th>게시글 댓글</th>
+	<td><input type="text" id="schReply" value="<?php echo $schReply; ?>" /></td>
+	<th></th>
+	<td></td>
+</tr>
 <tr class="last-row-class">
 	<td colspan="4" align="right">
 		<button onclick="javascript:goSearch();">검색</button>
@@ -220,6 +237,7 @@ if($boardListTotalCount > 0){
 <input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
 <input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
 <input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
 </form>
 
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutEnd.php'); ?>
@@ -254,6 +272,7 @@ function goWrite(bdaSeq=''){
 function goSearch(){
 	paramFormObject.schTitle.value = $('#schTitle').val();
 	paramFormObject.schContent.value = $('#schContent').val();
+	paramFormObject.schReply.value = $('#schReply').val();
 	paramFormObject.pageNumber.value = '1';
 	paramFormObject.action = 'boardDtl.php';
 	paramFormObject.submit();
@@ -262,6 +281,7 @@ function resetSearch(){
 	if(confirm('검색을 초기화 하시겠습니까?')){
 		$('#schTitle').val('');
 		$('#schContent').val('');
+		$('#schReply').val('');
 		goSearch();
 	}//if
 }
