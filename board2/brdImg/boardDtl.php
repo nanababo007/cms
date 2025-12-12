@@ -250,7 +250,7 @@ $(function(){
 });
 //---
 function initPage(){
-	setSearchEnter($('#schTitle, #schContent'),function(){
+	setSearchEnter($('#schTitle, #schContent, #schReply'),function(){
 		goSearch();
 	});
 }
