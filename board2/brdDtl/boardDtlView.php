@@ -6,6 +6,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/brdMas/boardLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdDtl/boardDtlLibraryInclude.php');
 #---
 $thisPageMnSeq = getThisPageMnSeq("23","17");
+$pageTitleString = "";
 $boardArticleInfo = null;
 $boardInfo = null;
 $mnSeq = nvl(getRequestValue("mnSeq"));
@@ -28,6 +29,8 @@ $boardInfo = fnBoardGetInfo($bdSeq);
 if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
 debugArray("boardInfo",$boardInfo);
 if(!fnBoardArticleCheckInfo($bdaSeq)){alertBack("게시글 정보가 존재하지 않습니다.");}#if
+#---
+$pageTitleString = getArrayValue($boardInfo,"bd_nm")." | 멀티게시판";
 #---
 $sql = "
 	update tb_board_article set

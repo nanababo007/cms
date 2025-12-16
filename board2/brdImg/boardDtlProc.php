@@ -105,10 +105,11 @@ if($actionString=="write"){
 	$moveUrlParam .= "&blockSize=".$blockSize;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "&bdSeq=".$bdSeq;
+	$moveUrlParam .= "&bdaSeq=".$bdaSeq;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&schReply=".$schReply;
-	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardDtlView.php".$moveUrlParam);
 }else if($actionString=="delete"){
 	$bdaSeq = nvl(getPostValue("bdaSeq"));
 	#---
