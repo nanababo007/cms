@@ -84,7 +84,7 @@ fnCloseDB();
 	</td>
 </tr>
 <tr>
-	<th align="center">메뉴 URL</th>
+	<th align="center">메뉴 URL (&mnSeq=<?php echo $modMnSeq; ?>)</th>
 	<td colspan="3">
 		<input type="text" name="mnUrl" value="<?php echo nvl(getArrayValue($menuInfo,"mn_url"),"http://"); ?>" style="width:90%;height:20px;" />
 	</td>
