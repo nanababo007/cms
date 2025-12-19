@@ -1,0 +1,72 @@
+<?php
+	$pageTitle = "스크립트 CSS 임포트 구문 생성 유틸페이지";
+?>
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><?php echo $pageTitle ?></title>
+	<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<h1><?php echo $pageTitle ?></h1>
+
+<p>
+	<input type="button" value="구문생성" onclick="createClause();" />
+</p>
+
+
+<p>
+	<h3>css/js url 들 입력</h3>
+	<textarea id="cssJsUrls" style="width:500px;height:200px;"></textarea>
+</p>
+
+<p>
+	<h3>css/js url 들 import 구문 출력</h3>
+	<textarea id="cssJsUrlsImportClause" style="width:500px;height:200px;"></textarea>
+</p>
+
+<script type="text/javascript">
+var cssJsUrlsObject = document.getElementById('cssJsUrls');
+var cssJsUrlsImportClauseObject = document.getElementById('cssJsUrlsImportClause');
+//---
+function createClause(){
+	var cssJsUrlsString = '';
+	var cssJsUrlsArray = null;
+	var cssJsUrlsArrayLength = 0;
+	var cssJsUrlsImportString = '';
+	var cssJsUrlsImportArray = null;
+	var cssJsUrlsImportTemplateString = '';
+	//---
+	cssJsUrlsString = cssJsUrlsObject.value.replaceAll('\r\n','\n');
+	cssJsUrlsArray = cssJsUrlsString.split('\n');
+	cssJsUrlsArrayLength = cssJsUrlsArray.length;
+	//---
+	if(cssJsUrlsString===''){alert('css/js url 값을 입력해주세요.');cssJsUrlsObject.focus();return;}//if
+	cssJsUrlsImportClauseObject.value = '';
+	//---
+	cssJsUrlsImportArray = [];
+	cssJsUrlsArray.forEach(function(itemString,index){
+		var cssJsUrlString = $.trim(itemString);
+		if(cssJsUrlString!==''){
+			if(cssJsUrlString.endsWith('.css')){
+				cssJsUrlsImportTemplateString = '<link href="{{urlString}}" rel="stylesheet" crossorigin="anonymous">';
+			}else{
+				cssJsUrlsImportTemplateString = "(((((script src='{{urlString}}' crossorigin='anonymous'>(((((/script>";
+			}//if
+			//---
+			cssJsUrlsImportTemplateString = cssJsUrlsImportTemplateString.replaceAll('{{urlString}}',cssJsUrlString);
+			cssJsUrlsImportTemplateString = cssJsUrlsImportTemplateString.replaceAll('(((((','<');
+			//---
+			cssJsUrlsImportArray.push(cssJsUrlsImportTemplateString);
+		}//if
+	});
+	//---
+	cssJsUrlsImportString = cssJsUrlsImportArray.join('\n');
+	cssJsUrlsImportClauseObject.value = cssJsUrlsImportString;
+}
+</script>
+
+</body>
+</html>

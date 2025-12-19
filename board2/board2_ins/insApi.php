@@ -14,6 +14,7 @@ if($modeString=="server"){
 #fnOpenDB();
 #---
 if($actionString=="CREATE_FILE"){
+	$rowData = null;
 	$varList = "";
 	$varListArray = null;
 	$varListArrayLength = 0;
@@ -39,9 +40,15 @@ if($actionString=="CREATE_FILE"){
 	$replaceVarValueString = "";
 	$replaceInfo = null;
 	$tgtFilePathString = "";
+	$tgtFileFullPathString = "";
 	$tgtFileContentString = "";
 	$saveFolderPath = "";
+	$saveFullFolderPath = "";
+	$saveFolderDirPath = "";
+	$saveFilenameWithExt = "";
+	$sourceFolderPath = "";
 	#---
+	$rowData = array();
 	$varList = nvl(getPostValue("varList"),"");
 	$tgtFilePathString = trim(nvl(getPostValue("tgtFilePathString"),""));
 	#---
@@ -49,12 +56,6 @@ if($actionString=="CREATE_FILE"){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
-/*
-	if(!file_exists($tgtFilePathString)){
-		$responseLibraryObject->setResponseUserErrorData("not_exist_file");
-		responseJson();
-	}#if
-*/
 	#---
 	$varList = str_replace("\r\n","\n",$varList);
 	$varListArray = explode("\n",$varList);
@@ -85,6 +86,7 @@ if($actionString=="CREATE_FILE"){
 		}#foreach
 		#---
 		$saveFolderPath = trim(nvl($procInfo["saveFolderPath"]));
+		$sourceFolderPath = trim(nvl($procInfo["sourceFolderPath"]));
 	}#if
 	#---
 	if($saveFolderPath==""){
@@ -93,6 +95,15 @@ if($actionString=="CREATE_FILE"){
 	}#if
 	if(!is_dir($saveFolderPath)){
 		$responseLibraryObject->setResponseUserErrorData("not_exist_saveFolderPath");
+		responseJson();
+	}#if
+	#---
+	if($sourceFolderPath==""){
+		$responseLibraryObject->setResponseUserErrorData("need_param_sourceFolderPath");
+		responseJson();
+	}#if
+	if(!is_dir($sourceFolderPath)){
+		$responseLibraryObject->setResponseUserErrorData("not_exist_sourceFolderPath");
 		responseJson();
 	}#if
 	#---
@@ -109,20 +120,19 @@ if($actionString=="CREATE_FILE"){
 		}#foreach
 	}#if
 	#---
-	
-	
-	
-#파일 내용 읽어서, 변수에 저장 처리	
-# $tgtFilePathString = "";
-# $tgtFileContentString = "";
-
-
-
-
+	$tgtFileFullPathString = FileUtilLibraryClass::getForceCombinedSubFoldersPath($sourceFolderPath,$tgtFilePathString);
+	if(!file_exists($tgtFileFullPathString)){
+		$responseLibraryObject->setResponseUserErrorData("not_exist_file");
+		responseJson();
+	}#if
+	# 파일 내용 읽어서, 변수에 저장 처리	
+	$tgtFileContentString = FileUtilLibraryClass::getFileContentText($tgtFileFullPathString);
+	# for debug start
+	#$rowData["tgtFileFullPathString"] = $tgtFileFullPathString;
+	#$rowData["tgtFileContentString"] = $tgtFileContentString;
+	# for debug end
 	#---
-	
-	
-#파일 내용을 치환 처리
+	#파일 내용을 치환 처리
 	if($replaceVarListArrayLength > 0 && $replaceInfo!=null && nvl($tgtFileContentString)!=""){
 		foreach ($replaceInfo as $replaceVarNameString => $replaceVarValueString) {
 			$replaceVarKeyNameString = "{{replaceVarNameString}}";
@@ -131,25 +141,22 @@ if($actionString=="CREATE_FILE"){
 			$tgtFileContentString = str_replace($replaceVarKeyNameString,$replaceVarValueString,$tgtFileContentString);
 		}#foreach
 	}#if
-	
-# $tgtFileContentString = "";
-	
-	
+	# for debug start
+	#$rowData["replaced_tgtFileFullPathString"] = $tgtFileFullPathString;
+	#$rowData["replaced_tgtFileContentString"] = $tgtFileContentString;
+	# for debug end
 	#---
-	
-	
-# $tgtFilePathString = "";
-# $tgtFileContentString = "";
-# $saveFolderPath
-# $fileNameWithExtString = FileUtilLibraryClass::getFileNameWithExt($filePathString="");
-
-#치환된 파일 내용을, 목적 폴더에, 목적 파일명으로 저장 처리
-#목적 경로
-	
-	
-	
+	$saveFullFolderPath = FileUtilLibraryClass::getForceCombinedSubFoldersPath($saveFolderPath,$tgtFilePathString);
+	$saveFolderDirPath = FileUtilLibraryClass::getFileDirPathOnly($saveFullFolderPath);
+	$saveFilenameWithExt = FileUtilLibraryClass::getFileNameWithExt($saveFullFolderPath);
+	FileUtilLibraryClass::makeForceFolderPath($saveFolderDirPath);
+	FileUtilLibraryClass::writeFileContentTextByFilepathAndFilename($saveFolderDirPath,$saveFilenameWithExt,$tgtFileContentString);
+	# for debug start
+	#$rowData["saveFullFolderPath"] = $saveFullFolderPath;
+	#$rowData["saveFolderDirPath"] = $saveFolderDirPath;
+	#$rowData["saveFilenameWithExt"] = $saveFilenameWithExt;
+	# for debug end
 	#---
-	$rowData = array();
 	#$rowData["datakey"] = "data";
 	#---
 	$responseData['rowData'] = $rowData;

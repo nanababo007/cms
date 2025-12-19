@@ -1,0 +1,259 @@
+<?php
+include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/lib/_include.php');
+include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/checkLogin.php');
+include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/menu.php');
+include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/brdImg/boardMasLibraryInclude.php');
+#---
+$thisPageMnSeq = 24;
+$bdaFileCount = 12;
+$bdaFileIndex = 0;
+$bdaFileNumber = 0;
+$boardInfo = null;
+$boardArticleInfo = null;
+$pageTitleString = "";
+$mnSeq = nvl(getRequestValue("mnSeq"));
+$bdSeq = nvl(getRequestValue("bdSeq"));
+$bdaSeq = nvl(getRequestValue("bdaSeq"));
+$pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
+$pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
+$blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
+$schTitle = nvl(getRequestValue("schTitle"),"");
+$schContent = nvl(getRequestValue("schContent"),"");
+$schReply = nvl(getRequestValue("schReply"),"");
+$boardDtlFileList = null;
+$boardDtlFileListCount = 0;
+$boardDtlFileInfo = null;
+$bdafKindName = "";
+#---
+fnOpenDB();
+setDisplayMenuList();
+#---
+$boardInfo = fnBoardGetInfo($bdSeq);
+if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
+debugArray("boardInfo",$boardInfo);
+#---
+$pageTitleString = getArrayValue($boardInfo,"bd_nm")." | 멀티게시판";
+#---
+if($bdaSeq!=""){
+	$sqlBodyPart = "
+		FROM {{cms.tableNamePrefix}}_img_article a
+		where bda_seq = ${bdaSeq}
+	";
+	#---
+	$sqlMain = "
+		SELECT
+			a.bda_seq
+			,a.bd_seq
+			,a.bda_title
+			,a.bda_content
+			,a.bda_fix_yn
+			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
+			,a.regdate
+			,a.reguser
+			,a.moddate
+			,a.moduser
+		${sqlBodyPart}
+	";
+	$boardArticleInfo = fnDBGetRow($sqlMain);
+	#---
+	$sqlFile = "
+		select
+			a.*
+		from (
+			SELECT
+				a.bdaf_seq
+				,a.bda_seq
+				,a.bdaf_filename
+				,a.bdaf_save_filename
+				,a.bdaf_save_thumbnail
+				,a.bdaf_kind_name
+				,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
+				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
+				,a.regdate
+				,a.reguser
+				,a.moddate
+				,a.moduser
+			from {{cms.tableNamePrefix}}_img_article_file a
+			where a.bda_seq = ${bdaSeq}
+		) a
+		ORDER BY a.bda_seq DESC
+	";
+	$boardDtlFileList = fnDBGetList($sqlFile);
+	$boardDtlFileListCount = getArrayCount($boardDtlFileList);
+}else{
+	$boardArticleInfo = array();
+}#if
+#---
+fnCloseDB();
+?>
+<!doctype html>
+<html lang="ko">
+<head>
+	<?php include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/head.php'); ?>
+</head>
+<body>
+<?php include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/top.php'); ?>
+<?php include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/layoutStart.php'); ?>
+
+<h2>게시글 관리 (<?php echo getArrayValue($boardInfo,"bd_nm"); ?>) <span class="menu-navi-class"><?php echo getMenuPathString($thisPageMnSeq); ?></span></h2>
+
+<form name="writeForm" method="post" action="boardDtlProc.php" enctype="multipart/form-data">
+<input type="hidden" name="actionString" value="write" />
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
+<input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
+<input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
+<input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
+<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
+<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
+<table class="board-write-table-class">
+<colgroup>
+	<col width="20%" />
+	<col width="30%" />
+	<col width="20%" />
+	<col width="30%" />
+</colgroup>
+<tr>
+	<th>게시글 제목</th>
+	<td colspan="3"><input type="text" name="bdaTitle" value="<?php echo getArrayValue($boardArticleInfo,"bda_title"); ?>" style="width:90%;height:20px;" /></td>
+</tr>
+<tr>
+	<th align="center">게시글 고정 여부</th>
+	<td colspan="3">
+		<input type="radio" id="bdaFixY" name="bdaFixYn" value="Y" <?php echo nvl(getArrayValue($boardArticleInfo,"bda_fix_yn"),"N")=="Y" ? " checked " : ""; ?> /> <label for="bdaFixY">고정</label>
+		<input type="radio" id="bdaFixN" name="bdaFixYn" value="N" <?php echo nvl(getArrayValue($boardArticleInfo,"bda_fix_yn"),"N")!="Y" ? " checked " : ""; ?> /> <label for="bdaFixN">비고정</label>
+	</td>
+</tr>
+<tr>
+	<th>게시글 내용</th>
+	<td colspan="3">
+		<textarea name="bdaContent" style="width:90%;height:200px;"><?php echo getArrayValue($boardArticleInfo,"bda_content"); ?></textarea>
+	</td>
+</tr>
+<tr>
+	<th>게시글 첨부파일</th>
+	<td colspan="3">
+		<?php
+			for($bdaFileIndex=0;$bdaFileIndex<$bdaFileCount;$bdaFileIndex++){
+				$bdaFileNumber = $bdaFileIndex+1;
+				$bdafKindName = "file".$bdaFileNumber;
+				$boardDtlFileInfo = getBoardDtlFileInfo($bdafKindName);
+				#---
+				$boardDtlFileInfo = $boardDtlFileInfo==null ? array() : $boardDtlFileInfo;
+				?>
+				<div style="margin:5px 0;">
+					<?php echo $bdaFileNumber; ?>. 첨부파일 : 
+					<input type="file" name="file<?php echo $bdaFileNumber; ?>" value="" />&nbsp;&nbsp;
+					<a href="<?php echo getArrayValue($boardDtlFileInfo,"bdaf_save_filename"); ?>" target="_blank"><?php echo getArrayValue($boardDtlFileInfo,"bdaf_filename"); ?></a>
+					<?php if(nvl(getArrayValue($boardDtlFileInfo,"bdaf_seq"))!=""){ ?>
+					&nbsp;|&nbsp;<a href="javascript:deleteFile(<?php echo getArrayValue($boardDtlFileInfo,"bdaf_seq"); ?>);">파일삭제</a>
+					<?php }//if ?>
+				</div>
+				<?php
+			}#for
+		?>
+	</td>
+</tr>
+<!--<tr>
+	<th>게시판 이름</th>
+	<td>aaaaaaa</td>
+	<th>게시판 이름</th>
+	<td>aaaaaaa</td>
+</tr>-->
+</table>
+</form>
+
+<div align="right" style="margin-top:10px;">
+	<input type="button" value="저장" onclick="goSave();" />
+	<input type="button" value="취소" onclick="goCancel();" />
+</div>
+
+<?php fnPrintPagingHtml($pagingInfoMap); ?>
+
+<form name="paramForm" method="get">
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
+<input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
+<input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
+<input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
+<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
+<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
+</form>
+
+<form name="postForm" method="post" action="boardDtlProc.php">
+<input type="hidden" name="actionString" value="" />
+<input type="hidden" name="bdafSeq" value="" />
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
+<input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
+<input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
+<input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
+<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
+<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
+</form>
+
+<?php include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/layoutEnd.php'); ?>
+
+<script>
+var paramFormObject = document.paramForm;
+var writeFormObject = document.writeForm;
+var postFormObject = document.postForm;
+//---
+function goSave(pageNumber){
+	if(writeFormObject.bdaSeq.value!==''){
+		writeFormObject.actionString.value = 'modify';
+	}else{
+		writeFormObject.actionString.value = 'write';
+	}//if
+	if(writeFormObject.bdaTitle.value===''){alert('게시글 제목을 입력해주세요.');writeFormObject.bdaTitle.focus();return;}//if
+	writeFormObject.submit();
+}
+function goCancel(){
+	paramFormObject.action = 'boardDtl.php';
+	paramFormObject.submit();
+}
+function deleteFile(bdafSeq=''){
+	if(confirm("파일을 삭제 하시겠습니까?")){
+		postFormObject.actionString.value = "deleteFile";
+		postFormObject.bdafSeq.value = bdafSeq;
+		postFormObject.submit();
+	}//if
+}
+</script>
+
+</body>
+</html>
+<?php 
+function getBoardDtlFileInfo($bdafKindName=""){
+	global $boardDtlFileList;
+	global $boardDtlFileListCount;
+	#---
+	$returnMap = null;
+	#---
+	$boardDtlFileInfo = null;
+	$boardDtlFileListIndex = 0;
+	$boardDtlFileListNumber = 0;
+	#---
+	if($bdafKindName==""){return null;}#if
+	#---
+	if($boardDtlFileListCount > 0){
+		for($boardDtlFileListIndex=0;$boardDtlFileListIndex<$boardDtlFileListCount;$boardDtlFileListIndex++){
+			$boardDtlFileListNumber = $boardDtlFileListIndex+1;
+			$boardDtlFileInfo = $boardDtlFileList[$boardDtlFileListIndex];
+			if($bdafKindName==trim(nvl($boardDtlFileInfo["bdaf_kind_name"]))){
+				$returnMap = $boardDtlFileInfo;
+				break;
+			}#if
+		}#for
+	}#if
+	#---
+	return $returnMap;
+}		
+?>

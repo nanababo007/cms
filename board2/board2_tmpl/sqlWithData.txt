@@ -1,0 +1,269 @@
+-- --------------------------------------------------------
+-- 호스트:                          127.0.0.1
+-- 서버 버전:                        10.4.32-MariaDB - mariadb.org binary distribution
+-- 서버 OS:                        Win64
+-- HeidiSQL 버전:                  12.13.0.7147
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+-- 테이블 test.{{cms.tableNamePrefix}}_article 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_article` (
+  `bda_seq` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '게시글 번호',
+  `bd_seq` int(11) NOT NULL DEFAULT 0 COMMENT '게시판 번호',
+  `bda_title` varchar(2000) DEFAULT NULL COMMENT '게시글 제목',
+  `bda_content` longtext DEFAULT NULL COMMENT '게시글 내용',
+  `bda_view_cnt` int(11) DEFAULT 0 COMMENT '게시글 조회수',
+  `bda_fix_yn` char(1) DEFAULT 'N' COMMENT '게시글 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(100) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bda_seq`),
+  KEY `bd_seq` (`bd_seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_article:~35 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_article` (`bda_seq`, `bd_seq`, `bda_title`, `bda_content`, `bda_view_cnt`, `bda_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 1, 'sdf', 'sdfsdfsdf', 74, 'N', '2025-11-25 16:53:27', 'admin', NULL, NULL),
+	(2, 1, '222', 'ㅁㄴㅇㄻㅇㄹ', 13, 'N', '2025-11-26 00:24:22', 'admin', '2025-12-02 23:30:53', 'admin'),
+	(3, 2, '(2025-11-27) 뉴스기사 샘플', 'ㅁㅁㅁ', 22, 'Y', '2025-11-27 13:05:19', 'admin', '2025-11-29 10:05:26', 'admin'),
+	(5, 1, '11', '11', 0, 'N', '2025-12-02 23:30:56', 'admin', NULL, NULL),
+	(6, 1, '11', '11', 0, 'N', '2025-12-02 23:31:00', 'admin', NULL, NULL),
+	(7, 1, '11', '11', 0, 'N', '2025-12-02 23:31:04', 'admin', NULL, NULL),
+	(8, 1, '11', '11', 0, 'N', '2025-12-02 23:31:14', 'admin', NULL, NULL),
+	(9, 1, '111', '11', 0, 'N', '2025-12-02 23:31:28', 'admin', NULL, NULL),
+	(10, 1, '111', '1111', 0, 'N', '2025-12-02 23:31:33', 'admin', NULL, NULL),
+	(11, 1, '11', '11', 0, 'N', '2025-12-02 23:31:37', 'admin', NULL, NULL),
+	(12, 1, '11', '111', 0, 'N', '2025-12-02 23:31:42', 'admin', NULL, NULL),
+	(13, 1, '11', '111', 0, 'N', '2025-12-02 23:31:47', 'admin', NULL, NULL),
+	(14, 1, '11', '111', 0, 'N', '2025-12-02 23:31:56', 'admin', NULL, NULL),
+	(15, 1, '11', '11', 0, 'N', '2025-12-02 23:32:02', 'admin', NULL, NULL),
+	(16, 1, '11', '111', 0, 'N', '2025-12-02 23:32:11', 'admin', NULL, NULL),
+	(17, 1, '11', '11', 0, 'N', '2025-12-02 23:32:15', 'admin', NULL, NULL),
+	(18, 1, '11', '11', 0, 'N', '2025-12-02 23:32:19', 'admin', NULL, NULL),
+	(19, 1, '11', '11', 0, 'N', '2025-12-02 23:32:23', 'admin', NULL, NULL),
+	(20, 1, '11', '111', 0, 'N', '2025-12-02 23:32:28', 'admin', NULL, NULL),
+	(21, 1, '11', '111', 0, 'N', '2025-12-02 23:32:33', 'admin', NULL, NULL),
+	(22, 1, '11', '111', 0, 'N', '2025-12-02 23:32:37', 'admin', NULL, NULL),
+	(23, 3, '11', '', 0, 'N', '2025-12-02 23:37:53', 'admin', NULL, NULL),
+	(24, 3, '11', '11', 0, 'N', '2025-12-02 23:37:58', 'admin', NULL, NULL),
+	(25, 1, '11', '11', 0, 'N', '2025-12-02 23:38:09', 'admin', NULL, NULL),
+	(26, 1, '11', '11', 0, 'N', '2025-12-02 23:38:24', 'admin', NULL, NULL),
+	(27, 1, '11', '111', 0, 'N', '2025-12-02 23:38:36', 'admin', NULL, NULL),
+	(28, 1, '11', '111', 0, 'N', '2025-12-02 23:38:47', 'admin', NULL, NULL),
+	(29, 1, '11', '111', 0, 'N', '2025-12-02 23:38:58', 'admin', NULL, NULL),
+	(30, 1, '11', '11', 0, 'N', '2025-12-02 23:39:08', 'admin', NULL, NULL),
+	(31, 1, '11', '11', 0, 'N', '2025-12-02 23:39:16', 'admin', NULL, NULL),
+	(32, 1, '11', '11', 0, 'N', '2025-12-02 23:39:21', 'admin', NULL, NULL),
+	(33, 1, '11', '11', 0, 'N', '2025-12-02 23:39:36', 'admin', NULL, NULL),
+	(34, 1, '11', '11', 0, 'N', '2025-12-02 23:39:40', 'admin', NULL, NULL),
+	(35, 1, '11', '11', 0, 'N', '2025-12-02 23:39:52', 'admin', NULL, NULL),
+	(36, 4, '11', '', 0, 'N', '2025-12-02 23:40:09', 'admin', NULL, NULL);
+
+-- 테이블 test.{{cms.tableNamePrefix}}_img_article 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_img_article` (
+  `bda_seq` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '게시글 번호',
+  `bd_seq` int(11) NOT NULL DEFAULT 0 COMMENT '게시판 번호',
+  `bda_title` varchar(2000) DEFAULT NULL COMMENT '게시글 제목',
+  `bda_content` longtext DEFAULT NULL COMMENT '게시글 내용',
+  `bda_view_cnt` int(11) DEFAULT 0 COMMENT '게시글 조회수',
+  `bda_fix_yn` char(1) DEFAULT 'N' COMMENT '게시글 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(100) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bda_seq`) USING BTREE,
+  KEY `bd_seq` (`bd_seq`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_img_article:~3 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_img_article` (`bda_seq`, `bd_seq`, `bda_title`, `bda_content`, `bda_view_cnt`, `bda_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 2, '111ㅁㅁ11', '222ㄷㄷ111', 12, 'N', '2025-11-28 19:38:50', 'admin', '2025-11-29 14:05:16', 'admin'),
+	(2, 3, 'ㄷㄷ', 'ㄹㄴㅇㄹㄴㅇㄹ', 0, 'Y', '2025-11-29 14:04:27', 'admin', NULL, NULL),
+	(3, 3, 'ㄱㄱ', 'ㄴ111', 2, 'N', '2025-11-29 14:05:02', 'admin', NULL, NULL),
+	(4, 2, 'ㅁㅁ', 'ㅠㅠㅠ', 0, 'N', '2025-12-03 04:18:16', 'admin', NULL, NULL),
+	(5, 2, 'ㅁㅁ', 'ㅠㅠㅠ', 0, 'N', '2025-12-03 04:19:01', 'admin', NULL, NULL),
+	(6, 2, 'ㅁㅁ111', 'ㅠㅠㅠ11111', 6, 'N', '2025-12-03 04:19:43', 'admin', '2025-12-03 04:22:00', 'admin');
+
+-- 테이블 test.{{cms.tableNamePrefix}}_img_article_file 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_img_article_file` (
+  `bdaf_seq` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '게시글 파일번호',
+  `bda_seq` bigint(20) NOT NULL DEFAULT 0 COMMENT '게시글 번호',
+  `bdaf_filename` varchar(500) DEFAULT NULL COMMENT '게시글 파일이름',
+  `bdaf_save_filename` varchar(500) DEFAULT NULL COMMENT '게시글 저장 파일경로',
+  `bdaf_save_thumbnail` varchar(500) DEFAULT NULL COMMENT '게시글 저장 썸네일 파일경로',
+  `bdaf_kind_name` varchar(200) DEFAULT NULL COMMENT '게시글 파일 구분이름',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(100) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bdaf_seq`),
+  KEY `bda_seq_bdaf_kind_name` (`bda_seq`,`bdaf_kind_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='이미지 게시판 게시글 이미지 파일';
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_img_article_file:~2 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_img_article_file` (`bdaf_seq`, `bda_seq`, `bdaf_filename`, `bdaf_save_filename`, `bdaf_save_thumbnail`, `bdaf_kind_name`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 6, '자연03.jpg', '/data/{{cms.prefix}}Img/2025/12/02/file5989b70f42ccdb319ad98e451e8e0890.jpg', '/data/{{cms.prefix}}Img/2025/12/02/file5989b70f42ccdb319ad98e451e8e0890_300x300.jpg', 'file1', '2025-12-03 04:19:43', 'admin', '2025-12-03 04:22:00', 'admin'),
+	(2, 6, '자연02.jpg', '/data/{{cms.prefix}}Img/2025/12/02/fileda8a0cea9b71afc906dd0e7e737ca20a.jpg', '/data/{{cms.prefix}}Img/2025/12/02/fileda8a0cea9b71afc906dd0e7e737ca20a_300x300.jpg', 'file2', '2025-12-03 04:19:43', 'admin', NULL, NULL);
+
+-- 테이블 test.{{cms.tableNamePrefix}}_img_info 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_img_info` (
+  `bd_seq` int(11) NOT NULL AUTO_INCREMENT COMMENT '게시판 번호',
+  `bd_nm` varchar(500) DEFAULT NULL COMMENT '게시판 이름',
+  `bd_content` longtext DEFAULT NULL COMMENT '게시판 내용',
+  `bd_fix_yn` char(1) DEFAULT 'N' COMMENT '게시판 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(50) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bd_seq`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_img_info:~2 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_img_info` (`bd_seq`, `bd_nm`, `bd_content`, `bd_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(2, '이미지 게시판 1', 'ㄱㄱㄱ', 'N', '2025-11-28 19:23:48', 'admin', '2025-11-28 19:24:03', 'admin'),
+	(3, '이미지 게시판 2', 'ㄱ', 'N', '2025-11-29 10:06:44', 'admin', NULL, NULL);
+
+-- 테이블 test.{{cms.tableNamePrefix}}_img_reply 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_img_reply` (
+  `bdr_seq` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '댓글 번호',
+  `bda_seq` bigint(20) NOT NULL DEFAULT 0 COMMENT '게시글 번호',
+  `bdr_content` text DEFAULT NULL COMMENT '댓글 내용',
+  `bdr_fix_yn` char(50) DEFAULT 'N' COMMENT '댓글 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(100) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bdr_seq`) USING BTREE,
+  KEY `bda_seq` (`bda_seq`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_img_reply:~2 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_img_reply` (`bdr_seq`, `bda_seq`, `bdr_content`, `bdr_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 1, '111122222', 'N', '2025-11-28 19:39:03', 'admin', '2025-11-29 14:05:31', 'admin'),
+	(2, 1, 'ㅁㅁㅁ1111', 'N', '2025-11-29 14:04:12', 'admin', '2025-11-29 14:05:28', 'admin');
+
+-- 테이블 test.{{cms.tableNamePrefix}}_info 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_info` (
+  `bd_seq` int(11) NOT NULL AUTO_INCREMENT COMMENT '게시판 번호',
+  `bd_nm` varchar(500) DEFAULT NULL COMMENT '게시판 이름',
+  `bd_content` longtext DEFAULT NULL COMMENT '게시판 내용',
+  `bd_fix_yn` char(1) DEFAULT 'N' COMMENT '게시판 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(50) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bd_seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_info:~4 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_info` (`bd_seq`, `bd_nm`, `bd_content`, `bd_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, '정치뉴스 분석 게시판', '정치뉴스를 분석하는 게시판 입니다.', 'N', '2025-11-25 16:53:04', 'admin', '2025-11-27 22:39:59', 'admin'),
+	(2, '경제뉴스 분석 게시판', '경제뉴스 분석하는 게시판 입니다.', 'N', '2025-11-27 12:51:54', 'admin', '2025-11-27 22:39:33', 'admin'),
+	(3, '역사 분석 게시판', '역사를 분석하는 게시판 입니다.', 'N', '2025-11-27 22:40:14', 'admin', '2025-11-27 22:40:23', 'admin'),
+	(4, '쇼핑몰 사업 분석 게시판', '쇼핑몰사업 관련 정보를 분석하는 게시판 입니다.', 'N', '2025-11-27 22:43:55', 'admin', '2025-11-27 22:44:55', 'admin');
+
+-- 테이블 test.{{cms.tableNamePrefix}}_menu_info 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_menu_info` (
+  `mn_seq` int(11) NOT NULL AUTO_INCREMENT COMMENT '메뉴 번호',
+  `p_mn_seq` int(11) NOT NULL DEFAULT 0 COMMENT '상위 메뉴 번호',
+  `mn_nm` varchar(500) DEFAULT NULL COMMENT '메뉴 이름',
+  `mn_content` longtext DEFAULT NULL COMMENT '메뉴 내용',
+  `mn_ord` varchar(500) DEFAULT NULL COMMENT '메뉴 정렬 순서',
+  `mn_url` varchar(2000) DEFAULT NULL COMMENT '메뉴 URL',
+  `mn_url_target` varchar(200) DEFAULT NULL COMMENT '메뉴 URL 타겟',
+  `mn_use_yn` char(1) DEFAULT 'Y' COMMENT '메뉴 사용 여부',
+  `mn_del_yn` char(1) DEFAULT 'N' COMMENT '메뉴 삭제 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(50) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`mn_seq`) USING BTREE,
+  KEY `p_mn_seq` (`p_mn_seq`),
+  KEY `mn_ord` (`mn_ord`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_menu_info:~16 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_menu_info` (`mn_seq`, `p_mn_seq`, `mn_nm`, `mn_content`, `mn_ord`, `mn_url`, `mn_url_target`, `mn_use_yn`, `mn_del_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 0, '환경 관리', '환경 관리 메뉴 입니다.', '0000000002', '/{{cms.prefix}}/menu/menuMan.php', '_self', 'Y', 'N', '2025-11-24 16:41:18', 'admin', '2025-11-27 12:30:46', 'admin'),
+	(2, 1, '메뉴 관리', '메뉴 관리 입니다.', '000001', '/{{cms.prefix}}/menu/menuMan.php', '_self', 'Y', 'N', '2025-11-24 17:37:50', 'admin', '2025-11-27 12:30:13', 'admin'),
+	(3, 1, '코드 관리', '코드 관리 입니다.', '000002', '/{{cms.prefix}}/code/codeMan.php', '_self', 'Y', 'N', '2025-11-24 17:39:14', 'admin', '2025-11-27 12:30:24', 'admin'),
+	(4, 0, '게시판 관리', '메뉴2 입니다.', '0000000003', '/{{cms.prefix}}/brdMas/board.php', '', 'Y', 'N', '2025-11-24 17:39:55', 'admin', '2025-11-27 12:29:32', 'admin'),
+	(15, 1, '용어사전 관리', '용어사전 관리 입니다.', '000003', '/{{cms.prefix}}/word/wordMan.php', '_self', 'Y', 'N', '2025-11-27 12:28:31', 'admin', '2025-11-27 12:30:36', 'admin'),
+	(16, 4, '게시판 관리', '게시판 관리 입니다.', '000001', '/{{cms.prefix}}/brdMas/board.php', '', 'Y', 'N', '2025-11-27 14:09:20', 'admin', '2025-11-27 14:10:17', 'admin'),
+	(17, 4, '경제분석', '경제분석 게시판 입니다.', '000002', '/{{cms.prefix}}/brdDtl/boardDtl.php?bdSeq=2', '', 'Y', 'N', '2025-11-27 14:09:37', 'admin', '2025-11-27 22:41:59', 'admin'),
+	(18, 4, '정치분석', '정치분석 게시판 입니다.', '000003', '/{{cms.prefix}}/brdDtl/boardDtl.php?bdSeq=1', '', 'Y', 'N', '2025-11-27 14:25:40', 'admin', '2025-11-27 22:41:42', 'admin'),
+	(20, 4, '역사분석', '역사분석 게시판 메뉴', '000004', '/{{cms.prefix}}/brdDtl/boardDtl.php?bdSeq=3', '', 'Y', 'N', '2025-11-27 22:41:20', 'admin', NULL, NULL),
+	(21, 4, '쇼핑몰 사업', '쇼핑몰 사업관련 분석 게시판 메뉴 입니다.', '000005', '/{{cms.prefix}}/brdDtl/boardDtl.php?bdSeq=4', '', 'Y', 'N', '2025-11-27 22:45:25', 'admin', NULL, NULL),
+	(22, 0, '로그아웃', '', '0000000001', '/{{cms.prefix}}/logout.php', '', 'Y', 'N', '2025-11-28 15:45:41', 'admin', NULL, NULL),
+	(23, 0, '이미지 게시판 관리', '', '0000000005', '/{{cms.prefix}}/brdImg/boardMas.php', '', 'Y', 'N', '2025-11-28 15:57:23', 'admin', NULL, NULL),
+	(24, 23, '게시판 관리', '이미지 게시판 관리 메뉴 입니다.', '000001', '/{{cms.prefix}}/brdImg/boardMas.php', '', 'Y', 'N', '2025-11-28 18:09:34', 'admin', '2025-11-28 19:30:51', 'admin'),
+	(25, 23, '게시글 관리', '이미지 게시판1의 게시글 관리 메뉴 입니다.', '000002', '/{{cms.prefix}}/brdImg/boardDtl.php?bdSeq=2&mnSeq=26', '', 'Y', 'N', '2025-11-28 18:09:48', 'admin', '2025-11-29 12:53:53', 'admin'),
+	(26, 25, '이미지 게시판 1', '이미지 게시판 1 메뉴 입니다.', '000001', '/{{cms.prefix}}/brdImg/boardDtl.php?bdSeq=2', '', 'Y', 'N', '2025-11-29 10:07:19', 'admin', '2025-11-29 12:52:10', 'admin'),
+	(27, 25, '이미지 게시판 2', '이미지 게시판 2 메뉴 입니다.', '000002', '/{{cms.prefix}}/brdImg/boardDtl.php?bdSeq=3', '', 'Y', 'N', '2025-11-29 10:07:31', 'admin', '2025-11-29 12:51:44', 'admin');
+
+-- 테이블 test.{{cms.tableNamePrefix}}_menu_info_default 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_menu_info_default` (
+  `mnf_seq` int(11) NOT NULL AUTO_INCREMENT COMMENT '기본 메뉴 번호',
+  `mn_seq` int(11) NOT NULL COMMENT '메뉴 번호',
+  `p_mn_seq` int(11) NOT NULL DEFAULT 0 COMMENT '상위 메뉴 번호',
+  `mn_nm` varchar(500) DEFAULT NULL COMMENT '메뉴 이름',
+  `mn_content` longtext DEFAULT NULL COMMENT '메뉴 내용',
+  `mn_ord` varchar(500) DEFAULT NULL COMMENT '메뉴 정렬 순서',
+  `mn_url` varchar(2000) DEFAULT NULL COMMENT '메뉴 URL',
+  `mn_url_target` varchar(200) DEFAULT NULL COMMENT '메뉴 URL 타겟',
+  `mn_use_yn` char(1) DEFAULT 'Y' COMMENT '메뉴 사용 여부',
+  `mn_del_yn` char(1) DEFAULT 'N' COMMENT '메뉴 삭제 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(50) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`mnf_seq`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_menu_info_default:~5 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_menu_info_default` (`mnf_seq`, `mn_seq`, `p_mn_seq`, `mn_nm`, `mn_content`, `mn_ord`, `mn_url`, `mn_url_target`, `mn_use_yn`, `mn_del_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 1001, 0, '환경 관리', '환경 관리 메뉴 입니다.', '0000000001', '/{{cms.prefix}}/menu/menuMan.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL),
+	(2, 1002, 1001, '메뉴 관리', '메뉴 관리 입니다.', '000001', '/{{cms.prefix}}/menu/menuMan.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL),
+	(3, 1003, 1001, '코드 관리', '코드 관리 입니다.', '000002', '/{{cms.prefix}}/code/codeMan.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL),
+	(4, 1004, 0, '게시판 관리', '메뉴2 입니다.', '0000000002', '/{{cms.prefix}}/brdMas/board.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL),
+	(5, 1005, 1001, '용어사전 관리', '용어사전 관리 입니다.', '000003', '/{{cms.prefix}}/word/wordMan.php', '_self', 'Y', 'N', NULL, NULL, NULL, NULL);
+
+-- 테이블 test.{{cms.tableNamePrefix}}_reply 구조 내보내기
+CREATE TABLE IF NOT EXISTS `{{cms.tableNamePrefix}}_reply` (
+  `bdr_seq` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '댓글 번호',
+  `bda_seq` bigint(20) NOT NULL DEFAULT 0 COMMENT '게시글 번호',
+  `bdr_content` text DEFAULT NULL COMMENT '댓글 내용',
+  `bdr_fix_yn` char(50) DEFAULT 'N' COMMENT '댓글 고정 여부',
+  `regdate` datetime DEFAULT NULL COMMENT '등록일시',
+  `reguser` varchar(100) DEFAULT NULL COMMENT '등록자',
+  `moddate` datetime DEFAULT NULL COMMENT '수정일시',
+  `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
+  PRIMARY KEY (`bdr_seq`) USING BTREE,
+  KEY `bda_seq` (`bda_seq`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 테이블 데이터 test.{{cms.tableNamePrefix}}_reply:~8 rows (대략적) 내보내기
+INSERT IGNORE INTO `{{cms.tableNamePrefix}}_reply` (`bdr_seq`, `bda_seq`, `bdr_content`, `bdr_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`) VALUES
+	(1, 1, 'aaa', 'N', '2025-11-25 21:35:53', 'admin', NULL, NULL),
+	(2, 1, 'bbbb', 'N', '2025-11-25 21:42:14', 'admin', NULL, NULL),
+	(4, 1, 'asdf1111\nasd\nf\nasdfasdf', 'N', '2025-11-25 21:43:11', 'admin', '2025-11-26 00:13:22', 'admin'),
+	(6, 1, '&lt;asdfasd&gt;asdkfasld&lt;/basdfa&gt;\nasdfasdf\n111\n', 'N', '2025-11-25 21:50:38', 'admin', '2025-11-26 00:13:17', 'admin'),
+	(7, 1, '&lt;asdfasd&gt;asdkfasld&lt;/basdfa&gt;\n\n\nadef\n\nasdfasdf\n\n\nfdasdfsdf', 'N', '2025-11-25 21:50:52', 'admin', NULL, NULL),
+	(8, 1, '한국 현대사 주요 흐름 정리\n\n순서 상관없이, 항목 하나하나 게시글로 등록해서, 관련 자료 수집, 댓글 내용등, 링크 등, \n\n순서를 추후에, url 링크로, 다른 게시판이나, 연대표에서, 링크를 순서대로 나열하고, \n기본적인 설명등을 요약 입력해서 출력처리.\n\n', 'N', '2025-11-25 22:45:48', 'admin', NULL, NULL),
+	(10, 1, '111111111111\n\n2222222\n\n\n333333', 'N', '2025-11-26 00:23:00', 'admin', '2025-11-26 00:23:22', 'admin'),
+	(11, 2, 'ㅁㄴㅇㄻㄴㅇㄹ', 'Y', '2025-11-26 00:24:34', 'admin', NULL, NULL);
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

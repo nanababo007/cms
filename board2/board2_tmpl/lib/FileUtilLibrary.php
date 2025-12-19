@@ -15,9 +15,9 @@
 	FileUtilLibraryClass::writeFileContentText("c:\\a.txt","file write content");
 	FileUtilLibraryClass::writeFileContentTextByFilepathAndFilename("c:\\folderpath\\","a.txt","file write content");
 	$editFolderPath = FileUtilLibraryClass::getCombinedSubFoldersPath("c:\\folderpath\\","subFolderName1","subFolderName2"); # 경로 체크 함 (상대경로에서 사용하면 빈값반환)
-	FileUtilLibraryClass::makeFolderPath("c:\\folderpath\\","subFolderName1","subFolderName2"); # 기본경로 체크 하고, 전체 폴더경로 생성
+	FileUtilLibraryClass::makeFolderPath("c:\\folderpath\\","subFolderName1","subFolderName2");
 	$editFolderPath = FileUtilLibraryClass::getForceCombinedSubFoldersPath("c:\\folderpath\\","subFolderName1","subFolderName2"); # 경로 체크 안함
-	FileUtilLibraryClass::makeForceFolderPath("c:\\folderpath\\","subFolderName1","subFolderName2"); # 기본경로 체크 안하고, 전체 폴더경로 생성
+	FileUtilLibraryClass::makeForceFolderPath("c:\\folderpath\\","subFolderName1","subFolderName2");
 	FileUtilLibraryClass::copyFile("c:\\folderpath\\orgFile.txt","c:\\folderpath2\\destFile.txt");
 */
 /*
@@ -307,7 +307,6 @@ class FileUtilLibraryClass
 		$editTemplateFilePathString = "file:///".$editTemplateFilePathString;
 		file_put_contents($editTemplateFilePathString,$templateFileText);
 	}
-	# 첫번째 기본경로가 존재할때만, 전체 경로문자열 대로 멀티폴더 생성
 	public static function makeFolderPath(
 		$templateFolderPathString="",$templateSub1FolderPath="",$templateSub2FolderPath=""
 		,$templateSub3FolderPath="",$templateSub4FolderPath="",$templateSub5FolderPath=""
@@ -374,7 +373,6 @@ class FileUtilLibraryClass
 		$returnString = $templatePathString;
 		return $returnString;
 	}
-	# 첫번째 기본경로가 존재하지않아도, 전체 경로문자열 대로 멀티폴더 생성
 	public static function makeForceFolderPath(
 		$templateFolderPathString="",$templateSub1FolderPath="",$templateSub2FolderPath=""
 		,$templateSub3FolderPath="",$templateSub4FolderPath="",$templateSub5FolderPath=""
