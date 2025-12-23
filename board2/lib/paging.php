@@ -74,6 +74,8 @@ function fnPrintPagingHtml(&$pagingInfoMap=null,$scriptFuncName="goPage"){
 <table class="pager" style="margin-top:10px;" align="center">
 <tr>
 
+    <td><a href="javascript:<?php echo $scriptFuncName; ?>(1);">처음</a> | </td>
+	
     <?php
     /* paging : 이전 페이지 */
     if($pagingInfoMap["pageNumber"] <= 1){
@@ -105,6 +107,8 @@ function fnPrintPagingHtml(&$pagingInfoMap=null,$scriptFuncName="goPage"){
     <td> | <a href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $pagingInfoMap["nextBlockPageNumber"]; ?>);">다음</a></td>
     <?php } ?>
 
+    <td> | <a href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $pagingInfoMap["totalPageNumber"]; ?>);">마지막</a></td>
+	
 </tr>
 </table>
 		<?php
