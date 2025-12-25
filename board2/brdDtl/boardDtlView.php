@@ -91,6 +91,7 @@ fnCloseDB();
 <tr>
 	<td colspan="4">
 		<div align="right" style="margin-top:10px;">
+			<input type="button" value="페이지끝" onclick="goPageEndPos();" />
 			<input type="button" value="댓글" onclick="goReplyPos();" />
 			<input type="button" value="수정" onclick="goModify();" />
 			<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
@@ -114,6 +115,8 @@ fnCloseDB();
 	<button onclick="javascript:cancelReply();">댓글취소</button>
 	<div class="reply-item-area-class"></div>
 </div>
+
+<a name="pageEndPos"></a>
 
 <form name="paramForm" method="get">
 <input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
@@ -163,6 +166,9 @@ function goDelete(){
 }
 function goReplyPos(){
 	location.href = '#replyPos';
+}
+function goPageEndPos(){
+	location.href = '#pageEndPos';
 }
 </script>
 
