@@ -1,5 +1,10 @@
 <?php
+/*
+$isDisplayRegBtnOnPagingListInfo : true/false, 페이지별 등록버튼 표시 여부
+*/
 function fnPrintPagingListInfo(&$pagingInfoMap){
+	global $isDisplayRegBtnOnPagingListInfo;
+	#---
 	?>
 <table width="100%">
 <colgroup>
@@ -11,6 +16,7 @@ function fnPrintPagingListInfo(&$pagingInfoMap){
 	<td align="right">
 		<?php echo number_format($pagingInfoMap["pageNumber"]); ?> page / 
 		<?php echo number_format($pagingInfoMap["totalPageNumber"]); ?> page
+		<?php if(isset($isDisplayRegBtnOnPagingListInfo) and $isDisplayRegBtnOnPagingListInfo){ ?>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="등록" onclick="goWrite();" /><?php }#if ?>
 	</td>
 </tr>
 </table>

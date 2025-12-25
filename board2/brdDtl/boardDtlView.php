@@ -91,6 +91,7 @@ fnCloseDB();
 <tr>
 	<td colspan="4">
 		<div align="right" style="margin-top:10px;">
+			<input type="button" value="댓글" onclick="goReplyPos();" />
 			<input type="button" value="수정" onclick="goModify();" />
 			<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
 			<input type="button" value="목록" onclick="goList();" />
@@ -106,6 +107,7 @@ fnCloseDB();
 	<input type="button" value="목록" onclick="goList();" />
 </div>
 
+<a name="replyPos"></a>
 <div class="reply-area-class">
 	<textarea style="width:99.4%;height:100px;margin-top:10px;" placeholder="댓글내용" id="replyContent"></textarea>
 	<button onclick="javascript:writeReply();">댓글등록</button>
@@ -158,6 +160,9 @@ function goDelete(){
 		actionParamFormObject.action = 'boardDtlProc.php';
 		actionParamFormObject.submit();
 	}//if
+}
+function goReplyPos(){
+	location.href = '#replyPos';
 }
 </script>
 

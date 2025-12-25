@@ -5,6 +5,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardMasLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
+$isDisplayRegBtnOnPagingListInfo = false;
 $thisPageMnSeq = 25;
 $pageTitleString = "";
 $boardInfo = null;
@@ -31,6 +32,7 @@ debugString("bdSeq",$bdSeq);
 fnOpenDB();
 setDisplayMenuList();
 #---
+$isDisplayRegBtnOnPagingListInfo = true;
 $boardInfo = fnBoardGetInfo($bdSeq);
 if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
 debugArray("boardInfo",$boardInfo);
