@@ -17,6 +17,8 @@ $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
 $schReply = nvl(getRequestValue("schReply"),"");
+$schSRegdate = nvl(getRequestValue("schSRegdate"),"");
+$schERegdate = nvl(getRequestValue("schERegdate"),"");
 #---
 fnOpenDB();
 setDisplayMenuList();
@@ -77,6 +79,8 @@ fnCloseDB();
 <input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
 <input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
 <input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
+<input type="hidden" name="schSRegdate" value="<?php echo $schSRegdate; ?>" />
+<input type="hidden" name="schERegdate" value="<?php echo $schERegdate; ?>" />
 <table class="board-write-table-class">
 <colgroup>
 	<col width="20%" />
@@ -127,6 +131,8 @@ fnCloseDB();
 <input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
 <input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
 <input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
+<input type="hidden" name="schSRegdate" value="<?php echo $schSRegdate; ?>" />
+<input type="hidden" name="schERegdate" value="<?php echo $schERegdate; ?>" />
 </form>
 
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutEnd.php'); ?>

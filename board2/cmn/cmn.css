@@ -193,3 +193,6 @@ main.content-area-class {
 	float:right;
 	top:10px;
 }
+.datepicker-input-class {
+	text-align:center;
+}

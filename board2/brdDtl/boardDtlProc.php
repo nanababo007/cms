@@ -13,6 +13,8 @@ $bdSeq = nvl(getPostValue("bdSeq"));
 $schTitle = nvl(getPostValue("schTitle"),"");
 $schContent = nvl(getPostValue("schContent"),"");
 $schReply = nvl(getPostValue("schReply"),"");
+$schSRegdate = nvl(getRequestValue("schSRegdate"),"");
+$schERegdate = nvl(getRequestValue("schERegdate"),"");
 $replyCount = 0;
 #---
 debugString("actionString",$actionString);
@@ -23,6 +25,8 @@ debugArray("request values",$_REQUEST);
 debugString("schTitle",$schTitle);
 debugString("schContent",$schContent);
 debugString("schReply",$schReply);
+debugString("schSRegdate",$schSRegdate);
+debugString("schERegdate",$schERegdate);
 #---
 fnOpenDB();
 #---
@@ -71,6 +75,8 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&schReply=".$schReply;
+	$moveUrlParam .= "&schSRegdate=".$schSRegdate;
+	$moveUrlParam .= "&schERegdate=".$schERegdate;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else if($actionString=="modify"){
 	$bdaSeq = nvl(getPostValue("bdaSeq"));
@@ -106,6 +112,8 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&schReply=".$schReply;
+	$moveUrlParam .= "&schSRegdate=".$schSRegdate;
+	$moveUrlParam .= "&schERegdate=".$schERegdate;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else if($actionString=="delete"){
 	$bdaSeq = nvl(getPostValue("bdaSeq"));
@@ -136,6 +144,8 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&schReply=".$schReply;
+	$moveUrlParam .= "&schSRegdate=".$schSRegdate;
+	$moveUrlParam .= "&schERegdate=".$schERegdate;
 	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
