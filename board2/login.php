@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<?php include $_SERVER['DOCUMENT_ROOT']."/board2/inc/head.php"; ?>
+	<?php include $_SERVER['DOCUMENT_ROOT']."/board2/inc/login/head.php"; ?>
 </head>
 <body>
 <form name="formLogin" method="post" action="loginP.php">

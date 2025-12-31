@@ -1,0 +1,45 @@
+a {
+	text-decoration: none;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+table, td, th {
+	border: black 1px solid;
+	cursor:pointer;
+}
+table th {
+	padding:10px;
+	background-color:#efefef;
+}
+table td {
+	padding:20px;
+}
+table th, table td {
+	font-size:20pt;
+}
+.no-padd {padding:0;}
+.no-marg {margin:0;}
+.tab-selected {
+	text-decoration:underline;
+	font-size:24pt;
+}
+.select-box {
+	width: 100%;
+	font-size:20pt;
+	padding: 10px;
+}
+.input-text,
+.input-password {
+	width: 90%;
+	padding:10px;
+	font-size: 30pt;
+}
+.list-item-class {cursor:pointer;}
+.font-color-warn-class {color:red;}
+.font-color-major-class {color:blue;}
+.font-color-major-class {color:blue;}
+.font-color-check-class {color:blue;background-color:gray;}
+.list-item-class {padding:16px 0;}
+.list-item-bottom-line-class {border-bottom:1px solid black;}
