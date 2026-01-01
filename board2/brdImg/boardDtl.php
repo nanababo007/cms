@@ -71,7 +71,7 @@ include('boardDtlServer.php');
 if($boardDtlFixListCount > 0){
 	foreach ($boardDtlFixList as $index => $row) {
 ?>
-<tr>
+<tr bgcolor="#f5f5f5">
 	<td align="center">고정</td>
 	<td align="left"><a href="javascript:goView('<?php echo $row["bda_seq"]; ?>');"><?php echo $row["bda_title"]; ?></a></td>
 	<td align="center"><?php echo $row["bda_view_cnt"]; ?></td>
