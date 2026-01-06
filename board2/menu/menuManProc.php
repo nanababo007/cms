@@ -34,6 +34,8 @@ if($actionString=="write"){
 	$mnUrlTarget = nvl(getPostValue("mnUrlTarget"));
 	$mnUseYn = nvl(getPostValue("mnUseYn"),"N");
 	#---
+	$mnUrl = getMenuUrlEncodedString($mnUrl);
+	#---
 	if($regMnSeq==""){
 		$pMnSeq = "0";
 		#---
@@ -117,6 +119,8 @@ if($actionString=="write"){
 	$mnUrl = nvl(getPostValue("mnUrl"));
 	$mnUrlTarget = nvl(getPostValue("mnUrlTarget"));
 	$mnUseYn = nvl(getPostValue("mnUseYn"),"N");
+	#---
+	$mnUrl = getMenuUrlEncodedString($mnUrl);
 	#---
 	if($modMnSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($mnNm==""){alertBack("정보가 부족 합니다.");}#if
@@ -373,4 +377,23 @@ if($actionString=="write"){
 }#if
 #---
 fnCloseDB();
+#---
+function getMenuUrlEncodedString($mnUrl=""){
+	$MN_URL_MAX_LENGTH_CONST = 2000;
+	#---
+	$returnString = "";
+	$failReturnString = "";
+	$editMnUrl = "";
+	$mnUrl = trim($mnUrl);
+	#---
+	if($mnUrl==""){return $failReturnString;}#if
+	#---
+	$editMnUrl = $mnUrl;
+	$editMnUrl = str_replace("〓","=",$editMnUrl);
+	#---
+	$editMnUrl = substr($editMnUrl, 0, $MN_URL_MAX_LENGTH_CONST);
+	#---
+	$returnString = $editMnUrl;
+	return $returnString;
+}
 ?>
