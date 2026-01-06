@@ -25,7 +25,7 @@ if($modeString=="server"){
 	$envVarMap["fileUploadRootWebPathGlobalValue"] = "/upload_web_path";
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] = 10;
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeGlobalValue"] = $envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] * 1024 * 1024;
-	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf";
+	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf,zip";
 }else{
 	$envVarMap["dbUsername"] = "root";
 	$envVarMap["dbUserpwd"] = "";
@@ -40,7 +40,7 @@ if($modeString=="server"){
 	$envVarMap["fileUploadRootWebPathGlobalValue"] = "/data";
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] = 10;
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeGlobalValue"] = $envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] * 1024 * 1024;
-	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf";
+	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf,zip";
 }#if
 #---
 function getServerModeString(){
