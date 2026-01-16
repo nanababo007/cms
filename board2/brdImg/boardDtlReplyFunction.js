@@ -130,6 +130,7 @@ function getReplyItemHtml(rowData=null){
 	//---
 	if(rowData){
 		bdrContentString = getDecodeHtmlString(getNvlString(rowData.bdr_content));
+		bdrContentString = getLinkContentHtmlString(bdrContentString);
 		//---
 		replyItemString = replyItemTemplateString;
 		replyItemString = replyItemString.replaceAll('{{bdrSeq}}',$.trim(rowData.bdr_seq));

@@ -148,7 +148,7 @@ fnCloseDB();
 			?>
 		</div>
 		<?php }#if ?>
-		<div style="margin-top:10px;"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></div>
+		<div style="margin-top:10px;" class="board-content-area"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></div>
 	</td>
 </tr>
 </table>
@@ -204,6 +204,20 @@ fnCloseDB();
 var paramFormObject = document.paramForm;
 var actionParamFormObject = document.actionParamForm;
 //---
+$(function(){
+	initThisPage();
+});
+//---
+function initThisPage(){
+	$('.board-content-area').each(function(index,el){
+		var boardContentJqueryObject = $(el);
+		var boardContentHtmlString = boardContentJqueryObject.html();
+		//---
+		boardContentHtmlString = getLinkContentHtmlString(boardContentHtmlString);
+		//---
+		boardContentJqueryObject.html(boardContentHtmlString);
+	});
+}
 function goModify(){
 	paramFormObject.action = 'boardDtlWrite.php';
 	paramFormObject.submit();

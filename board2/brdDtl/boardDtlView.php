@@ -99,7 +99,7 @@ fnCloseDB();
 			<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
 			<input type="button" value="목록" onclick="goList();" />
 		</div>
-		<?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?>
+		<div class="board-content-area"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></div>
 	</td>
 </tr>
 </table>
@@ -155,6 +155,20 @@ fnCloseDB();
 var paramFormObject = document.paramForm;
 var actionParamFormObject = document.actionParamForm;
 //---
+$(function(){
+	initThisPage();
+});
+//---
+function initThisPage(){
+	$('.board-content-area').each(function(index,el){
+		var boardContentJqueryObject = $(el);
+		var boardContentHtmlString = boardContentJqueryObject.html();
+		//---
+		boardContentHtmlString = getLinkContentHtmlString(boardContentHtmlString);
+		//---
+		boardContentJqueryObject.html(boardContentHtmlString);
+	});
+}
 function goModify(){
 	paramFormObject.action = 'boardDtlWrite.php';
 	paramFormObject.submit();

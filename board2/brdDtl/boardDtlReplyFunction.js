@@ -130,6 +130,7 @@ function getReplyItemHtml(rowData=null){
 	//---
 	if(rowData){
 		bdrContentString = getDecodeHtmlString(getNvlString(rowData.bdr_content));
+		bdrContentString = getLinkContentHtmlString(bdrContentString);
 		//---
 		replyItemString = replyItemTemplateString;
 		replyItemString = replyItemString.replaceAll('{{bdrSeq}}',$.trim(rowData.bdr_seq));
@@ -144,6 +145,7 @@ function getReplyItemHtml(rowData=null){
 		replyItemString = replyItemString.replaceAll('{{orgReplyContent}}',getNvlString(rowData.bdr_content));
 		replyItemString = replyItemString.replaceAll('{{bdrFixYN}}',$.trim(rowData.bdr_fix_yn));
 	}//if
+	//---
 	return replyItemString;
 }
 function getReplyRow(bdrSeq='',callbackFunc=null){
