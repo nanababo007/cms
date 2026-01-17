@@ -19,8 +19,9 @@
 			allowedUrlsArray = getAllowedUrlsArrayOfContent(orgContentTextString,linkAllowedHostsGlobalValue);
 			//---
 			linkContentString = getAllowedUrlLinkHtmlString(orgContentTextString,allowedUrlsArray);
-			linkContentString = linkContentString.replaceAll('\r\n','<br />');
-			linkContentString = linkContentString.replaceAll('\n','<br />');
+			//--- 다른 곳에서 이미 줄바꿈 처리하고 있음. 중복 처리됨. 처리 필요 없음.
+			//linkContentString = linkContentString.replaceAll('\r\n','\n');
+			//linkContentString = linkContentString.replaceAll('\n','<br />');
 			//---
 			returnString = linkContentString;
 			return returnString;
