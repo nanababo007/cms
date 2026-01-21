@@ -6,6 +6,7 @@ function getDecodeHtmlString(stringValue=''){
 		editStringValue = stringValue;
 		editStringValue = editStringValue.replaceAll('\r\n','\n');
 		editStringValue = editStringValue.replaceAll('\n','<br />');
+		editStringValue = editStringValue.replaceAll('\t','&nbsp;&nbsp;&nbsp;&nbsp;');
 	}//if
 	//---
 	returnString = editStringValue;
@@ -90,15 +91,22 @@ function getAllowedUrlsArrayOfContent(contentString='',allowedHostsArray=null,de
 			//var host = new URL(url).hostname;
 			var editUrlString = '';
 			var isContains = false;
+			var domainName = '';
+			var domainInfoObject = null;
 			//---
 			editUrlString = $.trim(url).substring(0,200);
+			domainInfoObject = getDomainAndHost(editUrlString);
+			domainName = $.trim(domainInfoObject.hostname);
 			if(debugFlag){console.info('editUrlString : ',editUrlString);}//if
+			if(debugFlag){console.info('domainName : ',domainName);}//if
 			//---
 			$(allowedHostsArray).each(function(index,allowedHostString){
 				if(debugFlag){console.info('allowedHostString({{index}}) : ',allowedHostString);}//if
 				if(allowedHostString!==undefined && allowedHostString!==null){
-					if(debugFlag){console.info('containsIgnoreCaseRegex(editUrlString,allowedHostString) : ',containsIgnoreCaseRegex(editUrlString,allowedHostString));}//if
-					if(containsIgnoreCaseRegex(editUrlString,allowedHostString)){
+					if(debugFlag){console.info('containsIgnoreCaseRegex(domainName,allowedHostString) : ',containsIgnoreCaseRegex(domainName,allowedHostString));}//if
+					if(debugFlag){console.info('domainName : ',domainName);}//if
+					if(debugFlag){console.info('allowedHostString : ',allowedHostString);}//if
+					if(containsIgnoreCaseRegex(domainName,allowedHostString)){
 						isContains = true;
 						return false;
 					}//if
@@ -166,4 +174,19 @@ function getCurrentLineOfTextarea(textareaJqueryObject=null) {
 	if (end === -1) end = text.length; // 마지막 줄 처리
 	// 현재 행 추출
 	return text.substring(start,end);
+}
+//const url = "https://modern3080.mycafe24.com/board2/brdDtl/boardDtlView.php?bdSeq=10";
+//console.log(getDomainAndHost(url)); 
+//결과: { hostname: "modern3080.mycafe24.com", domain: "modern3080.mycafe24.com" }
+function getDomainAndHost(url='') {
+	try {
+		const parsedUrl = new URL(url);
+		return {
+		hostname: parsedUrl.hostname, // 호스트명 (예: modern3080.mycafe24.com)
+		domain: parsedUrl.host        // 도메인 + 포트 (예: modern3080.mycafe24.com:80)
+	};
+	} catch (e) {
+		console.error("Invalid URL:", e);
+		return null;
+	}
 }

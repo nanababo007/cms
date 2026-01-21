@@ -315,7 +315,9 @@ function getInjectString($valueString=""){
 }
 function getDecodeHtmlString($valueString=""){
 	$valueString = nvl($valueString);
-	$valueString = str_replace("\n","<br />",$valueString);
+	$valueString = str_replace(" ","&nbsp;",$valueString);
+	$valueString = str_replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;",$valueString);
+	$valueString = str_replace("\n","<br/>",$valueString);
 	return $valueString;
 }
 function addGlobalResource(&$globalResourceObject=null){
