@@ -96,6 +96,7 @@ function getAllowedUrlsArrayOfContent(contentString='',allowedHostsArray=null,de
 			//---
 			editUrlString = $.trim(url).substring(0,200);
 			domainInfoObject = getDomainAndHost(editUrlString);
+			if(domainInfoObject===null){return true;}//if
 			domainName = $.trim(domainInfoObject.hostname);
 			if(debugFlag){console.info('editUrlString : ',editUrlString);}//if
 			if(debugFlag){console.info('domainName : ',domainName);}//if
@@ -179,12 +180,15 @@ function getCurrentLineOfTextarea(textareaJqueryObject=null) {
 //console.log(getDomainAndHost(url)); 
 //결과: { hostname: "modern3080.mycafe24.com", domain: "modern3080.mycafe24.com" }
 function getDomainAndHost(url='') {
+	if($.trim(url)===''){return null;}//if
+	if(url.toLowerCase().indexOf('http')===-1){return null;}//if
+	//---
 	try {
 		const parsedUrl = new URL(url);
 		return {
-		hostname: parsedUrl.hostname, // 호스트명 (예: modern3080.mycafe24.com)
-		domain: parsedUrl.host        // 도메인 + 포트 (예: modern3080.mycafe24.com:80)
-	};
+			hostname: parsedUrl.hostname, // 호스트명 (예: modern3080.mycafe24.com)
+			domain: parsedUrl.host        // 도메인 + 포트 (예: modern3080.mycafe24.com:80)
+		};
 	} catch (e) {
 		console.error("Invalid URL:", e);
 		return null;
