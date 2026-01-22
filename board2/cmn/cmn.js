@@ -134,15 +134,27 @@ function getAllowedUrlLinkHtmlString(contentString='',allowedUrlsArray=null,debu
 	var editContentString = '';
 	var allowedUrlLinkHtmlString = '';
 	var editAllowedUrlString = '';
+	var partArrayObjectOfAllowedUrlsArray = null;
+	var substringsArrayOfAllowedUrlsArray = null;
+	var nonSubstringsArrayOfAllowedUrlsArray = null;
 	//---
 	if(debugFlag){console.info('===== getAllowedUrlLinkHtmlString start');}//if
 	if(contentString===undefined || contentString===null){return failReturnString;}//if
 	if(allowedUrlsArray===undefined || allowedUrlsArray===null || !allowedUrlsArray.length){return contentString;}//if
-	//---
+	//--- allowedUrlsArray, 배열 중복 제거 처리
+	allowedUrlsArray = removeDupOfArray(allowedUrlsArray);
+	//--- allowedUrlsArray, 배열 항목, 긴 문자열 길이 기준으로, 긴문자열 상위 위치, 배열 정렬 처리
+	allowedUrlsArray = sortAscByStringLengthOfArray(allowedUrlsArray);
+	//--- allowedUrlsArray, 배열에서 포함문자열 항목 배열과, 비포함문자열 항목 배열로 분리
+	partArrayObjectOfAllowedUrlsArray = splitBySubstringOfArray(allowedUrlsArray);
+	substringsArrayOfAllowedUrlsArray = partArrayObjectOfAllowedUrlsArray.substrings;
+	nonSubstringsArrayOfAllowedUrlsArray = partArrayObjectOfAllowedUrlsArray.nonSubstrings;
+	//--- 
 	editContentString = contentString;
 	if(debugFlag){console.info('contentString : ',contentString);}//if
 	if(debugFlag){console.info('editContentString : ',editContentString);}//if
-	$(allowedUrlsArray).each(function(index,allowedUrlString){
+	//--- allowedUrlsArray, 비포함문자열 항목 배열 처리
+	$(nonSubstringsArrayOfAllowedUrlsArray).each(function(index,allowedUrlString){
 		if(allowedUrlString!==undefined && allowedUrlString!==null){
 			editAllowedUrlString = allowedUrlString.substring(0,ALLOW_URL_MAX_LENGTH_CONST);
 			//---
@@ -151,6 +163,20 @@ function getAllowedUrlLinkHtmlString(contentString='',allowedUrlsArray=null,debu
 			allowedUrlLinkHtmlString = allowedUrlLinkHtmlString.replaceAll('〓','=');
 			//---
 			editContentString = editContentString.replaceAll(editAllowedUrlString,allowedUrlLinkHtmlString);
+		}//if
+	});
+	//--- allowedUrlsArray, 포함문자열 항목 배열 처리
+	$(substringsArrayOfAllowedUrlsArray).each(function(index,allowedUrlString){
+		if(allowedUrlString!==undefined && allowedUrlString!==null){
+			editAllowedUrlString = allowedUrlString.substring(0,ALLOW_URL_MAX_LENGTH_CONST);
+			//---
+			allowedUrlLinkHtmlString = '<a href="editAllowedUrlString" target="_blank">editAllowedUrlString</a>';
+			allowedUrlLinkHtmlString = allowedUrlLinkHtmlString.replaceAll('editAllowedUrlString',editAllowedUrlString);
+			allowedUrlLinkHtmlString = allowedUrlLinkHtmlString.replaceAll('〓','=');
+			//---
+			editContentString = editContentString.replaceAll(editAllowedUrlString+' ',allowedUrlLinkHtmlString+' ');
+			editContentString = editContentString.replaceAll(editAllowedUrlString+'\t',allowedUrlLinkHtmlString+'\t');
+			editContentString = editContentString.replaceAll(editAllowedUrlString+'\n',allowedUrlLinkHtmlString+'\n');
 		}//if
 	});
 	//---
@@ -193,4 +219,73 @@ function getDomainAndHost(url='') {
 		console.error("Invalid URL:", e);
 		return null;
 	}
+}
+//const arr = [1, 2, 2, 3, 4, 4, 5];
+//removeDupOfArray(arr);
+function removeDupOfArray(arr=null){
+	if(!arr){return arr;}//if
+	if(!arr.length){return arr;}//if
+	//---
+	const uniqueArr = arr.filter(
+		(item, index) => arr.indexOf(item) === index
+	);
+	return uniqueArr;
+}
+/** 
+ * 문자열 배열을 길이 기준으로 내림차순 정렬하는 함수 
+ * @param {string[]} arr - 문자열 배열 
+ * @returns {string[]} - 길이가 긴 문자열이 앞에 오는 정렬된 배열 
+ * 사용 예시 
+ * const data = ["apple", "banana", "kiwi", "watermelon", "grape"]; 
+ * const sorted = sortDescByStringLengthOfArray(data);
+ */
+function sortDescByStringLengthOfArray(arr=null) {
+	if(!arr){return arr;}//if
+	if(!arr.length){return arr;}//if
+	//---
+	return arr.sort((a, b) => b.length - a.length); 
+}
+/** 
+ * 문자열 배열을 길이 기준으로 오름차순 정렬하는 함수 
+ * @param {string[]} arr - 문자열 배열 
+ * @returns {string[]} - 길이가 긴 문자열이 뒤에 오는 정렬된 배열 
+ * 사용 예시 
+ * const data = ["apple", "banana", "kiwi", "watermelon", "grape"]; 
+ * const sorted = sortAscByStringLengthOfArray(data);
+ */
+function sortAscByStringLengthOfArray(arr=null) {
+	if(!arr){return arr;}//if
+	if(!arr.length){return arr;}//if
+	//---
+	return arr.sort((a, b) => a.length - b.length); 
+}
+/**
+ * 설명
+ - 배열에서, 항목중에서, 다른 항목들의 부분문자열인 항목을 따로 배열로 분리하고, 
+ - 그외에 아닌 항목들을 또 다른 배열로 분리해서, 반환하는 자바스크립트 함수
+ * 사용 예시
+ - const data = ["apple", "app", "banana", "nan", "orange", "ora"];
+ - const result = splitBySubstringOfArray(data);
+ - console.log("부분문자열 배열:", result.substrings); 
+ - console.log("비부분문자열 배열:", result.nonSubstrings); 
+ */
+function splitBySubstringOfArray(arr) {
+	const substrings = [];
+	const nonSubstrings = [];
+	//---
+	if(!arr){return {};}//if
+	if(!arr.length){return {};}//if
+	//---
+	arr.forEach((item, index) => {
+		//다른 항목들 중 하나라도 item을 포함하면 부분문자열로 분류
+		const isSubstring = arr.some((other, i) => i !== index && other.includes(item));
+		//---
+		if (isSubstring) {
+			substrings.push(item);
+		} else {
+			nonSubstrings.push(item);
+		}//if
+	});
+	//---
+	return { substrings, nonSubstrings };
 }
