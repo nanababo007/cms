@@ -4,6 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pagingListInfo.php');
 #---
+$pageTitleString = "";
 $thisPageMnSeq = 16;
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
@@ -15,6 +16,8 @@ $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
 $boardFixList = null;
 $boardFixListCount = 0;
+#---
+$pageTitleString = "게시판 관리";
 #---
 fnOpenDB();
 setDisplayMenuList();

@@ -4,6 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/menu/menuLibraryInclude.php');
 #---
+$pageTitleString = "";
 $thisPageMnSeq = 2;
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
@@ -11,10 +12,12 @@ $sqlSearchPart2 = "";
 $sqlSearchPart2Index = 0;
 $mnSeq = nvl(getRequestValue("mnSeq"),"");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
-$pageSize = 50;
+$pageSize = 100;
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+#---
+$pageTitleString = "메뉴 관리";
 #---
 fnOpenDB();
 setDisplayMenuList();
