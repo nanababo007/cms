@@ -92,6 +92,8 @@ if($actionString=="write"){
 	if($bdaSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
+	fnHistInsertImgBoardArticle($bdaSeq);
+	#---
 	$sql = "
 		update tb_board_img_article set
 			bda_title = '${bdaTitle}'
@@ -138,6 +140,8 @@ if($actionString=="write"){
 	";
 	$fileCount = fnDBGetIntValue($sql);
 	if($fileCount > 0){alertBack("파일이 존재 합니다.\\n파일을 모두 삭제 해주세요.");}#if
+	#---
+	fnHistInsertImgBoardArticle($bdaSeq);
 	#---
 	$sql = "
 		delete from tb_board_img_article

@@ -130,6 +130,8 @@ if($actionString=="GET_REPLY_LIST"){
 		responseJson();
 	}#if
 	#---
+	fnHistInsertBoardReply($bdrSeq);
+	#---
 	$sql = "
 		update tb_board_reply set
 			bdr_content = '${bdrContent}',
@@ -151,6 +153,8 @@ if($actionString=="GET_REPLY_LIST"){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
+	#---
+	fnHistInsertBoardReply($bdrSeq);
 	#---
 	$sql = "
 		delete from tb_board_reply

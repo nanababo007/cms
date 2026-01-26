@@ -125,6 +125,8 @@ if($actionString=="write"){
 	if($modMnSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($mnNm==""){alertBack("정보가 부족 합니다.");}#if
 	#---
+	fnHistInsertBoardMenuInfo($modMnSeq);
+	#---
 	$sql = "
 		update tb_board_menu_info set
 			mn_nm = '${mnNm}'
@@ -152,6 +154,8 @@ if($actionString=="write"){
 	#---
 	if($delMnSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if(getSubMenuCount($delMnSeq) > 0){alertBack("하위 메뉴가 존재 합니다.\\n하위 메뉴를 삭제해야, 상위메뉴가 삭제 가능합니다.");}#if
+	#---
+	fnHistInsertBoardMenuInfo($delMnSeq);
 	#---
 	$sql = "
 		delete from tb_board_menu_info

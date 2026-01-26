@@ -91,6 +91,8 @@ if($actionString=="write"){
 	if($bdaSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
+	fnHistInsertBoardArticle($bdaSeq);
+	#---
 	$sql = "
 		update tb_board_article set
 			bda_title = '${bdaTitle}'
@@ -120,6 +122,8 @@ if($actionString=="write"){
 	$bdaSeq = nvl(getPostValue("bdaSeq"));
 	#---
 	if($bdaSeq==""){alertBack("정보가 부족 합니다.");}#if
+	#---
+	fnHistInsertBoardArticle($bdaSeq);
 	#---
 	$sql = "
 		select count(*) as cnt

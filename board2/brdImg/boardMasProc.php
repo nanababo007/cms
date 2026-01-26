@@ -64,6 +64,8 @@ if($actionString=="write"){
 	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
 	#---
+	fnHistInsertImgBoardInfo($bdSeq);
+	#---
 	$sql = "
 		update tb_board_img_info set
 			bd_nm = '${bdNm}'
@@ -88,6 +90,8 @@ if($actionString=="write"){
 	$bdSeq = nvl(getPostValue("bdSeq"));
 	#---
 	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
+	#---
+	fnHistInsertImgBoardInfo($bdSeq);
 	#---
 	$sql = "
 		delete from tb_board_img_info

@@ -9,4 +9,6 @@
 	include $envVarMap["appPath"]."/lib/exceptionLibrary.php";
 	include $envVarMap["appPath"]."/lib/FileUtilLibrary.php";
 	include $envVarMap["appPath"]."/lib/FileUploadLibrary.php";
+	#---
+	include $envVarMap["appPath"]."/lib/apps/historyAppsLibrary.php";
 ?>
