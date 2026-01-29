@@ -30,6 +30,8 @@ function fnHistInsertBoardInfo($bdSeq=""){
 			,bd_fix_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,bakdate
 		) select
 			bd_seq
@@ -38,6 +40,8 @@ function fnHistInsertBoardInfo($bdSeq=""){
 			,bd_fix_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,NOW(3)
 		from tb_board_info
 		where bd_seq = '${bdSeq}'
@@ -59,6 +63,8 @@ function fnHistInsertBoardArticle($bdaSeq=""){
 			,bda_fix_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,bakdate
 		) select
 			bda_seq
@@ -68,6 +74,8 @@ function fnHistInsertBoardArticle($bdaSeq=""){
 			,bda_fix_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,NOW(3)
 		from tb_board_article
 		where bda_seq = '${bdaSeq}'
@@ -87,6 +95,8 @@ function fnHistInsertBoardReply($bdrSeq=""){
 			,bdr_content
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,bakdate
 		) select
 			bdr_seq
@@ -94,6 +104,8 @@ function fnHistInsertBoardReply($bdrSeq=""){
 			,bdr_content
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,NOW(3)
 		from tb_board_reply
 		where bdr_seq = '${bdrSeq}'
@@ -114,6 +126,8 @@ function fnHistInsertImgBoardInfo($bdSeq=""){
 			,bd_fix_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,bakdate
 		) select
 			bd_seq
@@ -122,6 +136,8 @@ function fnHistInsertImgBoardInfo($bdSeq=""){
 			,bd_fix_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,NOW(3)
 		from tb_board_img_info
 		where bd_seq = '${bdSeq}'
@@ -143,6 +159,8 @@ function fnHistInsertImgBoardArticle($bdaSeq=""){
 			,bda_fix_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,bakdate
 		) select
 			bda_seq
@@ -152,6 +170,8 @@ function fnHistInsertImgBoardArticle($bdaSeq=""){
 			,bda_fix_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,NOW(3)
 		from tb_board_img_article
 		where bda_seq = '${bdaSeq}'
@@ -171,6 +191,8 @@ function fnHistInsertImgBoardReply($bdrSeq=""){
 			,bdr_content
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,bakdate
 		) select
 			bdr_seq
@@ -178,6 +200,8 @@ function fnHistInsertImgBoardReply($bdrSeq=""){
 			,bdr_content
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,NOW(3)
 		from tb_board_img_reply
 		where bdr_seq = '${bdrSeq}'
@@ -203,6 +227,8 @@ function fnHistInsertBoardMenuInfo($mnSeq=""){
 			,mn_del_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,bakdate
 		) select
 			p_mn_seq
@@ -216,6 +242,8 @@ function fnHistInsertBoardMenuInfo($mnSeq=""){
 			,mn_del_yn
 			,regdate
 			,reguser
+			,moddate
+			,moduser
 			,NOW(3)
 		from tb_board_menu_info
 		where mn_seq = '${mnSeq}'

@@ -196,3 +196,13 @@ main.content-area-class {
 .datepicker-input-class {
 	text-align:center;
 }
+.board-content-area {
+	margin-top:20px;
+	padding-bottom:20px;
+}
+.board-content-history-list-title {
+	margin:20px 0 0 0;
+}
+.board-content-history-list-area {
+	display:none;
+}
