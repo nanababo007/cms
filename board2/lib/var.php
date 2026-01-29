@@ -26,6 +26,7 @@ if($modeString=="server"){
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] = 10;
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeGlobalValue"] = $envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] * 1024 * 1024;
 	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf,zip";
+    $envVarMap["linkAllowedHostsGlobalValue"] = "naver.com,daum.net,cafe24.com,tistory.com,.ac.kr,.org,.or.kr,go.kr,youtube.com,github.com,namu.wiki,youtu.be";
 }else{
 	$envVarMap["dbUsername"] = "root";
 	$envVarMap["dbUserpwd"] = "";
@@ -41,6 +42,7 @@ if($modeString=="server"){
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] = 10;
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeGlobalValue"] = $envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] * 1024 * 1024;
 	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf,zip";
+	$envVarMap["linkAllowedHostsGlobalValue"] = "localhost";
 }#if
 #---
 function getServerModeString(){
