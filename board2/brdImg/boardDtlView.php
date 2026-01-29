@@ -4,97 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardMasLibraryInclude.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardDtlLibraryInclude.php');
-#---
-$thisPageMnSeq = 24;
-$pageTitleString = "";
-$boardArticleInfo = null;
-$boardInfo = null;
-$mnSeq = nvl(getRequestValue("mnSeq"),"");
-$bdSeq = nvl(getRequestValue("bdSeq"));
-$bdaSeq = nvl(getRequestValue("bdaSeq"));
-$pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
-$pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
-$blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
-$schTitle = nvl(getRequestValue("schTitle"),"");
-$schContent = nvl(getRequestValue("schContent"),"");
-$schReply = nvl(getRequestValue("schReply"),"");
-$schSRegdate = nvl(getRequestValue("schSRegdate"),"");
-$schERegdate = nvl(getRequestValue("schERegdate"),"");
-$boardDtlFileList = null;
-$boardDtlFileInfo = null;
-$boardDtlFileListCount = 0;
-$boardDtlFileListIndex = 0;
-$boardDtlFileListNumber = 0;
-#---
-fnOpenDB();
-setDisplayMenuList();
-#---
-if($bdSeq==""){alertBack("정보가 부족합니다.");}#if
-if($bdaSeq==""){alertBack("정보가 부족합니다.");}#if
-#---
-$boardInfo = fnBoardGetInfo($bdSeq);
-if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.");}#if
-debugArray("boardInfo",$boardInfo);
-if(!fnBoardArticleCheckInfo($bdaSeq)){alertBack("게시글 정보가 존재하지 않습니다.");}#if
-#---
-$pageTitleString = getArrayValue($boardInfo,"bd_nm")." | 멀티게시판";
-#---
-$sql = "
-	update tb_board_img_article set
-		bda_view_cnt = bda_view_cnt + 1
-	where bda_seq = ${bdaSeq}
-";
-fnDBUpdate($sql);
-#---
-$sqlBodyPart = "
-	FROM tb_board_img_article a
-	where bda_seq = ${bdaSeq}
-";
-#---
-$sqlMain = "
-	SELECT
-		a.bda_seq
-		,a.bd_seq
-		,a.bda_title
-		,a.bda_content
-		,a.bda_view_cnt
-		,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
-		,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
-		,a.regdate
-		,a.reguser
-		,a.moddate
-		,a.moduser
-	${sqlBodyPart}
-";
-debugString("sqlMain",getDecodeHtmlString($sqlMain));
-$boardArticleInfo = fnDBGetRow($sqlMain);
-#---
-$sqlFile = "
-	select
-		a.*
-	from (
-		SELECT
-			a.bdaf_seq
-			,a.bda_seq
-			,a.bdaf_filename
-			,a.bdaf_save_filename
-			,a.bdaf_save_thumbnail
-			,a.bdaf_kind_name
-			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
-			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
-			,a.regdate
-			,a.reguser
-			,a.moddate
-			,a.moduser
-		from tb_board_img_article_file a
-		where a.bda_seq = ${bdaSeq}
-	) a
-	ORDER BY a.bda_seq DESC
-";
-$boardDtlFileList = fnDBGetList($sqlFile);
-$boardDtlFileListCount = getArrayCount($boardDtlFileList);
-#---
-fnCloseDB();
+include("boardDtlViewServer.php");
 ?>
 <!doctype html>
 <html lang="ko">
@@ -125,6 +35,7 @@ fnCloseDB();
 		<div align="right" style="margin-top:10px;">
 			<input type="button" value="페이지끝" onclick="goPageEndPos();" />
 			<input type="button" value="댓글" onclick="goReplyPos();" />
+			<input type="button" value="변경이력" onclick="toggleBoardContentHistoryList();" />
 			<input type="button" value="수정" onclick="goModify();" />
 			<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
 			<input type="button" value="목록" onclick="goList();" />
@@ -148,7 +59,45 @@ fnCloseDB();
 			?>
 		</div>
 		<?php }#if ?>
-		<div style="margin-top:10px;" class="board-content-area"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></div>
+		<div class="board-content-history-list-area">
+			<hr />
+			<h3 class="board-content-history-list-title">변경 이력 목록 (<?php echo $boardArticleHistoryListCount; ?>)</h3>
+			<?php
+				printBoardArticleHistoryList();
+				function printBoardArticleHistoryList(){
+					global $boardArticleHistoryList;
+					global $boardArticleHistoryListCount;
+					#---
+					$boardArticleHistoryListNumber = 0;
+					$historyDateString = "";
+					$historyBdaSeq = "";
+					$historyBdaTitle = "";
+					#---
+					if($boardArticleHistoryListCount > 0){
+						foreach($boardArticleHistoryList as $boardArticleHistoryListIndex => $boardArticleHistoryInfo){
+							$boardArticleHistoryListNumber = $boardArticleHistoryListIndex + 1;
+							#---
+							$historyDateString = nvl(getArrayValue($boardArticleHistoryInfo,"hist_date_str"));
+							$historyBdaSeq = nvl(getArrayValue($boardArticleHistoryInfo,"bda_bseq"));
+							$historyBdaTitle = nvl(getArrayValue($boardArticleHistoryInfo,"bda_title"));
+							#---
+							if($boardArticleHistoryListNumber==1){
+								?><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
+							}else{
+								?><br /><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
+							}#if
+						}#foreach
+					}#if
+				}
+			?>
+		</div>
+		<div class="board-content-area">
+			<hr />
+			최초 등록일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"regdate_str")); ?>
+			<br />최종 변경일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"moddate_str")); ?>
+			<hr />
+			<br /><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?>
+		</div>
 	</td>
 </tr>
 </table>
@@ -170,76 +119,22 @@ fnCloseDB();
 <a name="pageEndPos"></a>
 
 <form name="paramForm" method="get">
-<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
-<input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
-<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
-<input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
-<input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
-<input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
-<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
-<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
-<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
-<input type="hidden" name="schSRegdate" value="<?php echo $schSRegdate; ?>" />
-<input type="hidden" name="schERegdate" value="<?php echo $schERegdate; ?>" />
+<?php include("boardDtlViewFormItem.php"); ?>
+</form>
+
+<form name="historyViewParamForm" method="get" target="_blank">
+<input type="hidden" name="histBdaSeq" value="" />
+<?php include("boardDtlViewFormItem.php"); ?>
 </form>
 
 <form name="actionParamForm" method="post">
 <input type="hidden" name="actionString" value="" />
-<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
-<input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
-<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
-<input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
-<input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
-<input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
-<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
-<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
-<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
-<input type="hidden" name="schSRegdate" value="<?php echo $schSRegdate; ?>" />
-<input type="hidden" name="schERegdate" value="<?php echo $schERegdate; ?>" />
+<?php include("boardDtlViewFormItem.php"); ?>
 </form>
 
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutEnd.php'); ?>
 
-<script>
-var paramFormObject = document.paramForm;
-var actionParamFormObject = document.actionParamForm;
-//---
-$(function(){
-	initThisPage();
-});
-//---
-function initThisPage(){
-	$('.board-content-area').each(function(index,el){
-		var boardContentJqueryObject = $(el);
-		var boardContentHtmlString = boardContentJqueryObject.html();
-		//---
-		boardContentHtmlString = getLinkContentHtmlString(boardContentHtmlString);
-		//---
-		boardContentJqueryObject.html(boardContentHtmlString);
-	});
-}
-function goModify(){
-	paramFormObject.action = 'boardDtlWrite.php';
-	paramFormObject.submit();
-}
-function goList(){
-	paramFormObject.action = 'boardDtl.php';
-	paramFormObject.submit();
-}
-function goDelete(){
-	if(confirm('삭제 하시겠습니까?')){
-		actionParamFormObject.actionString.value = 'delete';
-		actionParamFormObject.action = 'boardDtlProc.php';
-		actionParamFormObject.submit();
-	}//if
-}
-function goReplyPos(){
-	location.href = '#replyPos';
-}
-function goPageEndPos(){
-	location.href = '#pageEndPos';
-}
-</script>
+<?php include("boardDtlViewScript.php"); ?>
 
 </body>
 </html>

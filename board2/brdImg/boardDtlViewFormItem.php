@@ -1,0 +1,11 @@
+<input type="hidden" name="mnSeq" value="<?php echo $mnSeq; ?>" />
+<input type="hidden" name="bdSeq" value="<?php echo $bdSeq; ?>" />
+<input type="hidden" name="bdaSeq" value="<?php echo $bdaSeq; ?>" />
+<input type="hidden" name="pageNumber" value="<?php echo $pageNumber; ?>" />
+<input type="hidden" name="pageSize" value="<?php echo $pageSize; ?>" />
+<input type="hidden" name="blockSize" value="<?php echo $blockSize; ?>" />
+<input type="hidden" name="schTitle" value="<?php echo $schTitle; ?>" />
+<input type="hidden" name="schContent" value="<?php echo $schContent; ?>" />
+<input type="hidden" name="schReply" value="<?php echo $schReply; ?>" />
+<input type="hidden" name="schSRegdate" value="<?php echo $schSRegdate; ?>" />
+<input type="hidden" name="schERegdate" value="<?php echo $schERegdate; ?>" />

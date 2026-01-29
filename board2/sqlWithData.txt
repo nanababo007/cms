@@ -257,7 +257,6 @@ INSERT INTO `tb_board_reply` (`bdr_seq`, `bda_seq`, `bdr_content`, `bdr_fix_yn`,
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
 
-
 -- 테이블 memo.tb_board_bak_article 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tb_board_bak_article` (
   `bda_bseq` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '게시글 백업 번호',
@@ -273,7 +272,8 @@ CREATE TABLE IF NOT EXISTS `tb_board_bak_article` (
   `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
   `bakdate` datetime DEFAULT NULL COMMENT '백업일시',
   PRIMARY KEY (`bda_bseq`) USING BTREE,
-  KEY `bd_seq` (`bd_seq`)
+  KEY `bd_seq` (`bd_seq`),
+  KEY `bda_seq` (`bda_seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 테이블 데이터 memo.tb_board_bak_article:~2 rows (대략적) 내보내기
@@ -296,7 +296,8 @@ CREATE TABLE IF NOT EXISTS `tb_board_bak_img_article` (
   `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
   `bakdate` datetime DEFAULT NULL COMMENT '백업일시',
   PRIMARY KEY (`bda_bseq`) USING BTREE,
-  KEY `bd_seq` (`bd_seq`)
+  KEY `bd_seq` (`bd_seq`),
+  KEY `bda_seq` (`bda_seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 테이블 데이터 memo.tb_board_bak_img_article:~2 rows (대략적) 내보내기
@@ -316,7 +317,8 @@ CREATE TABLE IF NOT EXISTS `tb_board_bak_img_info` (
   `moddate` datetime DEFAULT NULL COMMENT '수정일시',
   `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
   `bakdate` datetime DEFAULT NULL COMMENT '백업일시',
-  PRIMARY KEY (`bd_bseq`) USING BTREE
+  PRIMARY KEY (`bd_bseq`) USING BTREE,
+  KEY `bd_seq` (`bd_seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 테이블 데이터 memo.tb_board_bak_img_info:~2 rows (대략적) 내보내기
@@ -337,7 +339,8 @@ CREATE TABLE IF NOT EXISTS `tb_board_bak_img_reply` (
   `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
   `bakdate` datetime DEFAULT NULL COMMENT '백업일시',
   PRIMARY KEY (`bdr_bseq`) USING BTREE,
-  KEY `bda_seq` (`bda_seq`)
+  KEY `bda_seq` (`bda_seq`),
+  KEY `bdr_seq` (`bdr_seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 테이블 데이터 memo.tb_board_bak_img_reply:~3 rows (대략적) 내보내기
@@ -358,7 +361,8 @@ CREATE TABLE IF NOT EXISTS `tb_board_bak_info` (
   `moddate` datetime DEFAULT NULL COMMENT '수정일시',
   `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
   `bakdate` datetime DEFAULT NULL COMMENT '백업일시',
-  PRIMARY KEY (`bd_bseq`) USING BTREE
+  PRIMARY KEY (`bd_bseq`) USING BTREE,
+  KEY `bd_seq` (`bd_seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 테이블 데이터 memo.tb_board_bak_info:~2 rows (대략적) 내보내기
@@ -384,7 +388,8 @@ CREATE TABLE IF NOT EXISTS `tb_board_bak_menu_info` (
   `moduser` varchar(50) DEFAULT NULL COMMENT '수정자',
   `bakdate` datetime DEFAULT NULL COMMENT '백업일시',
   PRIMARY KEY (`mn_bseq`) USING BTREE,
-  KEY `p_mn_seq` (`p_mn_seq`)
+  KEY `p_mn_seq` (`p_mn_seq`),
+  KEY `mn_seq` (`mn_seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 테이블 데이터 memo.tb_board_bak_menu_info:~2 rows (대략적) 내보내기
@@ -406,7 +411,8 @@ CREATE TABLE IF NOT EXISTS `tb_board_bak_reply` (
   `moduser` varchar(100) DEFAULT NULL COMMENT '수정자',
   `bakdate` datetime DEFAULT NULL COMMENT '백업일시',
   PRIMARY KEY (`bdr_bseq`) USING BTREE,
-  KEY `bda_seq` (`bda_seq`) USING BTREE
+  KEY `bda_seq` (`bda_seq`) USING BTREE,
+  KEY `bdr_seq` (`bdr_seq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 테이블 데이터 memo.tb_board_bak_reply:~2 rows (대략적) 내보내기

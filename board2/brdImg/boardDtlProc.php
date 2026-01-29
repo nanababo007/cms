@@ -125,6 +125,8 @@ if($actionString=="write"){
 	#---
 	if($bdaSeq==""){alertBack("정보가 부족 합니다.");}#if
 	#---
+	fnHistInsertImgBoardArticle($bdaSeq);
+	#---
 	$sql = "
 		select count(*) as cnt
 		from tb_board_img_reply
