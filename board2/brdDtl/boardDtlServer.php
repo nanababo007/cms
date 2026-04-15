@@ -76,6 +76,9 @@ $sqlFix = "
 			,a.bd_seq
 			,a.bda_title
 			,a.bda_view_cnt
+			,(select count(*) 
+				from tb_board_reply
+				where bda_seq = a.bda_seq) as reply_cnt
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 			,a.regdate
@@ -111,6 +114,9 @@ $sqlMain = "
 			,a.bd_seq
 			,a.bda_title
 			,a.bda_view_cnt
+			,(select count(*) 
+				from tb_board_reply
+				where bda_seq = a.bda_seq) as reply_cnt
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 			,a.regdate

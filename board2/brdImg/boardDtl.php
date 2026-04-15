@@ -73,7 +73,10 @@ if($boardDtlFixListCount > 0){
 ?>
 <tr bgcolor="#f5f5f5">
 	<td align="center">고정</td>
-	<td align="left"><a href="javascript:goView('<?php echo $row["bda_seq"]; ?>');"><?php echo $row["bda_title"]; ?></a></td>
+	<td align="left">
+		<a href="javascript:goView('<?php echo $row["bda_seq"]; ?>');"><?php echo $row["bda_title"]; ?></a>
+		(<?php echo intval($row["reply_cnt"]); ?>)
+	</td>
 	<td align="center"><?php echo $row["bda_view_cnt"]; ?></td>
 	<td align="center"><?php echo $row["regdate_str"]; ?></td>
 	<td align="center"><?php echo $row["reguser"]; ?></td>
@@ -88,7 +91,10 @@ if($boardListTotalCount > 0){
 ?>
 <tr>
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
-	<td align="left"><a href="javascript:goView('<?php echo $row["bda_seq"]; ?>');"><?php echo $row["bda_title"]; ?></a></td>
+	<td align="left">
+		<a href="javascript:goView('<?php echo $row["bda_seq"]; ?>');"><?php echo $row["bda_title"]; ?></a>
+		(<?php echo intval($row["reply_cnt"]); ?>)
+	</td>
 	<td align="center"><?php echo $row["bda_view_cnt"]; ?></td>
 	<td align="center"><?php echo $row["regdate_str"]; ?></td>
 	<td align="center"><?php echo $row["reguser"]; ?></td>
