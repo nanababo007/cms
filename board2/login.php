@@ -3,10 +3,12 @@
 	$exceptUserFuncJsOption = false;
 	$fromParameterValue = "";
 	$loginUserId = "";
+	$return_url = "";
 	#---
 	$exceptUserFuncJsOption = true;
 	$fromParameterValue = getRequestValue("from");
 	if($fromParameterValue=="career"){$loginUserId = "career";}
+	$return_url = isset($_GET['return_url']) ? $_GET['return_url'] : '/board2/menu/menuMan.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,6 +19,7 @@
 <form name="formLogin" method="post" action="loginP.php">
 <input type="hidden" name="loginMode" value="" />
 <input type="hidden" name="from" value="<?php echo $fromParameterValue; ?>" />
+<input type="hidden" name="return_url" value="<?php echo $return_url; ?>" />
 <table>
 <tr>
 	<td align="center" valign="middle"><input type="text" id="userId" name="userId" value="" placeholder="User id" class="input-text" onclick="this.select();" /></td>
