@@ -12,6 +12,14 @@ a {
 	text-decoration: none;		/* 밑줄 제거 */
 	/*color: inherit;*/			/* 글자색을 부모 요소와 동일하게 (선택 사항) */
 }
+span {
+	margin: 0;
+	padding: 0;
+}
+hr {
+	margin: 20px 0;
+	padding: 0;
+}
 .title_box {
 	display:inline-block; 
 	width:100%; 
@@ -196,13 +204,39 @@ main.content-area-class {
 .datepicker-input-class {
 	text-align:center;
 }
+.board-title-area-class {
+	width: 99%;
+	word-break: break-all;
+	overflow-wrap: break-word;
+	white-space: normal;
+}
 .board-content-area {
 	margin-top:20px;
 	padding-bottom:20px;
+	width: 99%;
+	word-break: break-all;
+	overflow-wrap: break-word;
+	white-space: normal;
+}
+.board-content-area hr {
+	margin: 10px 0;
+	padding: 0;
+}
+.board-content-timeinfo-area {
+	text-align:left;
+}
+.board-content-timeinfo-area > div {
+	margin:4px 0;
 }
 .board-content-history-list-title {
 	margin:20px 0 0 0;
 }
 .board-content-history-list-area {
 	display:none;
+}
+.reply-item-area-class {
+	width: 99%;
+	word-break: break-all;
+	overflow-wrap: break-word;
+	white-space: normal;
 }

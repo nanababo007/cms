@@ -79,7 +79,9 @@ fnCloseDB();
 			<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
 			<input type="button" value="목록" onclick="goList();" />
 		</div>
-		<?php echo getDecodeHtmlString(getArrayValue($boardInfo,"bd_content")); ?>
+		<div class="board-content-area">
+			<?php echo getDecodeHtmlString(getArrayValue($boardInfo,"bd_content")); ?>
+		</div>
 	</td>
 </tr>
 </table>

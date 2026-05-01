@@ -28,7 +28,7 @@ include("boardDtlViewServer.php");
 </colgroup>
 <tr>
 	<th>게시글 제목</th>
-	<td colspan="3"><?php echo getArrayValue($boardArticleInfo,"bda_title"); ?> (조회수 : <?php echo getArrayValue($boardArticleInfo,"bda_view_cnt"); ?>)</td>
+	<td colspan="3"><div class="board-title-area-class"><?php echo getArrayValue($boardArticleInfo,"bda_title"); ?> (조회수 : <?php echo getArrayValue($boardArticleInfo,"bda_view_cnt"); ?>)</div></td>
 </tr>
 <tr>
 	<td colspan="4">
@@ -73,10 +73,12 @@ include("boardDtlViewServer.php");
 			?>
 		</div>
 		<div class="board-content-area">
-			<hr />
-			최초 등록일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"regdate_str")); ?>
-			<br />최종 변경일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"moddate_str")); ?>
-			<hr />
+			<div class="board-content-timeinfo-area">
+				<hr />
+				<div>최초 등록일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"regdate_str")); ?></div>
+				<div>최종 변경일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"moddate_str")); ?></div>
+				<hr />
+			</div>
 			<br /><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?>
 		</div>
 	</td>

@@ -72,7 +72,11 @@ fnCloseDB();
 </tr>
 <tr>
 	<th>게시판 설명</th>
-	<td colspan="3"><?php echo getDecodeHtmlString(getArrayValue($boardInfo,"bd_content")); ?></td>
+	<td colspan="3">
+		<div class="board-content-area">
+			<?php echo getDecodeHtmlString(getArrayValue($boardInfo,"bd_content")); ?>
+		</div>
+	</td>
 </tr>
 </table>
 
