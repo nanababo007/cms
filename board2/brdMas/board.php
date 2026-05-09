@@ -143,8 +143,10 @@ if($boardFixListCount > 0){
 <tr>
 	<td align="center">고정</td>
 	<td align="left">
-		<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
-		<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+		<div class="board-title-area-class">
+			<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
+			<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+		</div>
 	</td>
 	<td align="center">
 		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |
@@ -164,8 +166,10 @@ if($boardListTotalCount > 0){
 <tr>
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
 	<td align="left">
-		<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
-		<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+		<div class="board-title-area-class">
+			<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
+			<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+		</div>
 	</td>
 	<td align="center">
 		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |

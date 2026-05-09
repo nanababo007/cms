@@ -63,7 +63,7 @@ fnCloseDB();
 </colgroup>
 <tr>
 	<th>게시판 이름</th>
-	<td colspan="3"><?php echo getArrayValue($boardInfo,"bd_nm"); ?></td>
+	<td colspan="3"><div class="board-title-area-class"><?php echo getArrayValue($boardInfo,"bd_nm"); ?></div></td>
 </tr>
 <tr>
 	<th>게시판 보기</th>
