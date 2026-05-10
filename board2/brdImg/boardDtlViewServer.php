@@ -1,6 +1,7 @@
 <?php
 $thisPageMnSeq = 24;
 $pageTitleString = "";
+$pageMTitleString = "";
 $boardArticleTableName = "";
 $boardArticleInfo = null;
 $boardInfo = null;
@@ -46,6 +47,7 @@ debugArray("boardInfo",$boardInfo);
 if(!fnBoardArticleCheckInfo($bdaSeq)){alertBack("게시글 정보가 존재하지 않습니다.");}#if
 #---
 $pageTitleString = getArrayValue($boardInfo,"bd_nm")." | 멀티게시판";
+$pageMTitleString = getArrayValue($boardInfo,"bd_nm")." | 멀티게시판";
 #---
 if($histBdaSeq==""){
 	$sql = "

@@ -3,6 +3,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 #---
 $actionString = getPostValue("actionString");
+$siteModeString = trim(nvl(getPostValue("siteModeString"),""));
 $pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getPostValue("pageSize"),"10"));
 $blockSize = intval(nvl(getPostValue("blockSize"),"10"));
@@ -11,6 +12,7 @@ $schContent = nvl(getPostValue("schContent"),"");
 $mnSeq = nvl(getPostValue("mnSeq"),"");
 #---
 debugString("actionString",$actionString);
+debugString("siteModeString",$siteModeString);
 debugString("pageNumber",$pageNumber);
 debugString("pageSize",$pageSize);
 debugString("blockSize",$blockSize);
@@ -54,7 +56,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
-	alertGo("처리 되었습니다.","boardMas.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardMas${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="modify"){
 	$bdSeq = nvl(getPostValue("bdSeq"));
 	$bdNm = nvl(getPostValue("bdNm"));
@@ -85,7 +87,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
-	alertGo("처리 되었습니다.","boardMas.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardMas${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="delete"){
 	$bdSeq = nvl(getPostValue("bdSeq"));
 	#---
@@ -107,7 +109,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
-	alertGo("처리 되었습니다.","boardMas.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardMas${siteModeString}.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
 }#if

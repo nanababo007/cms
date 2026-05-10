@@ -1,8 +1,9 @@
 <?php include $_SERVER['DOCUMENT_ROOT']."/board2/lib/_include.php"; ?>
 <?php
+	$mobileMode = nvl(getPostValue("mobileMode"));
 	$userId = nvl(getPostValue("userId"));
 	$userPassword = nvl(getPostValue("userPassword"));
-	$return_url = nvl(getPostValue("return_url"),"/board2/menu/menuMan.php");
+	$return_url = nvl(getPostValue("return_url"),"/board2/menu/menuMan${mobileMode}.php");
 	#---
 	$userId = substr($userId,0,50);
 	$userPassword = substr($userPassword,0,50);

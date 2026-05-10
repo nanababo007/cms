@@ -19,15 +19,22 @@ function fnCalcPaging($pageNumber=1,$totalListCount=0,$pageSizeNumber=10,$blockS
 	$currentBlockNumber = ceil($pageNumber / $blockSizeNumber);
 	$listRestCount = $totalListCount % $pageSizeNumber;
 	# 블럭 당 시작 페이지 번호
-	$startPageNumberOfBlock = ($currentBlockNumber - 1) * $pageSizeNumber + 1;
-	$startPageNumberOfBlock = max($startPageNumberOfBlock,1);
+	$startPageNumberOfBlock = (($currentBlockNumber - 1) * $blockSizeNumber) + 1;
 	# 블럭 당 마지막 페이지 번호
-	$endPageNumberOfBlock = $currentBlockNumber * $pageSizeNumber;
-	$endPageNumberOfBlock = min($endPageNumberOfBlock,$totalPageNumber);
+	$endPageNumberOfBlock = $currentBlockNumber * $blockSizeNumber;
+	if($currentBlockNumber >= $totalBlockNumber) {$endPageNumberOfBlock = $totalPageNumber;}#if
+	/*
+	echo "<br />pageNumber : ".$pageNumber;
+	echo "<br />currentBlockNumber : ".$currentBlockNumber;
+	echo "<br />pageSizeNumber : ".$pageSizeNumber;
+	echo "<br />blockSizeNumber : ".$blockSizeNumber;
+	echo "<br />startPageNumberOfBlock : ".$startPageNumberOfBlock;
+	echo "<br />endPageNumberOfBlock : ".$endPageNumberOfBlock;
+	*/
 	# 이전블록 페이지 번호
-	$prevBlockPageNumber = max(max($currentBlockNumber - 1,0) * $pageSizeNumber,1);
+	$prevBlockPageNumber = max(($currentBlockNumber - 1) * $blockSizeNumber,1);
 	# 다음블록 페이지 번호
-	$nextBlockPageNumber = min($currentBlockNumber * $pageSizeNumber + 1,$totalPageNumber);
+	$nextBlockPageNumber = min(($currentBlockNumber * $blockSizeNumber) + 1,$totalPageNumber);
 	# 시작 번호 (mysql limit $startNumberOfThisPage, $pageSizeNumber)
 	$startNumberOfThisPage = ($pageNumber - 1) * $pageSizeNumber;
 	# 페이지별 시작 행번호
@@ -111,6 +118,65 @@ function fnPrintPagingHtml(&$pagingInfoMap=null,$scriptFuncName="goPage"){
 	
 </tr>
 </table>
+		<?php
+	}
+}
+function fnMobilePrintPagingHtml(&$pagingInfoMap=null,$scriptFuncName="goPage"){
+	$printPageNumber = 0;
+	#---
+	$totalListCount = intval(nvl(getArrayValue($pagingInfoMap,"totalListCount"),"0"));
+	if($totalListCount==0){return;}#if
+	#---
+	if($pagingInfoMap!=null){
+		?>
+<nav aria-label="Page navigation example" class="mt-4">
+	<ul class="pagination justify-content-center">
+		<li class="page-item"><a class="page-link" href="javascript:<?php echo $scriptFuncName; ?>(1);">처음</a></li>
+		
+		<?php
+		/* paging : 이전 페이지 */
+		if($pagingInfoMap["pageNumber"] <= 1){
+		?>
+		<li class="page-item"><a class="page-link" href="javascript:<?php echo $scriptFuncName; ?>(1);">이전</a></li>
+		<?php }else{ ?>
+		<li class="page-item"><a class="page-link" href="javascript:goPage(<?php echo $pagingInfoMap["prevBlockPageNumber"]; ?>);">이전</a></li>
+		<?php } ?>
+
+		<?php
+		/* pager : 페이지 번호 출력 */
+		for($printPageNumber = $pagingInfoMap["startPageNumberOfBlock"]; $printPageNumber <= $pagingInfoMap["endPageNumberOfBlock"]; $printPageNumber++){
+			if($printPageNumber==$pagingInfoMap["pageNumber"]){
+		?>
+		<li class="page-item active"><a class="page-link" href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $printPageNumber; ?>);"><?php echo $printPageNumber; ?></a></li>
+		<?php }else{ ?>
+		<li class="page-item"><a class="page-link" href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $printPageNumber; ?>);"><?php echo $printPageNumber; ?></a></li>
+		<?php
+			}#if
+		}#for
+		?>
+
+		<?php
+		/* paging : 다음 페이지 */
+		if($pagingInfoMap["pageNumber"] >= $pagingInfoMap["totalPageNumber"]){
+		?>
+		<li class="page-item"><a class="page-link" href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $pagingInfoMap["totalPageNumber"]; ?>);">다음</a></li>
+		<?php }else{ ?>
+		<li class="page-item"><a class="page-link" href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $pagingInfoMap["nextBlockPageNumber"]; ?>);">다음</a></li>
+		<?php } ?>
+
+		<li class="page-item"><a class="page-link" href="javascript:<?php echo $scriptFuncName; ?>(<?php echo $pagingInfoMap["totalPageNumber"]; ?>);">마지막</a></li>
+	</ul>
+</nav>
+<!-- 페이지네이션 -->
+<!--<nav aria-label="Page navigation example" class="mt-4">
+	<ul class="pagination justify-content-center">
+		<li class="page-item disabled"><a class="page-link">이전</a></li>
+		<li class="page-item active"><a class="page-link" href="#">1</a></li>
+		<li class="page-item"><a class="page-link" href="#">2</a></li>
+		<li class="page-item"><a class="page-link" href="#">3</a></li>
+		<li class="page-item"><a class="page-link" href="#">다음</a></li>
+	</ul>
+</nav>-->
 		<?php
 	}
 }

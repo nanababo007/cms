@@ -2,6 +2,7 @@
 $isDisplayRegBtnOnPagingListInfo = false;
 $thisPageMnSeq = getThisPageMnSeq("23","17");
 $pageTitleString = "";
+$pageMTitleString = "";
 $boardInfo = null;
 $boardListTotalCount = 0;
 $pagingInfoMap = null;
@@ -14,7 +15,7 @@ $bdSeq = nvl(getRequestValue("bdSeq"),"");
 $bdaSeq = nvl(getRequestValue("bdaSeq"),"");
 $pageNumber = intval(nvl(getRequestValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
-$blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
+$blockSize = intval(nvl(getRequestValue("blockSize"),$envVarMap["pagingBlockSize"]));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
 $schReply = nvl(getRequestValue("schReply"),"");
@@ -34,6 +35,7 @@ if($boardInfo==null){alertBack("게시판 정보가 존재하지 않습니다.")
 debugArray("boardInfo",$boardInfo);
 #---
 $pageTitleString = getArrayValue($boardInfo,"bd_nm")." | 멀티게시판";
+$pageMTitleString = getArrayValue($boardInfo,"bd_nm")." | 게시글 관리";
 #---
 $sqlSearchPart .= "where a.bd_seq = ${bdSeq} ";
 $sqlSearchPartIndex = 1;

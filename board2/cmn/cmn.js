@@ -1,3 +1,9 @@
+function isMobile(){
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+	if(location.href.indexOf('M.php')!==-1){return true;}//if
+    // 주요 모바일 기기 키워드 체크
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+}
 function getDecodeHtmlString(stringValue=''){
 	var returnString = '';
 	var editStringValue = ''
@@ -57,7 +63,7 @@ function setSearchEnter(targetJqueryObject=null,fnSearchCb=null){
 	}//if
 }
 function setSearchDatepicker(targetJqueryObject=null){
-	if(targetJqueryObject){
+	if(!isMobile() && targetJqueryObject){
 		targetJqueryObject.datepicker({
 			dateFormat: "yy-mm-dd",   // 날짜 형식 (예: 2025-12-26)
 			showAnim: "fadeIn",       // 애니메이션 효과

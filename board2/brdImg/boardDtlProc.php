@@ -6,6 +6,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/brdImg/boardMasLibraryInclude.php');
 #ResponseLibraryClass::setDisplayAllError();
 $boardInfo = null;
 $actionString = getPostValue("actionString");
+$siteModeString = trim(nvl(getPostValue("siteModeString"),""));
 $pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getPostValue("pageSize"),"10"));
 $blockSize = intval(nvl(getPostValue("blockSize"),"10"));
@@ -18,6 +19,7 @@ $schSRegdate = nvl(getRequestValue("schSRegdate"),"");
 $schERegdate = nvl(getRequestValue("schERegdate"),"");
 #---
 debugString("actionString",$actionString);
+debugString("siteModeString",$siteModeString);
 debugString("pageNumber",$pageNumber);
 debugString("pageSize",$pageSize);
 debugString("blockSize",$blockSize);
@@ -78,7 +80,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schReply=".$schReply;
 	$moveUrlParam .= "&schSRegdate=".$schSRegdate;
 	$moveUrlParam .= "&schERegdate=".$schERegdate;
-	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardDtl${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="modify"){
 	$bdaSeq = nvl(getPostValue("bdaSeq"));
 	$bdaTitle = nvl(getPostValue("bdaTitle"));
@@ -119,7 +121,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schReply=".$schReply;
 	$moveUrlParam .= "&schSRegdate=".$schSRegdate;
 	$moveUrlParam .= "&schERegdate=".$schERegdate;
-	alertGo("처리 되었습니다.","boardDtlView.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardDtlView${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="delete"){
 	$bdaSeq = nvl(getPostValue("bdaSeq"));
 	#---
@@ -163,7 +165,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schReply=".$schReply;
 	$moveUrlParam .= "&schSRegdate=".$schSRegdate;
 	$moveUrlParam .= "&schERegdate=".$schERegdate;
-	alertGo("처리 되었습니다.","boardDtl.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardDtl${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="deleteFile"){
 	$bdafSeq = nvl(getPostValue("bdafSeq"));
 	#---
@@ -187,7 +189,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schReply=".$schReply;
 	$moveUrlParam .= "&schSRegdate=".$schSRegdate;
 	$moveUrlParam .= "&schERegdate=".$schERegdate;
-	alertGo("처리 되었습니다.","boardDtlWrite.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","boardDtlWrite${siteModeString}.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
 }#if

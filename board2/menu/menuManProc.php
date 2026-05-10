@@ -4,6 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/menu.php');
 #---
 $actionString = getPostValue("actionString");
+$siteModeString = trim(nvl(getPostValue("siteModeString"),""));
 $pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getPostValue("pageSize"),"10"));
 $blockSize = intval(nvl(getPostValue("blockSize"),"10"));
@@ -16,6 +17,7 @@ $pMnSeq = "";
 $mnOrd = "";
 #---
 debugString("actionString",$actionString);
+debugString("siteModeString",$siteModeString);
 debugString("pageNumber",$pageNumber);
 debugString("pageSize",$pageSize);
 debugString("blockSize",$blockSize);
@@ -111,7 +113,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
-	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","menuMan${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="modify"){
 	$modMnSeq = nvl(getPostValue("modMnSeq"));
 	$mnNm = nvl(getPostValue("mnNm"));
@@ -148,7 +150,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "&editedMnSeq=".$modMnSeq;
-	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","menuMan${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="delete"){
 	$delMnSeq = nvl(getPostValue("delMnSeq"));
 	#---
@@ -170,7 +172,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
-	alertGo("처리 되었습니다.","menuMan.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","menuMan${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="menuMoveUp"){
 	$moveMnSeq = nvl(getPostValue("moveMnSeq"));
 	$pMoveMnSeq = "";
@@ -271,7 +273,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "#mnSeqPos".$moveMnSeq;
-	pageGo("menuMan.php".$moveUrlParam);
+	pageGo("menuMan${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="menuMoveDown"){
 	$moveMnSeq = nvl(getPostValue("moveMnSeq"));
 	$pMoveMnSeq = "";
@@ -375,7 +377,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "#mnSeqPos".$moveMnSeq;
-	pageGo("menuMan.php".$moveUrlParam);
+	pageGo("menuMan${siteModeString}.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
 }#if
