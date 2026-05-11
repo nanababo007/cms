@@ -12,8 +12,8 @@ var replyItemTemplateString = `
 				<button class="btn btn-light border flex-shrink-0" onclick="cancelModifyReplyForm('{{bdrSeq}}','{{bdrSeqId}}');">댓글수정 취소</button>
 			</div>
 		</div>
-		<div class="small fw-bold">{{replyDatetime}}</div>
-		<!--<div class="small text-muted mb-1">5분전</div>-->
-		<div class="small reply-item-view-class" id="replyItemView{{bdrSeqId}}">{{replyContent}}</div>
+		<div class="fw-bold">{{replyDatetime}}</div>
+		<!--<div class="text-muted mb-1">5분전</div>-->
+		<div class="reply-item-view-class" id="replyItemView{{bdrSeqId}}">{{replyContent}}</div>
 	</div>
 `;
