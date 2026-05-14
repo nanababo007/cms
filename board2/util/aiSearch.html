@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>텍스트 에어리어 배치</title>
+    <style>
+        /* 기본 스타일 초기화 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 버튼 영역 공통 스타일 */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 0;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+        }
+
+        /* 메인 콘텐츠 영역 (좌우 배치) */
+        .main-content-item {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .text-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .text-section h2 {
+            font-size: 18px;
+            color: #333;
+        }
+        .text-section textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <!-- 상단 버튼 영역 -->
+    <div class="button-container">
+        <button class="btn btn-submit">생성</button>
+        <button class="btn btn-cancel">취소</button>
+    </div>
+
+    <!-- 메인 콘텐츠 영역 (텍스트 에어리어) -->
+    <main id="mainContentArea" class="main-content-area">
+      <div class="main-content-item">
+        <!-- 왼쪽 영역 -->
+        <section class="text-section">
+            <h2>상단 텍스트</h2>
+            <textarea rows="10" id="preText" placeholder="항목별로 붙일 상단 텍스트를 입력하세요...">
+
+회계 정산
+---
+
+</textarea>
+        </section>
+        <!-- 오른쪽 영역 -->
+        <section class="text-section">
+            <h2>하단 텍스트</h2>
+            <textarea rows="10" id="afterText" placeholder="항목별로 붙일 하단 텍스트를 입력하세요...">
+
+
+---
+상세내용 작성
+
+</textarea>
+        </section>
+      </div>
+      <hr />
+      <div id="mainContentBodyArea" class="main-content-body-area"></div>
+    </main>
+
+    <!-- 하단 버튼 영역 -->
+    <div class="button-container">
+        <button class="btn btn-submit">생성</button>
+        <button class="btn btn-cancel">취소</button>
+    </div>
+
+<script>
+var mainContentAreaJqueryObject = $('#mainContentArea');
+var mainContentBodyAreaJqueryObject = $('#mainContentBodyArea');
+var preTextJqueryObject = $('#preText');
+var afterTextJqueryObject = $('#afterText');
+//---
+$(function(){
+  fnInitPage();
+  //---
+  $('.btn-submit').click(function(e){
+    fnCreateCode();
+  });
+  //---
+  $('.btn-cancel').click(function(e){
+    fnCancel();
+  });
+});
+//---
+function fnInitPage(){
+  var htmlBuffers = [];
+  var htmlString = '';
+  var forIndex = 0;
+  var forNumber = 0;
+  //---
+  for(forIndex = 0;forIndex < 10;forIndex++){
+    forNumber = forIndex + 1;
+    //---
+    htmlBuffers.push(`
+        <div class="main-content-item">
+          <!-- 왼쪽 영역 -->
+          <section class="text-section">
+              <h2>${forNumber}. 원본 텍스트</h2>
+              <textarea rows="10" id="orgText${forNumber}" placeholder="여기에 내용을 입력하세요..."></textarea>
+          </section>
+          <!-- 오른쪽 영역 -->
+          <section class="text-section">
+              <h2>${forNumber}. 변환된 텍스트</h2>
+              <textarea rows="10" id="resultText${forNumber}" placeholder="결과가 여기에 표시됩니다..." onclick="this.select();"></textarea>
+          </section>
+        </div>
+    `);
+  }//for
+  //---
+  htmlString = htmlBuffers.join('\n');
+  mainContentBodyAreaJqueryObject.html(htmlString);
+}
+function fnCreateCode(){
+  var forIndex = 0;
+  var forNumber = 0;
+  var preTextString = '';
+  var afterTextString = '';
+  var orgTextJqueryObject = null;
+  var resultTextJqueryObject = null;
+  var orgTextString = '';
+  var resultTextString = '';
+  //---
+  preTextString = preTextJqueryObject.val();
+  afterTextString = afterTextJqueryObject.val();
+  //---
+  for(forIndex = 0;forIndex < 10;forIndex++){
+    forNumber = forIndex + 1;
+    //---
+    orgTextJqueryObject = $(`#orgText${forNumber}`);
+    resultTextJqueryObject = $(`#resultText${forNumber}`);
+    //---
+    orgTextString = orgTextJqueryObject.val();
+    //---
+    resultTextString = preTextString + orgTextString + afterTextString;
+    resultTextJqueryObject.val(resultTextString);
+  }//for forIndex
+}
+function fnCancel(){
+  if(confirm('입력을 초기화 하시겠습니까?')){
+    location.href = 'ai_search.html';
+  }//if
+}
+</script>
+</body>
+</html>
