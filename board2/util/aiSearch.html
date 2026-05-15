@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>텍스트 에어리어 배치</title>
+    <title>AI 검색어 생성</title>
     <style>
         /* 기본 스타일 초기화 */
         * {
@@ -76,6 +76,7 @@
     <div class="button-container">
         <button class="btn btn-submit">생성</button>
         <button class="btn btn-cancel">취소</button>
+        <button class="btn btn-content-cancel">내용초기화</button>
     </div>
 
     <!-- 메인 콘텐츠 영역 (텍스트 에어리어) -->
@@ -111,6 +112,7 @@
     <div class="button-container">
         <button class="btn btn-submit">생성</button>
         <button class="btn btn-cancel">취소</button>
+        <button class="btn btn-content-cancel">내용초기화</button>
     </div>
 
 <script>
@@ -128,6 +130,10 @@ $(function(){
   //---
   $('.btn-cancel').click(function(e){
     fnCancel();
+  });
+  //---
+  $('.btn-content-cancel').click(function(e){
+    fnCancelContent();
   });
 });
 //---
@@ -187,6 +193,24 @@ function fnCreateCode(){
 function fnCancel(){
   if(confirm('입력을 초기화 하시겠습니까?')){
     location.href = 'ai_search.html';
+  }//if
+}
+function fnCancelContent(){
+  var forIndex = 0;
+  var forNumber = 0;
+  var orgTextJqueryObject = null;
+  var resultTextJqueryObject = null;
+  //---
+  if(confirm('내용부분 입력을 초기화 하시겠습니까?')){
+	  for(forIndex = 0;forIndex < 10;forIndex++){
+		forNumber = forIndex + 1;
+		//---
+		orgTextJqueryObject = $(`#orgText${forNumber}`);
+		resultTextJqueryObject = $(`#resultText${forNumber}`);
+		//---
+		orgTextJqueryObject.val('');
+		resultTextJqueryObject.val('');
+	  }//for forIndex
   }//if
 }
 </script>
