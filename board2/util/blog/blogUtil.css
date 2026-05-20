@@ -1,0 +1,62 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f9f9f9;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+th {
+  background-color: #f0f0f0;
+  width: 150px;
+}
+input[type="text"] {
+  width: 95%;
+  padding: 5px;
+}
+textarea {
+  width: 95%;
+  height: 80px;
+  padding: 5px;
+  resize: vertical;
+}
+.radio-group {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.radio-group label {
+  margin-right: 10px;
+}
+/* button section */
+.cmn-btn-content {
+  margin: 0px;
+  padding: 20px;
+}
+.cmn-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.cmn-btn:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+.cmn-btn:active {
+  background-color: #3e8e41;
+  transform: scale(0.95);
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>블로그 게시글 작성 유틸</title>
+  <link rel="stylesheet" href="blogUtil.css">
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script src="common.js"></script>
+</head>
+<body>
+  <a name="winTopPos"></a>
+  <h1>블로그 게시글 작성 유틸</h1>
+  
+  <div class="cmn-btn-content">
+    <button id="blogContentWriteBtn" class="cmn-btn" onclick="fnWriteBlogContent();">블로그 게시글 작성</button>
+    <button id="blogContentViewBtn" class="cmn-btn" onclick="fnViewBlogContent();" style="margin-left:10px;">블로그 게시글 보기</button>
+    <button id="resetPageBtn" class="cmn-btn" onclick="fnResetPage();" style="margin-left:10px;background-color:#CD5C5C;">페이지 리셋</button>
+    <button id="saveTagInfoBtn" class="cmn-btn" onclick="fnSaveTagInfo();" style="margin-left:40px;">태그저장</button>
+    <button id="deleteTagAllBtn" class="cmn-btn" onclick="fnDeleteTagAll();" style="margin-left:10px;">태그전체삭제</button>
+  </div>
+  
+  <table>
+    <!-- 즐겨작성 글종류 -->
+    <tr>
+      <th valign="top">즐겨작성글</th>
+      <td colspan="5">
+	    <span id="savedTagInfoArea"></span>
+        <a href="javascript:fnFavArticle('조선역사');">조선역사</a>, 
+		<a href="javascript:fnFavArticle('고려역사');">고려역사</a>, 
+		<a href="javascript:fnFavArticle('명나라역사');">명나라역사</a>, 
+		<a href="javascript:fnFavArticle('청나라역사');">청나라역사</a>, 
+      </td>
+    </tr>
+    <!-- 블로그 타입 선택 -->
+    <tr>
+      <th valign="top">블로그 타입</th>
+      <td colspan="5">
+        <div class="radio-group">
+          <label><input type="radio" name="blogType" id="blogTypeNaver" value="naver" checked> 네이버 블로그</label>
+          <label><input type="radio" name="blogType" id="blogTypeGoogle" value="google"> 구글 블로그</label>
+        </div>
+      </td>
+    </tr>
+    <!-- 분류 다섯개 한줄 텍스트 입력박스 -->
+    <tr>
+      <th valign="top">분류 (<a href="javascript:fnCopyCateToTag();">태그복사</a>)</th>
+      <td>
+        <input type="text" placeholder="분류1" id="blogCate1" class="blog-cate-cls">
+      </td>
+      <td>
+        <input type="text" placeholder="분류2" id="blogCate2" class="blog-cate-cls">
+      </td>
+      <td>
+        <input type="text" placeholder="분류3" id="blogCate3" class="blog-cate-cls">
+      </td>
+      <td>
+        <input type="text" placeholder="분류4" id="blogCate4" class="blog-cate-cls">
+      </td>
+      <td>
+        <input type="text" placeholder="분류5" id="blogCate5" class="blog-cate-cls">
+      </td>
+    </tr>
+    <!-- 태그 다섯개 한줄 텍스트 입력박스 -->
+    <tr>
+      <th valign="top">태그</th>
+      <td>
+        <input type="text" placeholder="태그1" id="blogTag1" class="blog-tag-cls">
+      </td>
+      <td>
+        <input type="text" placeholder="태그2" id="blogTag2" class="blog-tag-cls">
+      </td>
+      <td>
+        <input type="text" placeholder="태그3" id="blogTag3" class="blog-tag-cls">
+      </td>
+      <td>
+        <input type="text" placeholder="태그4" id="blogTag4" class="blog-tag-cls">
+      </td>
+      <td>
+        <input type="text" placeholder="태그5" id="blogTag5" class="blog-tag-cls">
+      </td>
+    </tr>
+    <!-- AI 검색구문 복사용 텍스트 입력박스 -->
+    <tr>
+      <th valign="top">AI 검색구문</th>
+      <td colspan="5">
+			<textarea id="blogAISearchStr" placeholder="AI 검색구문 복사용 텍스트" style="height:100px;">
+
+========================================
+
+조선예종 일대기 
+---
+
+위 내용을 10개의 장으로 분할하여, 
+각 장별로 개요를 작성해줘 
+
+---
+
+1   번째 장의 상세내용을 작성해줘 
+
+
+========================================
+
+조선예종 일대기 
+
+제5장: 노비안검법, 호족의 팔다리를 자르다
+956년, 억울하게 노비가 된 자들을 해방하는 '노비안검법'을 실시합니다. 호족의 경제력과 군사력을 합법적으로 약화시킨 결정적 사건입니다.
+
+---
+
+위 내용을 10개의 절로 분할하여, 
+각 절별로 개요를 작성해줘 
+
+---
+
+1번째 절의 상세내용을 작성해줘 
+
+</textarea>
+      </td>
+    </tr>
+    <!-- 블로그 제목 입력 -->
+    <tr>
+      <th valign="top">블로그 공통 제목</th>
+      <td colspan="5">
+        <input type="text" placeholder="블로그 공통 제목" title="블로그 공통 제목" id="blogCmnTitle" class="">
+      </td>
+    </tr>
+    <!-- 블로그 내용 입력 -->
+    <tr>
+      <th valign="top">블로그 단락</th>
+      <td colspan="5">
+		<div id="blogContentArea">
+			<textarea id="blogContent1" class="blog-content-cls" placeholder="내용 단락 1" style="height:200px;"></textarea>
+			<!--<br><br><textarea placeholder="내용 단락 2"></textarea>
+			<br><br><textarea placeholder="내용 단락 3"></textarea>-->
+		</div>
+      </td>
+    </tr>
+    <!-- 블로그 결과 내용 -->
+    <tr>
+      <th valign="top" style="background-color:#dadada;">블로그 결과 (<a href="#winTopPos" title="상위위치이동">상위</a>)</th>
+      <td colspan="5">
+		<a name="winBlogResultPos"></a>
+        <input type="text" id="blogResultTitle" placeholder="블로그 결과 제목" style="margin-bottom:10px;">
+		<textarea id="blogResultContent" placeholder="블로그 결과 내용" style="height:600px;"></textarea>
+      </td>
+    </tr>
+  </table>
+  
+  <br /><br /><br /><br /><br /><br /><br />
+  
+  <script src="blogUtil.js"></script>
+</body>
+</html>
