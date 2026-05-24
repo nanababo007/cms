@@ -419,3 +419,28 @@ CREATE TABLE IF NOT EXISTS `tb_board_bak_reply` (
 INSERT INTO `tb_board_bak_reply` (`bdr_bseq`, `bdr_seq`, `bda_seq`, `bdr_content`, `bdr_fix_yn`, `regdate`, `reguser`, `moddate`, `moduser`, `bakdate`) VALUES
 	(1, 33, 5, 'aaaaa', 'N', '2026-01-27 06:58:54', 'admin', NULL, NULL, '2026-01-27 07:03:02'),
 	(2, 33, 5, 'aaaaa11', 'N', '2026-01-27 06:58:54', 'admin', NULL, NULL, '2026-01-27 07:03:21');
+
+CREATE TABLE `tb_board_pray_hist` (
+	`prh_seq` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '기도구문이력순번',
+	`pr_seq` BIGINT(20) NULL DEFAULT NULL COMMENT '기도구문순번',
+	`pr_no` VARCHAR(200) NULL DEFAULT NULL COMMENT '기도구문번호' COLLATE 'utf8mb4_general_ci',
+	`prh_date` DATETIME NULL DEFAULT NULL COMMENT '이력일시',
+	PRIMARY KEY (`prh_seq`) USING BTREE
+)
+COMMENT='기도구문 암기 히스토리'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `tb_board_pray_info` (
+	`pr_seq` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '기도구문순번',
+	`pr_title` VARCHAR(2000) NULL DEFAULT NULL COMMENT '문제내용' COLLATE 'utf8mb4_general_ci',
+	`pr_content` VARCHAR(3000) NULL DEFAULT NULL COMMENT '문제보기1' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`pr_seq`) USING BTREE
+)
+COMMENT='기도구문 암기 정보'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=26
+;
+
