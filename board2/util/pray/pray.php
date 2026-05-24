@@ -25,12 +25,14 @@ require "prayServer.php";
 	<p>
 		<h2 id="bookTitleArea">북마크</h2>
 		<div id="bookListArea">
+			<a href="javascript:void(0);" style="text-decoration:underline;"><?php echo date("Y-m-d H:i:s"); ?> (현재시간)</a><br />
+			<!-- !!! --->
 			<?php
 			if($bookmarkListCount > 0){
 				foreach ($bookmarkList as $index => $row) {
 					$number = $index + 1;
 			?>
-			<a href="#prayPos<?php echo nvl($row["pr_seq"]); ?>"><?php if($number > 1){ ?><br /><?php }//if ?><?php echo nvl($row["prh_date_str"]); ?> (<?php echo nvl($row["pr_no"]); ?>번문제)
+			<a href="#prayPos<?php echo nvl($row["pr_seq"]); ?>"><?php if($number > 1){ ?><br /><?php }//if ?><?php echo nvl($row["prh_date_str"]); ?> (<?php echo nvl($row["pr_no"]); ?>번구문)
 			<?php
 				}#foreach
 			}#if
