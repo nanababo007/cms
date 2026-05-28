@@ -126,6 +126,7 @@ function setReplyListHtml(listData=null){
 			replyListHtmlArray.push(getReplyItemHtml(itemDataObject));
 		});
 		replyObjects.replyItemAreaJqueryObject.html(replyListHtmlArray.join('\n'));
+		fnCmnBotReplaceSpcCharForElement(replyObjects.replyItemAreaJqueryObject);
 	}//if
 }
 function getReplyItemHtml(rowData=null){

@@ -295,3 +295,17 @@ function splitBySubstringOfArray(arr) {
 	//---
 	return { substrings, nonSubstrings };
 }
+function fnCmnBotReplaceSpcCharForElement(elJqueryObject=null){
+	var htmlString = '';
+	var editHtmlString = '';
+	//---
+	if(elJqueryObject){
+		//---
+		htmlString = elJqueryObject.html();
+		//---
+		editHtmlString = htmlString;
+		editHtmlString = editHtmlString.replaceAll('〓','=');
+		//---
+		elJqueryObject.html(editHtmlString);
+	}//if
+}
