@@ -1,0 +1,37 @@
+.calendar-box { width: 94%; font-family: sans-serif; margin: 20px auto; border: 1px solid #ccc; padding: 15px; border-radius: 8px; }
+.calendar-header { 
+	width: 90%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; 
+	margin: 0 auto;       /* (선택사항) 테이블을 가운데 정렬 */
+}
+.calendar-grid { width: 100%; }
+.day-header { font-weight: bold; padding: 5px 0; }
+.day { padding: 8px 0; cursor: pointer; border-radius: 4px; }
+.day:hover { background-color: #eee; }
+.day.thisweek { background-color: #fafafa; }
+.day.today { background-color: #007bff; color: white; font-weight: bold; }
+.calendar {
+    border-collapse: collapse;
+    width: 90%;
+    font-family: Arial, sans-serif;
+    text-align: center;
+	margin: 0 auto 20px auto;       /* (선택사항) 테이블을 가운데 정렬 */
+}
+.calendar th, .calendar td {
+    border: 1px solid #ddd;
+    padding: 10px;
+	width:14.2%;
+}
+.calendar td {
+	height: 100px;
+	text-align:left;
+}
+.calendar td div {
+	white-space:pre-wrap;
+	word-break:break-all;
+	overflow-wrap:break-word;
+}
+.calendar th {
+    background-color: #f4f4f4;
+}
+.sun { color: red; } /* 일요일 */
+.sat { color: blue; } /* 토요일 */

@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>쿠팡 근무표</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="cmn.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="cmn.js"></script>
+</head>
+<body>
+
+<div style="padding:0 20px;">
+	<h1><!--쿠팡--> 근무표</h1>
+</div>
+
+<hr />
+
+<div class="calendar-box">
+	<div class="calendar-header">
+		<button onclick="changeMonth(-1)">이전달</button>
+		<h3 id="calendarTitle">2026년 06월</h3>
+		<button onclick="changeMonth(0)">오늘</button>
+		<button onclick="changeMonth(1)">다음달</button>
+	</div>
+	<div class="calendar-grid" id="calendar-days">
+		<table class="calendar">
+		<thead>
+				<tr>
+					<th class="sun">일</th>
+					<th>월</th>
+					<th>화</th>
+					<th>수</th>
+					<th>목</th>
+					<th>금</th>
+					<th class="sat">토</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!--
+				<tr>
+					<td valign="top" class="day thisweek sun"></td>
+					<td valign="top" class="day thisweek today">1<div>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br />bbb</div></td>
+					<td valign="top" class="day thisweek">2<div>쿠팡근무</div></td>
+					<td valign="top" class="day thisweek">3<div>휴일</div></td>
+					<td valign="top" class="day thisweek">4</td>
+					<td valign="top" class="day thisweek">5</td>
+					<td valign="top" class="day thisweek sat">6</td>
+				</tr>
+				<tr>
+					<td valign="top" class="day sun">7</td>
+					<td valign="top" class="day">8<div></div></td>
+					<td valign="top" class="day">9</td>
+					<td valign="top" class="day">10</td>
+					<td valign="top" class="day">11</td>
+					<td valign="top" class="day today">12</td>
+					<td valign="top" class="day sat">13</td>
+				</tr>
+				<tr>
+					<td valign="top" class="day sun">14</td>
+					<td valign="top" class="day">15</td>
+					<td valign="top" class="day">16</td>
+					<td valign="top" class="day">17</td>
+					<td valign="top" class="day">18</td>
+					<td valign="top" class="day">19</td>
+					<td valign="top" class="day sat">20</td>
+				</tr>
+				<tr>
+					<td valign="top" class="day sun">21</td>
+					<td valign="top" class="day">22</td>
+					<td valign="top" class="day">23</td>
+					<td valign="top" class="day">24</td>
+					<td valign="top" class="day">25</td>
+					<td valign="top" class="day">26</td>
+					<td valign="top" class="day sat">27</td>
+				</tr>
+				<tr>
+					<td valign="top" class="day sun">28</td>
+					<td valign="top" class="day">29</td>
+					<td valign="top" class="day">30</td>
+					<td valign="top" class="day"></td>
+					<td valign="top" class="day"></td>
+					<td valign="top" class="day"></td>
+					<td valign="top" class="day sat"></td>
+				</tr>
+				-->
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<br /><br /><br />
+
+<script src="coupangData.js"></script>
+<script src="coupang.js"></script>
+<script>
+</script></body>
+</html>
