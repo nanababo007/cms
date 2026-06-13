@@ -20,6 +20,7 @@ function fnInitPage(){
 function renderCalendar() {
 	let today = null;
 	let todayDateString = '';
+	let todayYearMonDateString = '';
 	let todayWeekNumberOfYear = 0;
 	let year = 0;
 	let month = 0;
@@ -34,6 +35,7 @@ function renderCalendar() {
 	//---
 	today = new Date();
 	todayDateString = getTodayDateString(today);
+	todayYearMonDateString = todayDateString.substring(0,6);
 	todayWeekNumberOfYear = fnGetWeekNoOfMonthForDateString(todayDateString);
 	year = currentGridDate.getFullYear();
 	month = currentGridDate.getMonth();
@@ -69,6 +71,7 @@ function renderCalendar() {
 		const dayOfWeek = (firstDayIndex + date - 1) % 7;
 		let className = '';
 		let dateFormatString = ''; //20260612
+		let yearMonDateFormatString = ''; //202606
 		let calendarDayHtml = '';
 		let isSun = false;
 		let isSat = false;
@@ -76,6 +79,7 @@ function renderCalendar() {
 		let thisDateWeekNumberOfYear = '';
 		//---
 		dateFormatString = getDateString(year,month,date);
+		yearMonDateFormatString = dateFormatString.substring(0,6);
 		//---
 		calDisplayString = getNvlString(calData[dateFormatString]);
 		//---
@@ -99,7 +103,8 @@ function renderCalendar() {
 		if (year === today.getFullYear() && month === today.getMonth() && date === today.getDate()) {
 			className += ' today';
 		// 이번주 날짜 하이라이트 (월~토요일)
-		} else if(todayWeekNumberOfYear===thisDateWeekNumberOfYear && !isSun) {
+		} else if(todayWeekNumberOfYear===thisDateWeekNumberOfYear 
+				&& todayYearMonDateString===yearMonDateFormatString && !isSun) { 
 			className += ' thisweek';
 			//--- debug
 			if(pageDebugFlag){console.info(`[${dateFormatString}]`);}//if
