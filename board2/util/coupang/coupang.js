@@ -98,9 +98,6 @@ function renderCalendar() {
 		// 오늘 날짜 하이라이트
 		if (year === today.getFullYear() && month === today.getMonth() && date === today.getDate()) {
 			className += ' today';
-		// 이번주 날짜 하이라이트 (일요일)
-		} else if((todayWeekNumberOfYear-1)===thisDateWeekNumberOfYear && isSun) {
-			className += ' thisweek';
 		// 이번주 날짜 하이라이트 (월~토요일)
 		} else if(todayWeekNumberOfYear===thisDateWeekNumberOfYear && !isSun) {
 			className += ' thisweek';
