@@ -34,7 +34,7 @@ function renderCalendar() {
 	//---
 	today = new Date();
 	todayDateString = getTodayDateString(today);
-	todayWeekNumberOfYear = getWeekNumberOfYear(todayDateString);
+	todayWeekNumberOfYear = fnGetWeekNoOfMonthForDateString(todayDateString);
 	year = currentGridDate.getFullYear();
 	month = currentGridDate.getMonth();
 	lastDayOfWeekNum = getLastDayOfWeekNum(year, month + 1);
@@ -79,7 +79,7 @@ function renderCalendar() {
 		//---
 		calDisplayString = getNvlString(calData[dateFormatString]);
 		//---
-		thisDateWeekNumberOfYear = getWeekNumberOfYear(dateFormatString);
+		thisDateWeekNumberOfYear = fnGetWeekNoOfMonthForDateString(dateFormatString);
 		//---
 		if (dayOfWeek === 0) {
 			isSun = true;

@@ -539,3 +539,35 @@ function fnGetCombineString(orgStr='',appendStr='',sepStr=''){
 	returnValue = combineString;
 	return returnValue;
 }
+// 해당년월의 해당일자가 포함되는 주의 주번호 반환
+// month : 1월부터 시작, 월번호
+// console.log(fnGetWeekNoOfMonth(2026, 6, 14));
+function fnGetWeekNoOfMonth(year=0, month=0, upToDay=0) {
+    let weekCount = 1;
+    
+    // 1일부터 지정한 날짜(upToDay)까지 반복
+    for (let day = 1; day <= upToDay; day++) {
+        // 자바스크립트는 월(Month)이 0부터 시작하므로 month - 1 처리
+        const date = new Date(year, month - 1, day);
+        
+        // getDay()가 0이면 일요일
+        if (date.getDay() === 0) {
+            weekCount++;
+        }
+    }
+    
+    return weekCount;
+}
+// 해당년월의 해당일자가 포함되는 주의 주번호 반환
+// month : 1월부터 시작, 월번호
+// console.log(fnGetWeekNoOfMonthForDateString('20260614'));
+function fnGetWeekNoOfMonthForDateString(dateString='') {
+    if(!dateString){return 0;}//if
+
+	// 문자열을 자 잘라서 숫자형으로 변환
+	const year = parseInt(dateString.substring(0, 4), 10);
+	const month = parseInt(dateString.substring(4, 6), 10);
+	const day = parseInt(dateString.substring(6, 8), 10);
+	
+	return fnGetWeekNoOfMonth(year, month, day);
+}
