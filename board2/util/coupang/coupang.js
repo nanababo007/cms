@@ -98,18 +98,24 @@ function renderCalendar() {
 		//---
 		if (isSun) {className += ' sun';} //if
 		if (isSat) {className += ' sat';} //if
+		//--- debug
+		if(pageDebugFlag){console.info(`[${dateFormatString}]`);}//if
+		if(pageDebugFlag){console.info('- todayWeekNumberOfYear : ',todayWeekNumberOfYear);}//if
+		if(pageDebugFlag){console.info('- thisDateWeekNumberOfYear : ',thisDateWeekNumberOfYear);}//if
+		if(pageDebugFlag){console.info('- todayYearMonDateString : ',todayYearMonDateString);}//if
+		if(pageDebugFlag){console.info('- yearMonDateFormatString : ',yearMonDateFormatString);}//if
 		//---
 		// 오늘 날짜 하이라이트
 		if (year === today.getFullYear() && month === today.getMonth() && date === today.getDate()) {
 			className += ' today';
+		// 이번주 날짜 하이라이트 (일요일)
+		} else if(todayWeekNumberOfYear===thisDateWeekNumberOfYear 
+				&& todayYearMonDateString===yearMonDateFormatString && isSun) { 
+			className += ' thisweek';
 		// 이번주 날짜 하이라이트 (월~토요일)
 		} else if(todayWeekNumberOfYear===thisDateWeekNumberOfYear 
 				&& todayYearMonDateString===yearMonDateFormatString && !isSun) { 
 			className += ' thisweek';
-			//--- debug
-			if(pageDebugFlag){console.info(`[${dateFormatString}]`);}//if
-			if(pageDebugFlag){console.info('- todayWeekNumberOfYear : ',todayWeekNumberOfYear);}//if
-			if(pageDebugFlag){console.info('- thisDateWeekNumberOfYear : ',thisDateWeekNumberOfYear);}//if
 		}//if
 		//---
 		if (isSun) {calendarDayHtml += `<tr>`;} //if
