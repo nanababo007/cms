@@ -265,11 +265,12 @@ cd D:/project/nodejs/geminiApiSample2
 node appTemp.js > appTempResult.txt
 */
 
+const delayMsec = 20000;
+
 //const ai = new GoogleGenAI({});
 const ai = new GoogleGenAI({ apiKey: "API키값" });
 
 {{templateResultString1}}
-//---
 {{templateResultString2}}
 `;
 	//--- 템플릿 결과문자열 생성
@@ -282,7 +283,9 @@ const ai = new GoogleGenAI({ apiKey: "API키값" });
 `const interaction{{aiSearchTextArrayNumberString}} = await ai.interactions.create({
   model: "gemini-3.5-flash",
   input: "{{aiSearchTextArrayItemString}}",
-});`;
+});
+await new Promise(resolve => setTimeout(resolve, delayMsec));
+//---`;
 		templateResultString1ItemString = templateResultString1ItemString.replaceAll('{{aiSearchTextArrayNumberString}}',aiSearchTextArrayNumberString);
 		templateResultString1ItemString = templateResultString1ItemString.replaceAll('{{aiSearchTextArrayItemString}}',aiSearchTextArrayItemString);
 		//--- 템플릿 결과문자열2 생성
