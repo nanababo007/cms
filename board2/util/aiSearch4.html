@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 검색어 생성 3</title>
+    <title>AI 검색어 생성 4</title>
     <style>
         /* 기본 스타일 초기화 */
         * {
@@ -81,7 +81,7 @@
 
     <!-- 메인 콘텐츠 영역 (텍스트 에어리어) -->
     <main id="mainContentArea" class="main-content-area">
-	  <h1><a href="">별개 독립세션 질문들 생성</a></h1>
+	  <h1><a href="">한개 동일세션 질문들 생성</a></h1>
       <div class="main-content-item">
         <!-- 검색어 영역 -->
         <section class="text-section">
@@ -208,7 +208,7 @@ function fnCancelContent(){
   }//if
 }
 function getAiSearchTextTemplateString(aiSearchTextArray=null){
-	const templateResultString2DivConstString = '\nconsole.log("----------------------------- (결과구분선)");  ';
+	//const templateResultString2DivConstString = '\nconsole.log("----------------------------- (결과구분선)");  ';
 	//---
 	var aiSearchTextString = '';
 	var templateResultString1 = '';
@@ -217,12 +217,6 @@ function getAiSearchTextTemplateString(aiSearchTextArray=null){
 	var templateResultString1ArrayIndex = 0;
 	var templateResultString1ArrayNumber = 0;
 	var templateResultString1ItemString = '';
-	var templateResultString2 = '';
-	var templateResultString2Array = null;
-	var templateResultString2ArrayCount = 0;
-	var templateResultString2ArrayIndex = 0;
-	var templateResultString2ArrayNumber = 0;
-	var templateResultString2ItemString = '';
 	var aiSearchTextArrayCount = 0;
 	var aiSearchTextArrayIndex = 0;
 	var aiSearchTextArrayNumber = 0;
@@ -240,8 +234,11 @@ function getAiSearchTextTemplateString(aiSearchTextArray=null){
 `import { GoogleGenAI } from "@google/genai";
 /*
 nodejs 에서 프로젝트 폴더 생성.
+--- 소스파일 결과파일 등 소스 치환 키워드
+appTemp2 : appTemp3
+appTempResult2 : appTempResult3
 ---
-appTemp.js 파일 생성.
+appTemp2.js 파일 생성.
 생성 소스코드 붙여넣기.
 *** 키값셋팅 필수(중요) ***
 ---
@@ -263,16 +260,61 @@ D:/project/nodejs/geminiApiSample2
 윈도우 cmd 창에서, 다음 명령 수행
 d:
 cd D:/project/nodejs/geminiApiSample2
-node appTemp.js > appTempResult.txt
+node appTemp2.js > appTempResult2.txt
 */
 
-const delayMsec = 20000;
+const aiDelayMsec = 20000;
 
 //const ai = new GoogleGenAI({});
-const ai = new GoogleGenAI({ apiKey: "API키값" });
+const ai = new GoogleGenAI({ apiKey: "userApiKeySet" });
 
-{{templateResultString1}}
-{{templateResultString2}}
+//질문목록
+const aiQuestions = [{{templateResultString1}}];
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// 1. API 키 설정 (환경 변수 GEMINI_API_KEY를 자동으로 인식합니다)// process.env.GEMINI_API_KEY = "YOUR_API_KEY";const ai = new GoogleGenAI();
+// 지연 시간을 위한 프로미스 타이머 함수 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+async function runChatSession() {
+  try {
+    // 2. 하나의 채팅 세션 시작 (모델은 gemini-2.5-flash 추천)
+    const chat = ai.chats.create({
+      model: 'gemini-2.5-flash',
+    });
+
+    // 3. 연속해서 보낼 질문 리스트
+    const questions = aiQuestions;
+
+    // 4. 지연 시간 설정 (20초 = 20000밀리초)
+    const DELAY_MS = aiDelayMsec;
+
+    // 5. 루프를 돌며 질문 전송 및 대기
+    for (let i = 0; i < questions.length; i++) {
+      const question = questions[i];
+
+      console.log("\\n==================================");
+
+	  console.log("\\n[질문 "+(i + 1)+"] "+question);
+
+      // 세션을 유지하며 메시지 전송
+      const response = await chat.sendMessage({ message: question });
+      console.log("\\n[답변 "+(i + 1)+"] "+response.text);
+
+      // 마지막 질문이 아니라면 지정된 시간만큼 대기
+      if (i < questions.length - 1) {
+        //console.log("\\n--- "+(Math.floor(DELAY_MS / 1000))+"초 대기 중... ---");
+        await delay(DELAY_MS);
+      }
+    }
+
+    console.log("\\n 모든 질문이 완료되었습니다.");
+
+  } catch (error) {
+    console.error("오류가 발생했습니다:", error);
+  }
+}
+
+runChatSession();
 `;
 	//--- 템플릿 결과문자열 생성
 	for(aiSearchTextArrayIndex = 0; aiSearchTextArrayIndex < aiSearchTextArrayCount; aiSearchTextArrayIndex++){
@@ -280,33 +322,14 @@ const ai = new GoogleGenAI({ apiKey: "API키값" });
 		aiSearchTextArrayNumberString = aiSearchTextArrayNumber.toString();
 		aiSearchTextArrayItemString = aiSearchTextArray[aiSearchTextArrayIndex];
 		//--- 템플릿 결과문자열1 생성
-		templateResultString1ItemString = 
-`const interaction{{aiSearchTextArrayNumberString}} = await ai.interactions.create({
-  model: "gemini-3.5-flash",
-  input: "{{aiSearchTextArrayItemString}}",
-});
-await new Promise(resolve => setTimeout(resolve, delayMsec));
-//---`;
-		templateResultString1ItemString = templateResultString1ItemString.replaceAll('{{aiSearchTextArrayNumberString}}',aiSearchTextArrayNumberString);
-		templateResultString1ItemString = templateResultString1ItemString.replaceAll('{{aiSearchTextArrayItemString}}',aiSearchTextArrayItemString);
-		//--- 템플릿 결과문자열2 생성
-		templateResultString2ItemString = 
-`console.log(interaction{{aiSearchTextArrayNumberString}}.output_text);{{templateResultString2DivConstString}}`;
-		templateResultString2ItemString = templateResultString2ItemString.replaceAll('{{aiSearchTextArrayNumberString}}',aiSearchTextArrayNumberString);
-		if(aiSearchTextArrayNumber===aiSearchTextArrayCount){
-			templateResultString2ItemString = templateResultString2ItemString.replaceAll('{{templateResultString2DivConstString}}','');
-		}else{
-			templateResultString2ItemString = templateResultString2ItemString.replaceAll('{{templateResultString2DivConstString}}',templateResultString2DivConstString);
-		}//if
+		templateResultString1ItemString = `\`{{aiSearchTextArrayItemString}}\``;
+		templateResultString1ItemString = templateResultString1ItemString.replaceAll("{{aiSearchTextArrayItemString}}",aiSearchTextArrayItemString);
 		//---	
 		templateResultString1Array.push(templateResultString1ItemString);
-		templateResultString2Array.push(templateResultString2ItemString);
 	}//for
-	templateResultString1 = templateResultString1Array.join('\n');
-	templateResultString2 = templateResultString2Array.join('\n');
+	templateResultString1 = templateResultString1Array.join(',');
 	//--- 템플릿 결과문자열 치환
 	aiSearchTextString = aiSearchTextString.replaceAll('{{templateResultString1}}',templateResultString1);
-	aiSearchTextString = aiSearchTextString.replaceAll('{{templateResultString2}}',templateResultString2);
 	//--- return value
 	returnStringValue = aiSearchTextString;
 	return returnStringValue;
