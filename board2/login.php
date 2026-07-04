@@ -5,6 +5,8 @@
 	$loginUserId = "";
 	$return_url = "";
 	#---
+	if(nvl($_SESSION["loginId"])!=""){pageGo("/board2/menu/menuMan.php");}#if
+	#---
 	$exceptUserFuncJsOption = true;
 	$fromParameterValue = getRequestValue("from");
 	if($fromParameterValue=="career"){$loginUserId = "career";}
@@ -37,10 +39,22 @@
 </form>
 <script>
 var formLogin = document.formLogin;
+//---
+$(function(){
+	$('#userPassword').on('keypress', function(e) {
+		if (e.which === 13) {
+			e.preventDefault();		// 엔터 키의 기본 동작(폼 제출 등) 방지
+			fnGoLogin();				// 로그인 실행 함수 호출
+		}//if
+	});
+});
+//---
+//현재로그인
 function fnGoLogin(){
 	formLogin.loginMode.value='';
 	formLogin.submit();
 }
+//기존로그인(비활성)
 function fnGoLogin2(){
 	formLogin.loginMode.value='2';
 	formLogin.submit();
