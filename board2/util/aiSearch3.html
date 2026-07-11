@@ -180,8 +180,10 @@ function fnCreateCode(){
       resultTextString = `${forNumber - 2} 장 상세내용 작성`;
     }//if
     //---
-    resultTextJqueryObject.val(resultTextString);
-	aiSearchNodejsSourceTextArray.push(resultTextString);
+    //resultTextJqueryObject.val(resultTextString);
+	//aiSearchNodejsSourceTextArray.push(resultTextString);
+    //---
+	aiSearchNodejsSourceTextArray.push(resultTextJqueryObject.val());
   }//for forIndex
   //---
   aiSearchNodejsSourceTextString = getAiSearchTextTemplateString(aiSearchNodejsSourceTextArray);
@@ -279,6 +281,8 @@ const ai = new GoogleGenAI({ apiKey: "API키값" });
 		aiSearchTextArrayNumber = aiSearchTextArrayIndex + 1;
 		aiSearchTextArrayNumberString = aiSearchTextArrayNumber.toString();
 		aiSearchTextArrayItemString = aiSearchTextArray[aiSearchTextArrayIndex];
+		//---
+		if(aiSearchTextArrayItemString===''){continue;}//if
 		//--- 템플릿 결과문자열1 생성
 		templateResultString1ItemString = 
 `const interaction{{aiSearchTextArrayNumberString}} = await ai.interactions.create({
