@@ -5,7 +5,7 @@
 	$loginUserId = "";
 	$return_url = "";
 	#---
-	if(nvl($_SESSION["loginId"])!=""){pageGo("/board2/menu/menuMan.php");}#if
+	if(isset($_SESSION["loginId"]) and nvl($_SESSION["loginId"])!=""){pageGo("/board2/menu/menuMan.php");}#if
 	#---
 	$exceptUserFuncJsOption = true;
 	$fromParameterValue = getRequestValue("from");
