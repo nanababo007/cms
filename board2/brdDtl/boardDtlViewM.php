@@ -41,6 +41,10 @@ include("boardDtlViewServer.php");
 	<div class="post-content">
 		<div>
 			<p>
+				게시글 고정:
+				<a href="javascript:goToggleFix('<?php echo getArrayValue($boardArticleInfo,"bda_seq"); ?>','<?php echo nvl(getArrayValue($boardArticleInfo,"bda_fix_yn"),"N"); ?>');">고정</a>
+			</p>
+			<p>
 				페이지끝 이동:
 				<a href="javascript:goPageEndPos();">이동</a>
 			</p>

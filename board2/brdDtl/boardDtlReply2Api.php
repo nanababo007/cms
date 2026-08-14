@@ -10,10 +10,11 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLoginApi.php');
 #---
 fnOpenDB();
 #---
-if($actionString=="GET_REPLY_LIST"){
+if($actionString=="GET_REPLY2_LIST"){
 	$bdaSeq = nvl(getPostValue("bdaSeq"),"");
+	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
 	#---
-	if($bdaSeq==""){
+	if($bdrSeq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
@@ -23,49 +24,47 @@ if($actionString=="GET_REPLY_LIST"){
 			a.*
 		from (
 			select
-				a.bdr_seq
+				a.bdr2_seq
+				,a.bdr_seq
 				,a.bda_seq
-				,a.bdr_content
-				,ifnull(a.bdr_fix_yn,'N') as bdr_fix_yn
-				,'Y' as list_bdr_fix_yn
+				,a.bdr2_content
+				,ifnull(a.bdr2_fix_yn,'N') as bdr2_fix_yn
+				,'Y' as list_bdr2_fix_yn
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdatetime_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
-				,(select count(*) 
-					from tb_board_reply2
-					where bdr_seq = a.bdr_seq) as reply2_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_reply a
-			where bda_seq = ${bdaSeq}
-			and a.bdr_fix_yn = 'Y'
+			from tb_board_reply2 a
+			where a.bda_seq = ${bdaSeq}
+			and a.bdr_seq = ${bdrSeq}
+			and a.bdr2_fix_yn = 'Y'
 			union all
 			select
-				a.bdr_seq
+				a.bdr2_seq
+				,a.bdr_seq
 				,a.bda_seq
-				,a.bdr_content
-				,ifnull(a.bdr_fix_yn,'N') as bdr_fix_yn
-				,'N' as list_bdr_fix_yn
+				,a.bdr2_content
+				,ifnull(a.bdr2_fix_yn,'N') as bdr2_fix_yn
+				,'N' as list_bdr2_fix_yn
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdatetime_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
-				,(select count(*) 
-					from tb_board_reply2
-					where bdr_seq = a.bdr_seq) as reply2_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_reply a
-			where bda_seq = ${bdaSeq}
+			from tb_board_reply2 a
+			where a.bda_seq = ${bdaSeq}
+			and a.bdr_seq = ${bdrSeq}
 		) a
 		order by 
-			case when a.list_bdr_fix_yn = 'Y' then 1 else 2 end asc,
-			a.bdr_seq desc
+			case when a.list_bdr2_fix_yn = 'Y' then 1 else 2 end asc,
+			a.bdr2_seq desc
 	";
 	$listData = fnDBGetList($sql);
 	#---
@@ -74,10 +73,10 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setResponseDataObject('data',$responseData);
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
-}else if($actionString=="GET_REPLY_ROW"){
-	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
+}else if($actionString=="GET_REPLY2_ROW"){
+	$bdr2Seq = nvl(getPostValue("bdr2Seq"),"");
 	#---
-	if($bdrSeq==""){
+	if($bdr2Seq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
@@ -85,11 +84,8 @@ if($actionString=="GET_REPLY_LIST"){
 	$sql = "
 		select 
 			a.* 
-			,(select count(*) 
-				from tb_board_reply2
-				where bdr_seq = a.bdr_seq) as reply2_cnt
-		from tb_board_reply a
-		where a.bdr_seq = ${bdrSeq}
+		from tb_board_reply2 a
+		where a.bdr2_seq = ${bdr2Seq}
 	";
 	$rowData = fnDBGetRow($sql);
 	#---
@@ -98,24 +94,27 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setResponseDataObject('data',$responseData);
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
-}else if($actionString=="INSERT_REPLY_DATA"){
+}else if($actionString=="INSERT_REPLY2_DATA"){
 	$bdaSeq = nvl(getPostValue("bdaSeq"),"");
-	$bdrContent = nvl(getPostValue("bdrContent"),"");
+	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
+	$bdr2Content = nvl(getPostValue("bdr2Content"),"");
 	#---
-	if($bdaSeq=="" or $bdrContent==""){
+	if($bdaSeq=="" or $bdr2Content==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
 	#---
 	$sql = "
-		insert into tb_board_reply (
+		insert into tb_board_reply2 (
 			bda_seq,
-			bdr_content,
+			bdr_seq,
+			bdr2_content,
 			regdate,
 			reguser
 		) values (
 			${bdaSeq},
-			'${bdrContent}',
+			${bdrSeq},
+			'${bdr2Content}',
 			NOW(3),
 			'admin'
 		)
@@ -123,31 +122,35 @@ if($actionString=="GET_REPLY_LIST"){
 	$affectedQueryCount = fnDBUpdate($sql);
 	#---
 	$sql = "SELECT LAST_INSERT_ID()";
-	$bdrSeq = nvl(fnDBGetStringValue($sql));
+	$bdr2Seq = nvl(fnDBGetStringValue($sql));
 	#---
 	$responseData['affectedQueryCount'] = $affectedQueryCount;
-	$responseData['bdrSeq'] = $bdrSeq;
+	$responseData['bdr2Seq'] = $bdr2Seq;
 	#---
 	$responseLibraryObject->setResponseDataObject('data',$responseData);
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
-}else if($actionString=="UPDATE_REPLY_DATA"){
-	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
-	$bdrContent = nvl(getPostValue("bdrContent"),"");
+}else if($actionString=="UPDATE_REPLY2_DATA"){
+	$bdr2Seq = trim(nvl(getPostValue("bdr2Seq"),""));
+	$bdaSeq = trim(nvl(getPostValue("bdaSeq"),""));
+	$bdrSeq = trim(nvl(getPostValue("bdrSeq"),""));
+	$bdr2Content = nvl(getPostValue("bdr2Content"),"");
 	#---
-	if($bdrSeq=="" or $bdrContent==""){
+	if($bdr2Seq=="" or $bdaSeq=="" or $bdrSeq=="" or $bdr2Content==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
 	#---
-	fnHistInsertBoardReply($bdrSeq);
+	fnHistInsertBoardReply2($bdr2Seq);
 	#---
 	$sql = "
-		update tb_board_reply set
-			bdr_content = '${bdrContent}',
+		update tb_board_reply2 set
+			bdr2_content = '${bdr2Content}',
 			moddate = NOW(3),
 			moduser = 'admin'
-		where bdr_seq like '${bdrSeq}'
+		where bdr2_seq = '${bdr2Seq}'
+		and bda_seq = '${bdaSeq}'
+		and bdr_seq = '${bdrSeq}'
 	";
 	$affectedQueryCount = fnDBUpdate($sql);
 	#---
@@ -156,19 +159,23 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setResponseDataObject('data',$responseData);
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
-}else if($actionString=="DELETE_REPLY_DATA"){
-	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
+}else if($actionString=="DELETE_REPLY2_DATA"){
+	$bdr2Seq = trim(nvl(getPostValue("bdr2Seq"),""));
+	$bdaSeq = trim(nvl(getPostValue("bdaSeq"),""));
+	$bdrSeq = trim(nvl(getPostValue("bdrSeq"),""));
 	#---
-	if($bdrSeq==""){
+	if($bdr2Seq=="" or $bdaSeq=="" or $bdrSeq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
 	#---
-	fnHistInsertBoardReply($bdrSeq);
+	fnHistInsertBoardReply2($bdr2Seq);
 	#---
 	$sql = "
-		delete from tb_board_reply
-		where bdr_seq like '${bdrSeq}'
+		delete from tb_board_reply2
+		where bdr2_seq = '${bdr2Seq}'
+		and bda_seq = '${bdaSeq}'
+		and bdr_seq = '${bdrSeq}'
 	";
 	$affectedQueryCount = fnDBUpdate($sql);
 	#---
@@ -177,19 +184,19 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setResponseDataObject('data',$responseData);
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
-}else if($actionString=="FIX_REPLY_DATA"){
-	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
-	$bdrFixYN = nvl(getPostValue("bdrFixYN"),"N");
+}else if($actionString=="FIX_REPLY2_DATA"){
+	$bdr2Seq = nvl(getPostValue("bdr2Seq"),"");
+	$bdr2FixYN = nvl(getPostValue("bdr2FixYN"),"N");
 	#---
-	if($bdrSeq==""){
+	if($bdr2Seq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
 	#---
 	$sql = "
-		update tb_board_reply set
-			bdr_fix_yn = '${bdrFixYN}'
-		where bdr_seq like '${bdrSeq}'
+		update tb_board_reply2 set
+			bdr2_fix_yn = '${bdr2FixYN}'
+		where bdr2_seq like '${bdr2Seq}'
 	";
 	$affectedQueryCount = fnDBUpdate($sql);
 	#---

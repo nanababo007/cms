@@ -69,12 +69,16 @@ $sqlMain = "
 	SELECT
 		a.bda_seq
 		,a.bd_seq
+		,a.bda_fix_yn
 		,a.bda_title
 		,a.bda_content
 		,a.bda_view_cnt
 		,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdate_str
 		,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddate_str
 		${histDateSelectSqlString}
+		,(select count(*) 
+			from tb_board_reply
+			where bda_seq = a.bda_seq) as reply_cnt
 		,a.regdate
 		,a.reguser
 		,a.moddate
@@ -92,11 +96,15 @@ if($bdaSeq!=""){
 			SELECT
 				a.bda_bseq
 				,a.bda_seq
+				,a.bda_fix_yn
 				,a.bd_seq
 				,a.bda_title
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddate_str
 				,STR_TO_DATE(a.bakdate, '%Y-%m-%d %H:%i:%s') as hist_date_str
+				,(select count(*) 
+					from tb_board_reply
+					where bda_seq = a.bda_seq) as reply_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate

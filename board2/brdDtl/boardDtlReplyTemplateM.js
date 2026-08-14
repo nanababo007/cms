@@ -1,5 +1,5 @@
 var replyItemTemplateString = `
-	<div class="mb-3 border-bottom pb-2 reply-item-class" data-bdr_seq="{{bdrSeq}}">
+	<div class="mb-3 border-bottom pb-2 reply-item-class"  id="reply2ListItemArea{{bdr2Seq}}" data-bdr_seq="{{bdrSeq}}">
 		<div>
 			<a href="javascript:modifyReplyForm('{{bdrSeq}}','{{bdrSeqId}}');">수정</a> | 
 			<a href="javascript:deleteReply('{{bdrSeq}}','{{bdrSeqId}}');" style="color:red;">삭제</a> | 

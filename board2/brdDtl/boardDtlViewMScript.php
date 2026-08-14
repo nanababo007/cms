@@ -46,4 +46,23 @@ function goBoardContentHistoryView(histBdaSeq=''){
 	historyViewParamFormObject.histBdaSeq.value = histBdaSeq;
 	historyViewParamFormObject.submit();
 }
+function goToggleFix(bdaSeq='',bdaFixYN='',callbackFunc=null){
+	var apiUrl = '';
+	var paramsObject = {};
+	//---
+	if(bdaSeq && confirm('고정 혹은 고정해제 처리를 하시겠습니까?')){
+		apiUrl = 'boardDtlApi.php';
+		//---
+		bdaFixYN = bdaFixYN==='N' ? 'Y' : 'N';
+		//---
+		paramsObject.actionString = 'FIX_ARTICLE_DATA';
+		paramsObject.bdaSeq = bdaSeq;
+		paramsObject.bdaFixYN = bdaFixYN;
+		//---
+		$.post(apiUrl,paramsObject,function(data){
+			//console.info('goToggleFix : data : ',data);
+			if($.isFunction(callbackFunc)){callbackFunc(data);}//if
+		});
+	}//if
+}
 </script>
