@@ -12,6 +12,8 @@ include("boardDtlViewServer.php");
 	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/head.php'); ?>
 	<script src="boardDtlReplyTemplate.js"></script>
 	<script src="boardDtlReplyFunction.js"></script>
+	<script src="boardDtlReply2Template.js"></script>
+	<script src="boardDtlReply2Function.js"></script>
 </head>
 <body>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/top.php'); ?>
@@ -116,6 +118,7 @@ include("boardDtlViewServer.php");
 
 <a name="replyPos"></a>
 <div class="reply-area-class">
+	<h3 style="margin:0;padding:0;">댓글 (<?php echo nvl(getArrayValue($boardArticleInfo,"reply_cnt"),"0"); ?>개)</h3>
 	<textarea style="width:99.4%;height:100px;margin-top:10px;" placeholder="댓글내용" id="replyContent"></textarea>
 	<button onclick="javascript:writeReply();">댓글등록</button>
 	<button onclick="javascript:cancelReply();">댓글취소</button>

@@ -112,6 +112,7 @@ function getReplyList(callbackFunc=null){
 function setThisReplyListHtml(){
 	getReplyList(function(data){
 		var listData = data ? data.data.listData : null;
+		//console.info('reply list data : ', listData);
 		setReplyListHtml(listData);
 	});
 }
@@ -123,6 +124,15 @@ function setReplyListHtml(listData=null){
 		});
 		replyObjects.replyItemAreaJqueryObject.html(replyListHtmlArray.join('\n'));
 		fnCmnBotReplaceSpcCharForElement(replyObjects.replyItemAreaJqueryObject);
+		//--- 1차 댓글 항목별로, 2차 댓글 초기화 셋팅
+		$.each(listData,function(index,itemDataObject){
+			setTimeout(function(){
+				var reply2Object = new Reply2Class(itemDataObject.bda_seq,itemDataObject.bdr_seq);
+				reply2Object.setReply2Objects();
+				reply2Object.initReply2();
+				reply2Object.initReply2Events();
+			},1000+(index * 100));
+		});
 	}//if
 }
 function getReplyItemHtml(rowData=null){
@@ -145,7 +155,9 @@ function getReplyItemHtml(rowData=null){
 		}//if
 		replyItemString = replyItemString.replaceAll('{{orgReplyContent}}',getNvlString(rowData.bdr_content));
 		replyItemString = replyItemString.replaceAll('{{bdrFixYN}}',$.trim(rowData.bdr_fix_yn));
+		replyItemString = replyItemString.replaceAll('{{reply2Cnt}}',$.trim(rowData.reply2_cnt));
 	}//if
+	//---
 	return replyItemString;
 }
 function getReplyRow(bdrSeq='',callbackFunc=null){
