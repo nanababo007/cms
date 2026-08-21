@@ -6,7 +6,7 @@
 	$loginUserId = "";
 	$return_url = "";
 	#---
-	if(nvl($_SESSION["loginId"])!=""){pageGo("/board2/menu/menuManM.php");}#if
+	if(isset($_SESSION["loginId"]) and nvl($_SESSION["loginId"])!=""){pageGo("/board2/menu/menuManM.php");}#if
 	#---
 	$pageTitleString = "멀티게시판 로그인";
 	$exceptUserFuncJsOption = true;

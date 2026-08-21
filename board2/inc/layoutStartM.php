@@ -53,17 +53,21 @@
 					$activeClassString = "";
 				}#if
 				#---
-				?><a href="<?php echo $mnUrlString; ?>" class="list-group-item list-group-item-action py-3 <?php echo $activeClassString; ?>" 
-					target="<?php echo nvl($menuInfo["mn_url_target"]); ?>">📝 <?php echo nvl($menuInfo["mn_nm"]); ?></a><?php
+				?><a data-url_info="<?php echo $mnUrlString; ?>" href="javascript:fnLeftMenu_toggleTopMenu(<?php echo $mnSeq; ?>);" 
+					class="list-group-item list-group-item-action py-3 <?php echo $activeClassString; ?>" 
+					data-target_info="<?php echo nvl($menuInfo["mn_url_target"]); ?>" id="topMenuItemBox<?php echo $mnSeq; ?>">📝 <?php echo nvl($menuInfo["mn_nm"]); ?></a><?php
 				#--- 현재 메뉴의 하위메뉴
-				if($currentTopMenuSeq==$mnSeq){fnLeftMenuPrintMenu();}#if
+				if($currentTopMenuSeq==$mnSeq){
+					fnLeftMenuPrintMenu($mnSeq,true);
+				}else{
+					fnLeftMenuPrintMenu($mnSeq);
+				}#if
 			}#if
 		}#foreach
 	}
-	function fnLeftMenuPrintMenu(){
+	function fnLeftMenuPrintMenu($displayTopMenuSeq=0,$currentTopMenuFlag=false){
 		global $currentMenuSeq;
 		global $currentMenuInfo;
-		global $currentTopMenuSeq;
 		global $currentTopMenuInfo;
 		global $displayMenuList;
 		global $isLeftMenuDisplay;
@@ -86,7 +90,7 @@
 			?><li><a class="active" href="<?php echo $mnUrlString; ?>" target="<?php echo $mnUrlTargetString; ?>"><?php echo $mnNmString; ?></a></li><?php
 		}#if
 		#--- 하위메뉴출력.
-		if($currentTopMenuSeq!=0){
+		if($displayTopMenuSeq!=0){
 			foreach($displayMenuList as $index => $menuInfo){
 				$mnSeq = intval(nvl($menuInfo["mn_seq"],"0"));
 				$topMnSeq = intval(nvl($menuInfo["top_mn_seq"],"0"));
@@ -101,11 +105,29 @@
 				if(strpos($mnUrlString, "javascript:")===false){$mnUrlString = str_replace(".php","M.php",$mnUrlString);}//if
 				$prefixString = $mnDepthNo > 1 ? "&nbsp;&nbsp;" : "";
 				#---
-				if($currentTopMenuSeq==$topMnSeq){
-					?><a href="<?php echo $mnUrlString; ?>" target="<?php echo $mnUrlTargetString; ?>" class="list-group-item list-group-item-action py-3" 
-						>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $prefixString; ?><?php echo nvl($menuInfo["mn_nm"]); ?></a><?php
+				if($displayTopMenuSeq==$topMnSeq){
+					?><a href="<?php echo $mnUrlString; ?>" target="<?php echo $mnUrlTargetString; ?>" class="list-group-item list-group-item-action py-3 left-menu-item-box-item-list-class-<?php echo $displayTopMenuSeq; ?> left-menu-item-box-item-list-class" 
+						style="<?php if(!$currentTopMenuFlag){ ?>display:none;<?php } ?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $prefixString; ?><?php echo nvl($menuInfo["mn_nm"]); ?></a><?php
 				}#if
 			}#foreach
 		}#if
 	}
 	?>
+	<script>
+	function fnLeftMenu_toggleTopMenu(topMnSeq=0){
+		var topMenuItemBoxJqueryObject = null;
+		var thisMenuUrlString = '';
+		//---
+		if(!topMnSeq || topMnSeq===0){return;}//if
+		//---
+		topMenuItemBoxJqueryObject = $('#topMenuItemBox'+topMnSeq);
+		thisMenuUrlString = getNvlString(topMenuItemBoxJqueryObject.data('url_info'));
+		//---
+		if(thisMenuUrlString.indexOf('logoutM.php')!==-1){
+			location.href = thisMenuUrlString;
+		}else{
+			$('.left-menu-item-box-item-list-class').hide();
+			$('.left-menu-item-box-item-list-class-'+topMnSeq).show();
+		}//if
+	}
+	</script>
