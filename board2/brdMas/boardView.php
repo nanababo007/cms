@@ -28,6 +28,7 @@ if($bdSeq!=""){
 	$sqlMain = "
 		SELECT
 			a.bd_seq
+			,a.bd_fix_yn
 			,a.bd_nm
 			,a.bd_content
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
@@ -81,6 +82,7 @@ fnCloseDB();
 </table>
 
 <div align="right" style="margin-top:10px;">
+	<input type="button" value="고정" onclick="goToggleFix('<?php echo getArrayValue($boardInfo,"bd_seq"); ?>','<?php echo nvl(getArrayValue($boardInfo,"bd_fix_yn"),"N"); ?>');" />
 	<input type="button" value="수정" onclick="goModify();" />
 	<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
 	<input type="button" value="목록" onclick="goList();" />
@@ -142,6 +144,25 @@ function copyBoardArticleListUrl(bdSeq=''){
 	url += '/brdDtl/boardDtl.php';
 	url += '?bdSeq='+bdSeq;
 	prompt('게시글 관리 경로 문자열을 복사해 주세요.',url);
+}
+function goToggleFix(bdSeq='',bdFixYN='',callbackFunc=null){
+	var apiUrl = '';
+	var paramsObject = {};
+	//---
+	if(bdSeq && confirm('고정 혹은 고정해제 처리를 하시겠습니까?')){
+		apiUrl = 'boardApi.php';
+		//---
+		bdFixYN = bdFixYN==='N' ? 'Y' : 'N';
+		//---
+		paramsObject.actionString = 'FIX_BOARD_DATA';
+		paramsObject.bdSeq = bdSeq;
+		paramsObject.bdFixYN = bdFixYN;
+		//---
+		$.post(apiUrl,paramsObject,function(data){
+			//console.info('goToggleFix : data : ',data);
+			if($.isFunction(callbackFunc)){callbackFunc(data);}//if
+		});
+	}//if
 }
 </script>
 

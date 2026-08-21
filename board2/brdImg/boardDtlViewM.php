@@ -13,6 +13,8 @@ include("boardDtlViewServer.php");
 	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pageViewMStyle.php'); ?>
 	<script src="boardDtlReplyTemplateM.js"></script>
 	<script src="boardDtlReplyFunctionM.js"></script>
+	<script src="boardDtlReply2TemplateM.js"></script>
+	<script src="boardDtlReply2FunctionM.js"></script>
 </head>
 <body>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStartM.php'); ?>
@@ -40,6 +42,10 @@ include("boardDtlViewServer.php");
 	<!-- 본문 내용 -->
 	<div class="post-content">
 		<div>
+			<p>
+				게시글 고정:
+				<a href="javascript:goToggleFix('<?php echo getArrayValue($boardArticleInfo,"bda_seq"); ?>','<?php echo nvl(getArrayValue($boardArticleInfo,"bda_fix_yn"),"N"); ?>');">고정</a>
+			</p>
 			<p>
 				페이지끝 이동:
 				<a href="javascript:goPageEndPos();">이동</a>

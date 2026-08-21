@@ -42,6 +42,7 @@ include("boardDtlViewServer.php");
 			<input type="button" value="페이지끝" onclick="goPageEndPos();" />
 			<input type="button" value="댓글" onclick="goReplyPos();" />
 			<input type="button" value="변경이력" onclick="toggleBoardContentHistoryList();" />
+			<input type="button" value="고정" onclick="goToggleFix('<?php echo getArrayValue($boardArticleInfo,"bda_seq"); ?>','<?php echo nvl(getArrayValue($boardArticleInfo,"bda_fix_yn"),"N"); ?>');" />
 			<input type="button" value="수정" onclick="goModify();" />
 			<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
 			<input type="button" value="목록" onclick="goList();" />
@@ -111,6 +112,7 @@ include("boardDtlViewServer.php");
 </table>
 
 <div align="right" style="margin-top:10px;">
+	<input type="button" value="고정" onclick="goToggleFix('<?php echo getArrayValue($boardArticleInfo,"bda_seq"); ?>','<?php echo nvl(getArrayValue($boardArticleInfo,"bda_fix_yn"),"N"); ?>');" />
 	<input type="button" value="수정" onclick="goModify();" />
 	<input type="button" value="삭제" onclick="goDelete();" style="color:red;" />
 	<input type="button" value="목록" onclick="goList();" />

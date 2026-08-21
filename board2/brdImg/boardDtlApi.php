@@ -11,6 +11,8 @@ include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/checkLoginApi.php');
 fnOpenDB();
 #---
 if($actionString=="GET_REPLY_LIST"){
+	exitPage();
+	#---
 	$bdaSeq = nvl(getPostValue("bdaSeq"),"");
 	#---
 	if($bdaSeq==""){
@@ -32,14 +34,11 @@ if($actionString=="GET_REPLY_LIST"){
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdatetime_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
-				,(select count(*) 
-					from tb_board_reply2
-					where bdr_seq = a.bdr_seq) as reply2_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_img_reply a
+			from tb_board_reply a
 			where bda_seq = ${bdaSeq}
 			and a.bdr_fix_yn = 'Y'
 			union all
@@ -53,14 +52,11 @@ if($actionString=="GET_REPLY_LIST"){
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdatetime_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
-				,(select count(*) 
-					from tb_board_reply2
-					where bdr_seq = a.bdr_seq) as reply2_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_img_reply a
+			from tb_board_reply a
 			where bda_seq = ${bdaSeq}
 		) a
 		order by 
@@ -75,6 +71,8 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="GET_REPLY_ROW"){
+	exitPage();
+	#---
 	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
 	#---
 	if($bdrSeq==""){
@@ -83,13 +81,9 @@ if($actionString=="GET_REPLY_LIST"){
 	}#if
 	#---
 	$sql = "
-		select 
-			a.* 
-			,(select count(*) 
-				from tb_board_reply2
-				where bdr_seq = a.bdr_seq) as reply2_cnt
-		from tb_board_img_reply a
-		where a.bdr_seq = ${bdrSeq}
+		select * 
+		from tb_board_reply
+		where bdr_seq = ${bdrSeq}
 	";
 	$rowData = fnDBGetRow($sql);
 	#---
@@ -99,6 +93,8 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="INSERT_REPLY_DATA"){
+	exitPage();
+	#---
 	$bdaSeq = nvl(getPostValue("bdaSeq"),"");
 	$bdrContent = nvl(getPostValue("bdrContent"),"");
 	#---
@@ -108,7 +104,7 @@ if($actionString=="GET_REPLY_LIST"){
 	}#if
 	#---
 	$sql = "
-		insert into tb_board_img_reply (
+		insert into tb_board_reply (
 			bda_seq,
 			bdr_content,
 			regdate,
@@ -132,6 +128,8 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="UPDATE_REPLY_DATA"){
+	exitPage();
+	#---
 	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
 	$bdrContent = nvl(getPostValue("bdrContent"),"");
 	#---
@@ -140,10 +138,10 @@ if($actionString=="GET_REPLY_LIST"){
 		responseJson();
 	}#if
 	#---
-	fnHistInsertImgBoardReply($bdrSeq);
+	fnHistInsertBoardReply($bdrSeq);
 	#---
 	$sql = "
-		update tb_board_img_reply set
+		update tb_board_reply set
 			bdr_content = '${bdrContent}',
 			moddate = NOW(3),
 			moduser = 'admin'
@@ -157,6 +155,8 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
 }else if($actionString=="DELETE_REPLY_DATA"){
+	exitPage();
+	#---
 	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
 	#---
 	if($bdrSeq==""){
@@ -164,10 +164,10 @@ if($actionString=="GET_REPLY_LIST"){
 		responseJson();
 	}#if
 	#---
-	fnHistInsertImgBoardReply($bdrSeq);
+	fnHistInsertBoardReply($bdrSeq);
 	#---
 	$sql = "
-		delete from tb_board_img_reply
+		delete from tb_board_reply
 		where bdr_seq like '${bdrSeq}'
 	";
 	$affectedQueryCount = fnDBUpdate($sql);
@@ -177,19 +177,19 @@ if($actionString=="GET_REPLY_LIST"){
 	$responseLibraryObject->setResponseDataObject('data',$responseData);
 	$responseLibraryObject->setSuccessResponseData();
 	responseJson();
-}else if($actionString=="FIX_REPLY_DATA"){
-	$bdrSeq = nvl(getPostValue("bdrSeq"),"");
-	$bdrFixYN = nvl(getPostValue("bdrFixYN"),"N");
+}else if($actionString=="FIX_ARTICLE_DATA"){
+	$bdaSeq = nvl(getPostValue("bdaSeq"),"");
+	$bdaFixYN = nvl(getPostValue("bdaFixYN"),"N");
 	#---
-	if($bdrSeq==""){
+	if($bdaSeq==""){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
 	#---
 	$sql = "
-		update tb_board_img_reply set
-			bdr_fix_yn = '${bdrFixYN}'
-		where bdr_seq like '${bdrSeq}'
+		update tb_board_img_article set
+			bda_fix_yn = '${bdaFixYN}'
+		where bda_seq like '${bdaSeq}'
 	";
 	$affectedQueryCount = fnDBUpdate($sql);
 	#---
@@ -214,6 +214,10 @@ function responseJson(){
 	global $responseLibraryObject;
 	$dataJsonString = json_encode($responseLibraryObject->getResponseData());
 	echo $dataJsonString;
+	releaseResource();
+	exit();
+}
+function exitPage(){
 	releaseResource();
 	exit();
 }

@@ -46,34 +46,7 @@ include("boardDtlViewServer.php");
 		<div class="board-content-history-list-area">
 			<hr />
 			<h3 class="board-content-history-list-title">변경 이력 목록 (<?php echo $boardArticleHistoryListCount; ?>)</h3>
-			<?php
-				printBoardArticleHistoryList();
-				function printBoardArticleHistoryList(){
-					global $boardArticleHistoryList;
-					global $boardArticleHistoryListCount;
-					#---
-					$boardArticleHistoryListNumber = 0;
-					$historyDateString = "";
-					$historyBdaSeq = "";
-					$historyBdaTitle = "";
-					#---
-					if($boardArticleHistoryListCount > 0){
-						foreach($boardArticleHistoryList as $boardArticleHistoryListIndex => $boardArticleHistoryInfo){
-							$boardArticleHistoryListNumber = $boardArticleHistoryListIndex + 1;
-							#---
-							$historyDateString = nvl(getArrayValue($boardArticleHistoryInfo,"hist_date_str"));
-							$historyBdaSeq = nvl(getArrayValue($boardArticleHistoryInfo,"bda_bseq"));
-							$historyBdaTitle = nvl(getArrayValue($boardArticleHistoryInfo,"bda_title"));
-							#---
-							if($boardArticleHistoryListNumber==1){
-								?><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
-							}else{
-								?><br /><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
-							}#if
-						}#foreach
-					}#if
-				}
-			?>
+			<?php printBoardArticleHistoryList(); ?>
 		</div>
 		<div class="board-content-area">
 			<div class="board-content-timeinfo-area">
@@ -126,3 +99,30 @@ include("boardDtlViewServer.php");
 
 </body>
 </html>
+<?php
+function printBoardArticleHistoryList(){
+	global $boardArticleHistoryList;
+	global $boardArticleHistoryListCount;
+	#---
+	$boardArticleHistoryListNumber = 0;
+	$historyDateString = "";
+	$historyBdaSeq = "";
+	$historyBdaTitle = "";
+	#---
+	if($boardArticleHistoryListCount > 0){
+		foreach($boardArticleHistoryList as $boardArticleHistoryListIndex => $boardArticleHistoryInfo){
+			$boardArticleHistoryListNumber = $boardArticleHistoryListIndex + 1;
+			#---
+			$historyDateString = nvl(getArrayValue($boardArticleHistoryInfo,"hist_date_str"));
+			$historyBdaSeq = nvl(getArrayValue($boardArticleHistoryInfo,"bda_bseq"));
+			$historyBdaTitle = nvl(getArrayValue($boardArticleHistoryInfo,"bda_title"));
+			#---
+			if($boardArticleHistoryListNumber==1){
+				?><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
+			}else{
+				?><br /><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
+			}#if
+		}#foreach
+	}#if
+}
+?>

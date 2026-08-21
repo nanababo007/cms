@@ -299,7 +299,7 @@ function fnCmnBotReplaceSpcCharForElement(elJqueryObject=null){
 	var htmlString = '';
 	var editHtmlString = '';
 	//---
-	if(elJqueryObject){
+	if(elJqueryObject && elJqueryObject.length){
 		//---
 		htmlString = elJqueryObject.html();
 		//---

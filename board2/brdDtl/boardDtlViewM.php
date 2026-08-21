@@ -13,6 +13,8 @@ include("boardDtlViewServer.php");
 	<?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/pageViewMStyle.php'); ?>
 	<script src="boardDtlReplyTemplateM.js"></script>
 	<script src="boardDtlReplyFunctionM.js"></script>
+	<script src="boardDtlReply2TemplateM.js"></script>
+	<script src="boardDtlReply2FunctionM.js"></script>
 </head>
 <body>
 <?php include($_SERVER["DOCUMENT_ROOT"].'/board2/inc/layoutStartM.php'); ?>
@@ -60,34 +62,7 @@ include("boardDtlViewServer.php");
 		<div class="board-content-history-list-area" style="display:none;">
 			<hr />
 			<h3 class="board-content-history-list-title">변경 이력 목록 (<?php echo $boardArticleHistoryListCount; ?>)</h3>
-			<?php
-				printBoardArticleHistoryList();
-				function printBoardArticleHistoryList(){
-					global $boardArticleHistoryList;
-					global $boardArticleHistoryListCount;
-					#---
-					$boardArticleHistoryListNumber = 0;
-					$historyDateString = "";
-					$historyBdaSeq = "";
-					$historyBdaTitle = "";
-					#---
-					if($boardArticleHistoryListCount > 0){
-						foreach($boardArticleHistoryList as $boardArticleHistoryListIndex => $boardArticleHistoryInfo){
-							$boardArticleHistoryListNumber = $boardArticleHistoryListIndex + 1;
-							#---
-							$historyDateString = nvl(getArrayValue($boardArticleHistoryInfo,"hist_date_str"));
-							$historyBdaSeq = nvl(getArrayValue($boardArticleHistoryInfo,"bda_bseq"));
-							$historyBdaTitle = nvl(getArrayValue($boardArticleHistoryInfo,"bda_title"));
-							#---
-							if($boardArticleHistoryListNumber==1){
-								?><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
-							}else{
-								?><br /><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
-							}#if
-						}#foreach
-					}#if
-				}
-			?>
+			<?php printBoardArticleHistoryList(); ?>
 		</div>
 		<div class="post-content-area board-content-area">
 			<hr />
@@ -105,7 +80,7 @@ include("boardDtlViewServer.php");
 		<h6 class="fw-bold mb-3">댓글 <span id="replyCntArea">0</span></h6>
 		<div class="mb-3 border-bottom pb-3">
 			<textarea class="form-control" id="replyContent" rows="4" placeholder="댓글내용을 입력해주세요"></textarea>
-			<div class="mt-2">
+			<div class="mt-3">
 				<button class="btn btn-light border flex-shrink-0" onclick="writeReply();">댓글등록</button>
 				<button class="btn btn-light border flex-shrink-0" onclick="cancelReply();">댓글취소</button>
 			</div>
@@ -162,3 +137,30 @@ include("boardDtlViewServer.php");
 
 </body>
 </html>
+<?php
+function printBoardArticleHistoryList(){
+	global $boardArticleHistoryList;
+	global $boardArticleHistoryListCount;
+	#---
+	$boardArticleHistoryListNumber = 0;
+	$historyDateString = "";
+	$historyBdaSeq = "";
+	$historyBdaTitle = "";
+	#---
+	if($boardArticleHistoryListCount > 0){
+		foreach($boardArticleHistoryList as $boardArticleHistoryListIndex => $boardArticleHistoryInfo){
+			$boardArticleHistoryListNumber = $boardArticleHistoryListIndex + 1;
+			#---
+			$historyDateString = nvl(getArrayValue($boardArticleHistoryInfo,"hist_date_str"));
+			$historyBdaSeq = nvl(getArrayValue($boardArticleHistoryInfo,"bda_bseq"));
+			$historyBdaTitle = nvl(getArrayValue($boardArticleHistoryInfo,"bda_title"));
+			#---
+			if($boardArticleHistoryListNumber==1){
+				?><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
+			}else{
+				?><br /><a href="javascript:goBoardContentHistoryView('<?php echo $historyBdaSeq; ?>');"><?php echo $boardArticleHistoryListNumber; ?>. <?php echo $historyDateString; ?> <?php echo $historyBdaTitle; ?> (수정)</a><?php
+			}#if
+		}#foreach
+	}#if
+}
+?>

@@ -74,6 +74,7 @@ $sqlMain = "
 	SELECT
 		a.bda_seq
 		,a.bd_seq
+		,a.bda_fix_yn
 		,a.bda_title
 		,a.bda_content
 		,a.bda_view_cnt
@@ -98,6 +99,7 @@ if($bdaSeq!=""){
 				a.bda_bseq
 				,a.bda_seq
 				,a.bd_seq
+				,a.bda_fix_yn
 				,a.bda_title
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddate_str

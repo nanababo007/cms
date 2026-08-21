@@ -4,6 +4,7 @@
  - tb_board_bak_info
  - tb_board_bak_article
  - tb_board_bak_reply
+ - tb_board_bak_reply2
  - tb_board_bak_img_info
  - tb_board_bak_img_article
  - tb_board_bak_img_reply
@@ -15,6 +16,7 @@
  - fnHistInsertImgBoardInfo($bdSeq="")
  - fnHistInsertImgBoardArticle($bdaSeq="")
  - fnHistInsertImgBoardReply($bdrSeq="")
+ - fnHistInsertImgBoardReply2($bdr2Seq="")
  - fnHistInsertBoardMenuInfo($mnSeq="")
 */
 function fnHistInsertBoardInfo($bdSeq=""){
@@ -113,6 +115,38 @@ function fnHistInsertBoardReply($bdrSeq=""){
 	#---
 	fnDBUpdate($sql);
 }
+function fnHistInsertBoardReply2($bdr2Seq=""){
+	$bdr2Seq = trim($bdr2Seq);
+	#---
+	if($bdr2Seq==""){return;}#if
+	#---
+	$sql = "
+		insert into tb_board_bak_reply2 (
+			bdr2_seq
+			,bdr_seq
+			,bda_seq
+			,bdr2_content
+			,regdate
+			,reguser
+			,moddate
+			,moduser
+			,bakdate
+		) select
+			bdr2_seq
+			,bdr_seq
+			,bda_seq
+			,bdr2_content
+			,regdate
+			,reguser
+			,moddate
+			,moduser
+			,NOW(3)
+		from tb_board_reply2
+		where bdr2_seq = '${bdr2Seq}'
+	";
+	#---
+	fnDBUpdate($sql);
+}
 function fnHistInsertImgBoardInfo($bdSeq=""){
 	$bdSeq = trim($bdSeq);
 	#---
@@ -205,6 +239,38 @@ function fnHistInsertImgBoardReply($bdrSeq=""){
 			,NOW(3)
 		from tb_board_img_reply
 		where bdr_seq = '${bdrSeq}'
+	";
+	#---
+	fnDBUpdate($sql);
+}
+function fnHistInsertImgBoardReply2($bdr2Seq=""){
+	$bdr2Seq = trim($bdr2Seq);
+	#---
+	if($bdr2Seq==""){return;}#if
+	#---
+	$sql = "
+		insert into tb_board_bak_img_reply2 (
+			bdr2_seq
+			,bdr_seq
+			,bda_seq
+			,bdr_content
+			,regdate
+			,reguser
+			,moddate
+			,moduser
+			,bakdate
+		) select
+			bdr2_seq
+			,bdr_seq
+			,bda_seq
+			,bdr_content
+			,regdate
+			,reguser
+			,moddate
+			,moduser
+			,NOW(3)
+		from tb_board_img_reply2
+		where bdr2_seq = '${bdr2Seq}'
 	";
 	#---
 	fnDBUpdate($sql);
