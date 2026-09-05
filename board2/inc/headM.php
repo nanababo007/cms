@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="/board2/cmn/bootstrap5/css/bootstrap.min.css">
     <link rel="stylesheet" href="/board2/cmn/mobile/cmn.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script src="/board2/cmn/cmn.js"></script>
+	<script src="/board2/cmn/cmn.js?ver=202609051424"></script>
 	<script>
 		var linkAllowedHostsGlobalValue = [<?php echo "'".str_replace(",","','",$envVarMap["linkAllowedHostsGlobalValue"])."'"; ?>];
 		//---

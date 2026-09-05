@@ -222,8 +222,8 @@ function getDomainAndHost(url='') {
 			domain: parsedUrl.host        // 도메인 + 포트 (예: modern3080.mycafe24.com:80)
 		};
 	} catch (e) {
-		console.error("Invalid URL:", e);
-		return null;
+	} finally {
+		return '';
 	}
 }
 //const arr = [1, 2, 2, 3, 4, 4, 5];

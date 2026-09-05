@@ -29,6 +29,7 @@ function Reply2Class(bdaSeq=null,bdrSeq=null) {
 	}//if
 	//---
 	g_reply2ObjectList[bdrSeqString] = this;
+	g_reply2ObjectList[bdrSeqString+'Fix'] = this;
 }
 //--- init functions
 Reply2Class.prototype.setReply2Objects = function(){
