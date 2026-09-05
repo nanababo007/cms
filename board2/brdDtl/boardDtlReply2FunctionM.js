@@ -9,12 +9,13 @@ $(function(){
 */
 //---
 var g_reply2ObjectList = [];
-function Reply2Class(bdaSeq=null,bdrSeq=null) {
+function Reply2Class(bdaSeq=null,bdrSeq=null,bdrFixYn='N') {
 	var thisObject = this;
 	//---
 	thisObject.bdaSeq = bdaSeq;
 	thisObject.bdrSeq = bdrSeq;
 	thisObject.bdrSeqId = Number(thisObject.bdrSeq).toString();
+	thisObject.bdrFixYn = bdrFixYn;
 	//---
 	thisObject.settingsInfo = {};
 	thisObject.reply2Objects = {};
@@ -28,18 +29,28 @@ function Reply2Class(bdaSeq=null,bdrSeq=null) {
 		return;
 	}//if
 	//---
-	g_reply2ObjectList[bdrSeqString] = this;
-	g_reply2ObjectList[bdrSeqString+'Fix'] = this;
+	if(bdrFixYn==='Y'){
+		g_reply2ObjectList[bdrSeqString+'Fix'] = this;
+	}else{
+		g_reply2ObjectList[bdrSeqString] = this;
+	}
 }
 //--- init functions
 Reply2Class.prototype.setReply2Objects = function(){
 	var thisObject = this;
 	var paramFormObject = document.paramForm;
 	//---  
-	thisObject.reply2ListItemAreaJqueryObject = $('#reply2ListItemOutArea'+thisObject.bdrSeq);
-	thisObject.reply2Objects.reply2ContentObject = document.getElementById('reply2Content'+thisObject.bdrSeq);
-	thisObject.reply2Objects.reply2ContentJqueryObject = $(thisObject.reply2Objects.reply2ContentObject);
-	thisObject.reply2Objects.reply2ListAreaJqueryObject = $('.reply2-list-area-class',thisObject.reply2ListItemAreaJqueryObject).eq(0);
+	if(thisObject.bdrFixYn==='Y'){
+		thisObject.reply2ListItemAreaJqueryObject = $('#reply2ListItemOutArea'+thisObject.bdrSeq+'Fix');
+		thisObject.reply2Objects.reply2ContentObject = document.getElementById('reply2Content'+thisObject.bdrSeq+'Fix');
+		thisObject.reply2Objects.reply2ContentJqueryObject = $(thisObject.reply2Objects.reply2ContentObject);
+		thisObject.reply2Objects.reply2ListAreaJqueryObject = $('.reply2-list-area-class',thisObject.reply2ListItemAreaJqueryObject).eq(0);
+	}else{
+		thisObject.reply2ListItemAreaJqueryObject = $('#reply2ListItemOutArea'+thisObject.bdrSeq);
+		thisObject.reply2Objects.reply2ContentObject = document.getElementById('reply2Content'+thisObject.bdrSeq);
+		thisObject.reply2Objects.reply2ContentJqueryObject = $(thisObject.reply2Objects.reply2ContentObject);
+		thisObject.reply2Objects.reply2ListAreaJqueryObject = $('.reply2-list-area-class',thisObject.reply2ListItemAreaJqueryObject).eq(0);
+	}
 };
 Reply2Class.prototype.initReply2 = function(){
 	var thisObject = this;
@@ -81,8 +92,11 @@ Reply2Class.prototype.cancelReply2 = function(){
 };
 Reply2Class.prototype.modifyReply2Form = function(bdr2Seq='',bdr2SeqId=''){
 	var thisObject = this;
-	var reply2ItemViewJqueryObject = $('#reply2ItemView'+bdr2SeqId);
-	var reply2ItemEditJqueryObject = $('#reply2ItemEdit'+bdr2SeqId);
+	var reply2ItemViewJqueryObject = null;
+	var reply2ItemEditJqueryObject = null;
+	//---
+	reply2ItemViewJqueryObject = $('#reply2ItemView'+bdr2SeqId);
+	reply2ItemEditJqueryObject = $('#reply2ItemEdit'+bdr2SeqId);
 	//---
 	reply2ItemViewJqueryObject.hide();
 	reply2ItemEditJqueryObject.show();
@@ -191,7 +205,11 @@ Reply2Class.prototype.getReply2ItemHtml = function(rowData=null){
 		}//if
 		reply2ItemString = reply2ItemString.replaceAll('{{orgReply2Content}}',getNvlString(rowData.bdr2_content));
 		reply2ItemString = reply2ItemString.replaceAll('{{bdr2FixYN}}',$.trim(rowData.bdr2_fix_yn));
-		reply2ItemString = reply2ItemString.replaceAll('{{bdrSeqId}}',$.trim(thisObject.bdrSeqId));
+		if(thisObject.bdrFixYn==='Y'){
+			reply2ItemString = reply2ItemString.replaceAll('{{bdrSeqId}}',$.trim(thisObject.bdrSeqId)+'Fix');
+		}else{
+			reply2ItemString = reply2ItemString.replaceAll('{{bdrSeqId}}',$.trim(thisObject.bdrSeqId));
+		}//if
 	}//if
 	//---
 	return reply2ItemString;

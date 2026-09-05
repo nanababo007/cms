@@ -127,7 +127,7 @@ function setReplyListHtml(listData=null){
 		//--- 1차 댓글 항목별로, 2차 댓글 초기화 셋팅
 		$.each(listData,function(index,itemDataObject){
 			setTimeout(function(){
-				var reply2Object = new Reply2Class(itemDataObject.bda_seq,itemDataObject.bdr_seq);
+				var reply2Object = new Reply2Class(itemDataObject.bda_seq,itemDataObject.bdr_seq,itemDataObject.list_bdr_fix_yn);
 				reply2Object.setReply2Objects();
 				reply2Object.initReply2();
 				reply2Object.initReply2Events();

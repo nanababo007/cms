@@ -127,7 +127,7 @@ function setReplyListHtml(listData=null){
 		//--- 1차 댓글 항목별로, 2차 댓글 초기화 셋팅
 		$.each(listData,function(index,itemDataObject){
 			setTimeout(function(){
-				var reply2Object = new Reply2Class(itemDataObject.bda_seq,itemDataObject.bdr_seq);
+				var reply2Object = new Reply2Class(itemDataObject.bda_seq,itemDataObject.bdr_seq,itemDataObject.list_bdr_fix_yn);
 				reply2Object.setReply2Objects();
 				reply2Object.initReply2();
 				reply2Object.initReply2Events();
@@ -149,9 +149,11 @@ function getReplyItemHtml(rowData=null){
 		if(rowData.list_bdr_fix_yn==='Y'){
 			replyItemString = replyItemString.replaceAll('{{replyContent}}','<span style="color:blue;">[고정]</span> '+bdrContentString);
 			replyItemString = replyItemString.replaceAll('{{bdrSeqId}}',$.trim(rowData.bdr_seq)+'Fix');
+			replyItemString = replyItemString.replaceAll('{{bdrFixYnStr}}','Fix');
 		}else{
 			replyItemString = replyItemString.replaceAll('{{replyContent}}',bdrContentString);
 			replyItemString = replyItemString.replaceAll('{{bdrSeqId}}',$.trim(rowData.bdr_seq));
+			replyItemString = replyItemString.replaceAll('{{bdrFixYnStr}}','');
 		}//if
 		replyItemString = replyItemString.replaceAll('{{orgReplyContent}}',getNvlString(rowData.bdr_content));
 		replyItemString = replyItemString.replaceAll('{{bdrFixYN}}',$.trim(rowData.bdr_fix_yn));
