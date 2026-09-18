@@ -51,11 +51,19 @@ if($schContent!=""){
 }#if
 if($schReply!=""){
 	$sqlSearchPart .= fnGetSqlWhereAndString($sqlSearchPartIndex);
-	$sqlSearchPart .= " exists (
-		select bdr_seq 
-		from tb_board_reply 
-		where bda_seq = a.bda_seq
-		and bdr_content like '%${schReply}%')
+	$sqlSearchPart .= " 
+		(
+			exists (
+				select bdr_seq 
+				from tb_board_reply 
+				where bda_seq = a.bda_seq
+				and bdr_content like '%${schReply}%')
+			or exists (
+				select bdr2_seq
+				from tb_board_reply2 
+				where bda_seq = a.bda_seq
+				and bdr2_content like '%${schReply}%')
+		)
 	";
 	$sqlSearchPartIndex++;
 }#if
