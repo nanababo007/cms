@@ -3,10 +3,14 @@
 	$exceptUserFuncJsOption = false;
 	$fromParameterValue = "";
 	$loginUserId = "";
+	$return_url = "";
+	#---
+	if(isset($_SESSION["loginId"]) and nvl($_SESSION["loginId"])!=""){pageGo("/board2/menu/menuMan.php");}#if
 	#---
 	$exceptUserFuncJsOption = true;
 	$fromParameterValue = getRequestValue("from");
 	if($fromParameterValue=="career"){$loginUserId = "career";}
+	$return_url = isset($_GET['return_url']) ? $_GET['return_url'] : '/board2/menu/menuMan.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,6 +21,7 @@
 <form name="formLogin" method="post" action="loginP.php">
 <input type="hidden" name="loginMode" value="" />
 <input type="hidden" name="from" value="<?php echo $fromParameterValue; ?>" />
+<input type="hidden" name="return_url" value="<?php echo $return_url; ?>" />
 <table>
 <tr>
 	<td align="center" valign="middle"><input type="text" id="userId" name="userId" value="" placeholder="User id" class="input-text" onclick="this.select();" /></td>
@@ -34,10 +39,22 @@
 </form>
 <script>
 var formLogin = document.formLogin;
+//---
+$(function(){
+	$('#userPassword').on('keypress', function(e) {
+		if (e.which === 13) {
+			e.preventDefault();		// 엔터 키의 기본 동작(폼 제출 등) 방지
+			fnGoLogin();				// 로그인 실행 함수 호출
+		}//if
+	});
+});
+//---
+//현재로그인
 function fnGoLogin(){
 	formLogin.loginMode.value='';
 	formLogin.submit();
 }
+//기존로그인(비활성)
 function fnGoLogin2(){
 	formLogin.loginMode.value='2';
 	formLogin.submit();

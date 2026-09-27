@@ -2,6 +2,7 @@
 $siteLoginId = "test";
 $siteLoginPw = "1234";
 $modeString = getServerModeString();
+$mobileFlag = getMobileFlag();
 $envVarMap = array();
 $globalResourceArray = array();
 $displayMenuList = null;
@@ -10,6 +11,7 @@ $currentMenuInfo = null;
 $currentTopMenuSeq = 0;
 $currentTopMenuInfo = null;
 $thisPageMnSeq = 0;
+$siteVarScriptPath = $_SERVER['SCRIPT_NAME']; 
 #---
 if($modeString=="server"){
 	$envVarMap["dbUsername"] = "root";
@@ -25,7 +27,16 @@ if($modeString=="server"){
 	$envVarMap["fileUploadRootWebPathGlobalValue"] = "/upload_web_path";
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] = 10;
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeGlobalValue"] = $envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] * 1024 * 1024;
-	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf";
+	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf,zip";
+    $envVarMap["linkAllowedHostsGlobalValue"] = "naver.com,daum.net,cafe24.com,tistory.com,.ac.kr,.org,.or.kr,go.kr,youtube.com,github.com,namu.wiki,youtu.be";
+	#--- paging
+	$envVarMap["mobilePagingBlockSize"] = 2;
+	$envVarMap["pcPagingBlockSize"] = 5;
+	if($mobileFlag){
+		$envVarMap["pagingBlockSize"] = $envVarMap["mobilePagingBlockSize"];
+	}else{
+		$envVarMap["pagingBlockSize"] = $envVarMap["pcPagingBlockSize"];
+	}#if
 }else{
 	$envVarMap["dbUsername"] = "root";
 	$envVarMap["dbUserpwd"] = "";
@@ -40,7 +51,16 @@ if($modeString=="server"){
 	$envVarMap["fileUploadRootWebPathGlobalValue"] = "/data";
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] = 10;
 	$envVarMap["fileUploadAllowedMaxFileUploadSizeGlobalValue"] = $envVarMap["fileUploadAllowedMaxFileUploadSizeForMegaByteGlobalValue"] * 1024 * 1024;
-	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf";
+	$envVarMap["fileUploadAllowedExtensionsStringGlobalValue"] = "jpg,jpeg,png,gif,txt,doc,docx,xls,xlsx,ppt,pptx,pdf,zip";
+	$envVarMap["linkAllowedHostsGlobalValue"] = "localhost,modern3080.mycafe24.com,nate.com,naver.com";
+	#--- paging
+	$envVarMap["mobilePagingBlockSize"] = 2;
+	$envVarMap["pcPagingBlockSize"] = 5;
+	if($mobileFlag){
+		$envVarMap["pagingBlockSize"] = $envVarMap["mobilePagingBlockSize"];
+	}else{
+		$envVarMap["pagingBlockSize"] = $envVarMap["pcPagingBlockSize"];
+	}#if
 }#if
 #---
 function getServerModeString(){
@@ -57,5 +77,20 @@ function getServerModeString(){
 	#---
 	$returnValue = $serverModeString;
 	return $returnValue;
+}
+function getMobileFlag() {
+	# 모바일 기기 식별을 위한 키워드 목록
+	$mobileAgents = [
+		"iPhone", "iPod", "Android", "BlackBerry", "Windows CE", 
+		"Nokia", "WebOS", "Opera Mini", "SonyEricsson", "Opera Mobi"
+	];
+	$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+	# 키워드 매칭 검사
+	foreach ($mobileAgents as $agent) {
+		if (stripos($userAgent, $agent) !== false) {
+			return true;
+		}#if
+	}#foreach
+	return false;
 }
 ?>

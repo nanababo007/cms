@@ -4,6 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/menu.php');
 #---
 $actionString = getPostValue("actionString");
+$siteModeString = trim(nvl(getPostValue("siteModeString"),""));
 $pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getPostValue("pageSize"),"10"));
 $blockSize = intval(nvl(getPostValue("blockSize"),"10"));
@@ -16,6 +17,7 @@ $pMnSeq = "";
 $mnOrd = "";
 #---
 debugString("actionString",$actionString);
+debugString("siteModeString",$siteModeString);
 debugString("pageNumber",$pageNumber);
 debugString("pageSize",$pageSize);
 debugString("blockSize",$blockSize);
@@ -33,6 +35,8 @@ if($actionString=="write"){
 	$mnUrl = nvl(getPostValue("mnUrl"));
 	$mnUrlTarget = nvl(getPostValue("mnUrlTarget"));
 	$mnUseYn = nvl(getPostValue("mnUseYn"),"N");
+	#---
+	$mnUrl = getMenuUrlEncodedString($mnUrl);
 	#---
 	if($regMnSeq==""){
 		$pMnSeq = "0";
@@ -118,8 +122,12 @@ if($actionString=="write"){
 	$mnUrlTarget = nvl(getPostValue("mnUrlTarget"));
 	$mnUseYn = nvl(getPostValue("mnUseYn"),"N");
 	#---
+	$mnUrl = getMenuUrlEncodedString($mnUrl);
+	#---
 	if($modMnSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($mnNm==""){alertBack("정보가 부족 합니다.");}#if
+	#---
+	fnHistInsertBoardMenuInfo($modMnSeq);
 	#---
 	$sql = "
 		update {{cms.tableNamePrefix}}_menu_info set
@@ -148,6 +156,8 @@ if($actionString=="write"){
 	#---
 	if($delMnSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if(getSubMenuCount($delMnSeq) > 0){alertBack("하위 메뉴가 존재 합니다.\\n하위 메뉴를 삭제해야, 상위메뉴가 삭제 가능합니다.");}#if
+	#---
+	fnHistInsertBoardMenuInfo($delMnSeq);
 	#---
 	$sql = "
 		delete from {{cms.tableNamePrefix}}_menu_info
@@ -263,7 +273,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "#mnSeqPos".$moveMnSeq;
-	pageGo("menuMan.php".$moveUrlParam);
+	pageGo("menuMan${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="menuMoveDown"){
 	$moveMnSeq = nvl(getPostValue("moveMnSeq"));
 	$pMoveMnSeq = "";
@@ -367,10 +377,29 @@ if($actionString=="write"){
 	$moveUrlParam .= "&schContent=".$schContent;
 	$moveUrlParam .= "&mnSeq=".$mnSeq;
 	$moveUrlParam .= "#mnSeqPos".$moveMnSeq;
-	pageGo("menuMan.php".$moveUrlParam);
+	pageGo("menuMan${siteModeString}.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
 }#if
 #---
 fnCloseDB();
+#---
+function getMenuUrlEncodedString($mnUrl=""){
+	$MN_URL_MAX_LENGTH_CONST = 2000;
+	#---
+	$returnString = "";
+	$failReturnString = "";
+	$editMnUrl = "";
+	$mnUrl = trim($mnUrl);
+	#---
+	if($mnUrl==""){return $failReturnString;}#if
+	#---
+	$editMnUrl = $mnUrl;
+	$editMnUrl = str_replace("〓","=",$editMnUrl);
+	#---
+	$editMnUrl = substr($editMnUrl, 0, $MN_URL_MAX_LENGTH_CONST);
+	#---
+	$returnString = $editMnUrl;
+	return $returnString;
+}
 ?>

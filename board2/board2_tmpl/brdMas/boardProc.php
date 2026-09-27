@@ -3,6 +3,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/checkLogin.php');
 #---
 $actionString = getPostValue("actionString");
+$siteModeString = trim(nvl(getPostValue("siteModeString"),""));
 $pageNumber = intval(nvl(getPostValue("pageNumber"),"1"));
 $pageSize = intval(nvl(getPostValue("pageSize"),"10"));
 $blockSize = intval(nvl(getPostValue("blockSize"),"10"));
@@ -10,6 +11,7 @@ $schTitle = nvl(getPostValue("schTitle"),"");
 $schContent = nvl(getPostValue("schContent"),"");
 #---
 debugString("actionString",$actionString);
+debugString("siteModeString",$siteModeString);
 debugString("pageNumber",$pageNumber);
 debugString("pageSize",$pageSize);
 debugString("blockSize",$blockSize);
@@ -53,7 +55,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&bdSeq=".$bdSeq;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
-	alertGo("처리 되었습니다.","board.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","board${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="modify"){
 	$bdSeq = nvl(getPostValue("bdSeq"));
 	$bdNm = nvl(getPostValue("bdNm"));
@@ -62,6 +64,8 @@ if($actionString=="write"){
 	#---
 	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
 	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
+	#---
+	fnHistInsertBoardInfo($bdSeq);
 	#---
 	$sql = "
 		update {{cms.tableNamePrefix}}_info set
@@ -81,11 +85,13 @@ if($actionString=="write"){
 	$moveUrlParam .= "&blockSize=".$blockSize;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
-	alertGo("처리 되었습니다.","board.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","board${siteModeString}.php".$moveUrlParam);
 }else if($actionString=="delete"){
 	$bdSeq = nvl(getPostValue("bdSeq"));
 	#---
 	if($bdSeq==""){alertBack("정보가 부족 합니다.");}#if
+	#---
+	fnHistInsertBoardInfo($bdSeq);
 	#---
 	$sql = "
 		delete from {{cms.tableNamePrefix}}_info
@@ -100,7 +106,7 @@ if($actionString=="write"){
 	$moveUrlParam .= "&blockSize=".$blockSize;
 	$moveUrlParam .= "&schTitle=".$schTitle;
 	$moveUrlParam .= "&schContent=".$schContent;
-	alertGo("처리 되었습니다.","board.php".$moveUrlParam);
+	alertGo("처리 되었습니다.","board${siteModeString}.php".$moveUrlParam);
 }else{
 	alertBack("잘못된 접근 입니다.");
 }#if

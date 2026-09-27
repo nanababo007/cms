@@ -32,6 +32,9 @@ if($actionString=="GET_REPLY_LIST"){
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdatetime_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
+				,(select count(*) 
+					from tb_board_reply2
+					where bdr_seq = a.bdr_seq) as reply2_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
@@ -50,6 +53,9 @@ if($actionString=="GET_REPLY_LIST"){
 				,STR_TO_DATE(a.regdate, '%Y-%m-%d %H:%i:%s') as regdatetime_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
+				,(select count(*) 
+					from tb_board_reply2
+					where bdr_seq = a.bdr_seq) as reply2_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
@@ -77,9 +83,13 @@ if($actionString=="GET_REPLY_LIST"){
 	}#if
 	#---
 	$sql = "
-		select * 
-		from {{cms.tableNamePrefix}}_img_reply
-		where bdr_seq = ${bdrSeq}
+		select 
+			a.* 
+			,(select count(*) 
+				from tb_board_reply2
+				where bdr_seq = a.bdr_seq) as reply2_cnt
+		from tb_board_img_reply a
+		where a.bdr_seq = ${bdrSeq}
 	";
 	$rowData = fnDBGetRow($sql);
 	#---
@@ -130,6 +140,8 @@ if($actionString=="GET_REPLY_LIST"){
 		responseJson();
 	}#if
 	#---
+	fnHistInsertImgBoardReply($bdrSeq);
+	#---
 	$sql = "
 		update {{cms.tableNamePrefix}}_img_reply set
 			bdr_content = '${bdrContent}',
@@ -151,6 +163,8 @@ if($actionString=="GET_REPLY_LIST"){
 		$responseLibraryObject->setResponseUserErrorData("need_param");
 		responseJson();
 	}#if
+	#---
+	fnHistInsertImgBoardReply($bdrSeq);
 	#---
 	$sql = "
 		delete from {{cms.tableNamePrefix}}_img_reply

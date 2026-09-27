@@ -38,7 +38,10 @@ if(!isset($isLeftMenuDisplay)){$isLeftMenuDisplay = true;}#if
 				$mnUrlTargetString = nvl($currentTopMenuInfo["mn_url_target"]);
 				$mnNmString = nvl($currentTopMenuInfo["mn_nm"]);
 				#---
-				?><li><a class="active" href="<?php echo $mnUrlString; ?>" target="<?php echo $mnUrlTargetString; ?>"><?php echo $mnNmString; ?></a></li><?php
+				?>
+					<li><a class="active left-top-menu-class" href="<?php echo $mnUrlString; ?>" target="<?php echo $mnUrlTargetString; ?>"><?php echo $mnNmString; ?></a></li>
+					<li class="toggle-show-menu-class left-menu-status-show-class"><a href="javascript:toggleShowMenu();">메뉴토글</a></li>
+				<?php
 			}#if
 			if($currentTopMenuSeq!=0){
 				foreach($displayMenuList as $index => $menuInfo){

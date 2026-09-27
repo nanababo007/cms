@@ -60,11 +60,13 @@ class FileUtilLibraryClass
     # 폴더 / 디렉토리 목록 가져오기
 	public static function getFileList($dirname){
 		$result_array = array();
+		$filePathString = "";
 		if(!file_exists($dirname)){return $result_array;}#if
 		$handle = opendir($dirname);
 		while ($file = readdir($handle)) {
 			if($file == '.'||$file == '..') continue;
-			if (is_file($dirname.$file)){array_push($result_array,$file);}#if
+			$filePathString = self::getForceCombinedSubFoldersPath($dirname,$file);
+			if(is_file($filePathString)){array_push($result_array,$file);}#if
 		}#while
 		closedir($handle);
 		sort($result_array);

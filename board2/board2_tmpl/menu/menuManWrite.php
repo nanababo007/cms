@@ -3,6 +3,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/lib/_include.php');
 include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/menu.php');
 #---
+$pageTitleString = "";
 $thisPageMnSeq = 2;
 $mnSeq = nvl(getRequestValue("mnSeq"));
 $regMnSeq = nvl(getRequestValue("regMnSeq"));
@@ -12,6 +13,8 @@ $pageSize = intval(nvl(getRequestValue("pageSize"),"10"));
 $blockSize = intval(nvl(getRequestValue("blockSize"),"10"));
 $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
+#---
+$pageTitleString = "메뉴 관리";
 #---
 fnOpenDB();
 setDisplayMenuList();

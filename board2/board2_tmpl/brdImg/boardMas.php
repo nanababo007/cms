@@ -4,6 +4,7 @@ include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/checkLogin.php');
 include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/menu.php');
 include($_SERVER["DOCUMENT_ROOT"].'/{{cms.prefix}}/inc/pagingListInfo.php');
 #---
+$pageTitleString = "";
 $thisPageMnSeq = 24;
 $sqlSearchPart = "";
 $sqlSearchPartIndex = 0;
@@ -16,6 +17,8 @@ $schTitle = nvl(getRequestValue("schTitle"),"");
 $schContent = nvl(getRequestValue("schContent"),"");
 $boardFixList = null;
 $boardFixListCount = 0;
+#---
+$pageTitleString = "이미지 게시판 관리";
 #---
 fnOpenDB();
 setDisplayMenuList();
@@ -141,8 +144,10 @@ if($boardFixListCount > 0){
 <tr>
 	<td align="center">고정</td>
 	<td align="left">
-		<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
-		<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+		<div class="board-title-area-class">
+			<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
+			<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+		</div>
 	</td>
 	<td align="center">
 		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |
@@ -162,8 +167,10 @@ if($boardListTotalCount > 0){
 <tr>
 	<td align="center"><?php echo $pagingInfoMap["startRowNumberForPage"] - $index; ?></td>
 	<td align="left">
-		<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
-		<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+		<div class="board-title-area-class">
+			<a href="javascript:goView('<?php echo $row["bd_seq"]; ?>');"><?php echo $row["bd_nm"]; ?></a> 
+			<a href="javascript:copyBoardSeq('<?php echo $row["bd_seq"]; ?>');" style="color:gray;">(게시판 번호 : <?php echo $row["bd_seq"]; ?>)</a>
+		</div>
 	</td>
 	<td align="center">
 		<a href="javascript:goBoardArticleList('<?php echo $row["bd_seq"]; ?>');">보기</a> |

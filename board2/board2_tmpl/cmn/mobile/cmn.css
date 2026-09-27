@@ -1,0 +1,31 @@
+a {
+	text-decoration: none;		/* 밑줄 제거 */
+	color: inherit;				/* 글자색을 부모 요소와 동일하게 (선택 사항) */
+}
+a:hover {
+	text-decoration: underline;
+}
+.navbar .navbar-brand {
+	/*word-break: break-all; overflow-wrap: break-word; white-space: normal; */
+	display: inline-block; /* 1. 크기를 가지기 위해 필수 */
+	width: 76%;          /* 2. 말줄임표가 나타날 너비 지정 */
+	white-space: nowrap;   /* 3. 줄바꿈 방지 */
+	overflow: hidden;      /* 4. 영역을 벗어나는 텍스트 숨김 */
+	text-overflow: ellipsis; /* 5. ... 표시 (핵심 속성) */
+}
+#mobileMenu div.list-group {
+	width: 100%;
+}
+#mobileMenu div.list-group a {
+	word-break: break-all; overflow-wrap: break-word; white-space: normal;
+}
+.post-title {
+	word-break: break-all; overflow-wrap: break-word; white-space: normal;
+}
+.post-content-area {
+	word-break: break-all; overflow-wrap: break-word; white-space: normal;
+}
+.reply-item-view-class {
+	word-break: break-all; overflow-wrap: break-word; white-space: normal;
+	width:100%;
+}

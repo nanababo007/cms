@@ -15,6 +15,7 @@
 	<br /><a href="/{{cms.prefix}}_ins/ins.html" target="_blank">웹사이트 설치</a>
 	<br /><a href="/{{cms.prefix}}/brdMas/board.php" target="_blank">게시판 관리</a>
 	<br /><a href="/{{cms.prefix}}/menu/menuMan.php" target="_blank">메뉴 관리</a>
+	<br /><a href="/board2/menu/menuMan.php" target="_blank">메뉴 관리</a>
 </p>
 <hr/>
 
