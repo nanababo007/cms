@@ -38,7 +38,7 @@ if($actionString=="GET_REPLY_LIST"){
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_reply a
+			from ${envVarMap["tablePrefix"]}_reply a
 			where bda_seq = ${bdaSeq}
 			and a.bdr_fix_yn = 'Y'
 			union all
@@ -56,7 +56,7 @@ if($actionString=="GET_REPLY_LIST"){
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_reply a
+			from ${envVarMap["tablePrefix"]}_reply a
 			where bda_seq = ${bdaSeq}
 		) a
 		order by 
@@ -82,7 +82,7 @@ if($actionString=="GET_REPLY_LIST"){
 	#---
 	$sql = "
 		select * 
-		from tb_board_reply
+		from ${envVarMap["tablePrefix"]}_reply
 		where bdr_seq = ${bdrSeq}
 	";
 	$rowData = fnDBGetRow($sql);
@@ -104,7 +104,7 @@ if($actionString=="GET_REPLY_LIST"){
 	}#if
 	#---
 	$sql = "
-		insert into tb_board_reply (
+		insert into ${envVarMap["tablePrefix"]}_reply (
 			bda_seq,
 			bdr_content,
 			regdate,
@@ -141,7 +141,7 @@ if($actionString=="GET_REPLY_LIST"){
 	fnHistInsertBoardReply($bdrSeq);
 	#---
 	$sql = "
-		update tb_board_reply set
+		update ${envVarMap["tablePrefix"]}_reply set
 			bdr_content = '${bdrContent}',
 			moddate = NOW(3),
 			moduser = 'admin'
@@ -167,7 +167,7 @@ if($actionString=="GET_REPLY_LIST"){
 	fnHistInsertBoardReply($bdrSeq);
 	#---
 	$sql = "
-		delete from tb_board_reply
+		delete from ${envVarMap["tablePrefix"]}_reply
 		where bdr_seq like '${bdrSeq}'
 	";
 	$affectedQueryCount = fnDBUpdate($sql);
@@ -187,7 +187,7 @@ if($actionString=="GET_REPLY_LIST"){
 	}#if
 	#---
 	$sql = "
-		update tb_board_article set
+		update ${envVarMap["tablePrefix"]}_article set
 			bda_fix_yn = '${bdaFixYN}'
 		where bda_seq like '${bdaSeq}'
 	";

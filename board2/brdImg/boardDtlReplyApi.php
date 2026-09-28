@@ -33,13 +33,13 @@ if($actionString=="GET_REPLY_LIST"){
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
 				,(select count(*) 
-					from tb_board_reply2
+					from ${envVarMap["tablePrefix"]}_reply2
 					where bdr_seq = a.bdr_seq) as reply2_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_img_reply a
+			from ${envVarMap["tablePrefix"]}_img_reply a
 			where bda_seq = ${bdaSeq}
 			and a.bdr_fix_yn = 'Y'
 			union all
@@ -54,13 +54,13 @@ if($actionString=="GET_REPLY_LIST"){
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddatetime_str
 				,(select count(*) 
-					from tb_board_reply2
+					from ${envVarMap["tablePrefix"]}_reply2
 					where bdr_seq = a.bdr_seq) as reply2_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_img_reply a
+			from ${envVarMap["tablePrefix"]}_img_reply a
 			where bda_seq = ${bdaSeq}
 		) a
 		order by 
@@ -86,9 +86,9 @@ if($actionString=="GET_REPLY_LIST"){
 		select 
 			a.* 
 			,(select count(*) 
-				from tb_board_reply2
+				from ${envVarMap["tablePrefix"]}_reply2
 				where bdr_seq = a.bdr_seq) as reply2_cnt
-		from tb_board_img_reply a
+		from ${envVarMap["tablePrefix"]}_img_reply a
 		where a.bdr_seq = ${bdrSeq}
 	";
 	$rowData = fnDBGetRow($sql);
@@ -108,7 +108,7 @@ if($actionString=="GET_REPLY_LIST"){
 	}#if
 	#---
 	$sql = "
-		insert into tb_board_img_reply (
+		insert into ${envVarMap["tablePrefix"]}_img_reply (
 			bda_seq,
 			bdr_content,
 			regdate,
@@ -143,7 +143,7 @@ if($actionString=="GET_REPLY_LIST"){
 	fnHistInsertImgBoardReply($bdrSeq);
 	#---
 	$sql = "
-		update tb_board_img_reply set
+		update ${envVarMap["tablePrefix"]}_img_reply set
 			bdr_content = '${bdrContent}',
 			moddate = NOW(3),
 			moduser = 'admin'
@@ -167,7 +167,7 @@ if($actionString=="GET_REPLY_LIST"){
 	fnHistInsertImgBoardReply($bdrSeq);
 	#---
 	$sql = "
-		delete from tb_board_img_reply
+		delete from ${envVarMap["tablePrefix"]}_img_reply
 		where bdr_seq like '${bdrSeq}'
 	";
 	$affectedQueryCount = fnDBUpdate($sql);
@@ -187,7 +187,7 @@ if($actionString=="GET_REPLY_LIST"){
 	}#if
 	#---
 	$sql = "
-		update tb_board_img_reply set
+		update ${envVarMap["tablePrefix"]}_img_reply set
 			bdr_fix_yn = '${bdrFixYN}'
 		where bdr_seq like '${bdrSeq}'
 	";

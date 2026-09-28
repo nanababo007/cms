@@ -39,7 +39,7 @@ if($schContent!=""){
 }#if
 #---
 $sqlBodyPart = "
-	FROM tb_board_img_info a
+	FROM ${envVarMap["tablePrefix"]}_img_info a
 	${sqlSearchPart}
 ";
 #---
@@ -53,7 +53,7 @@ $sqlFix = "
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,a.regdate
 			,a.reguser
-		FROM tb_board_img_info a
+		FROM ${envVarMap["tablePrefix"]}_img_info a
 		where bd_fix_yn = 'Y'
 	) a
 	ORDER BY a.bd_seq DESC

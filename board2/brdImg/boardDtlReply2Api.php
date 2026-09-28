@@ -38,7 +38,7 @@ if($actionString=="GET_REPLY2_LIST"){
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_img_reply2 a
+			from ${envVarMap["tablePrefix"]}_img_reply2 a
 			where a.bda_seq = ${bdaSeq}
 			and a.bdr_seq = ${bdrSeq}
 			and a.bdr2_fix_yn = 'Y'
@@ -58,7 +58,7 @@ if($actionString=="GET_REPLY2_LIST"){
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_img_reply2 a
+			from ${envVarMap["tablePrefix"]}_img_reply2 a
 			where a.bda_seq = ${bdaSeq}
 			and a.bdr_seq = ${bdrSeq}
 		) a
@@ -84,7 +84,7 @@ if($actionString=="GET_REPLY2_LIST"){
 	$sql = "
 		select 
 			a.* 
-		from tb_board_img_reply2 a
+		from ${envVarMap["tablePrefix"]}_img_reply2 a
 		where a.bdr2_seq = ${bdr2Seq}
 	";
 	$rowData = fnDBGetRow($sql);
@@ -105,7 +105,7 @@ if($actionString=="GET_REPLY2_LIST"){
 	}#if
 	#---
 	$sql = "
-		insert into tb_board_img_reply2 (
+		insert into ${envVarMap["tablePrefix"]}_img_reply2 (
 			bda_seq,
 			bdr_seq,
 			bdr2_content,
@@ -144,7 +144,7 @@ if($actionString=="GET_REPLY2_LIST"){
 	fnHistInsertBoardReply2($bdr2Seq);
 	#---
 	$sql = "
-		update tb_board_img_reply2 set
+		update ${envVarMap["tablePrefix"]}_img_reply2 set
 			bdr2_content = '${bdr2Content}',
 			moddate = NOW(3),
 			moduser = 'admin'
@@ -172,7 +172,7 @@ if($actionString=="GET_REPLY2_LIST"){
 	fnHistInsertBoardReply2($bdr2Seq);
 	#---
 	$sql = "
-		delete from tb_board_img_reply2
+		delete from ${envVarMap["tablePrefix"]}_img_reply2
 		where bdr2_seq = '${bdr2Seq}'
 		and bda_seq = '${bdaSeq}'
 		and bdr_seq = '${bdrSeq}'
@@ -194,7 +194,7 @@ if($actionString=="GET_REPLY2_LIST"){
 	}#if
 	#---
 	$sql = "
-		update tb_board_img_reply2 set
+		update ${envVarMap["tablePrefix"]}_img_reply2 set
 			bdr2_fix_yn = '${bdr2FixYN}'
 		where bdr2_seq like '${bdr2Seq}'
 	";

@@ -45,7 +45,7 @@ if($actionString=="write"){
 	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		insert into tb_board_article (
+		insert into ${envVarMap["tablePrefix"]}_article (
 			bda_title
 			,bda_content
 			,bd_seq
@@ -96,7 +96,7 @@ if($actionString=="write"){
 	fnHistInsertBoardArticle($bdaSeq);
 	#---
 	$sql = "
-		update tb_board_article set
+		update ${envVarMap["tablePrefix"]}_article set
 			bda_title = '${bdaTitle}'
 			,bda_content = '${bdaContent}'
 			,bda_fix_yn = '${bdaFixYn}'
@@ -129,14 +129,14 @@ if($actionString=="write"){
 	#---
 	$sql = "
 		select count(*) as cnt
-		from tb_board_reply
+		from ${envVarMap["tablePrefix"]}_reply
 		where bda_seq = ${bdaSeq}
 	";
 	$replyCount = fnDBGetIntValue($sql);
 	if($replyCount > 0){alertBack("댓글이 존재 합니다.\\n댓글을 모두 삭제 해주세요.");}#if
 	#---
 	$sql = "
-		delete from tb_board_article
+		delete from ${envVarMap["tablePrefix"]}_article
 		where bda_seq = ${bdaSeq}
 	";
 	#---

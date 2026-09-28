@@ -55,12 +55,12 @@ if($schReply!=""){
 		(
 			exists (
 				select bdr_seq 
-				from tb_board_reply 
+				from ${envVarMap["tablePrefix"]}_reply 
 				where bda_seq = a.bda_seq
 				and bdr_content like '%${schReply}%')
 			or exists (
 				select bdr2_seq
-				from tb_board_reply2 
+				from ${envVarMap["tablePrefix"]}_reply2 
 				where bda_seq = a.bda_seq
 				and bdr2_content like '%${schReply}%')
 		)
@@ -74,7 +74,7 @@ if($schSRegdate!="" and $schERegdate!=""){
 }#if
 #---
 $sqlBodyPart = "
-	FROM tb_board_article a
+	FROM ${envVarMap["tablePrefix"]}_article a
 ";
 #---
 $sqlFix = "
@@ -87,7 +87,7 @@ $sqlFix = "
 			,a.bda_title
 			,a.bda_view_cnt
 			,(select count(*) 
-				from tb_board_reply
+				from ${envVarMap["tablePrefix"]}_reply
 				where bda_seq = a.bda_seq) as reply_cnt
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str
@@ -125,7 +125,7 @@ $sqlMain = "
 			,a.bda_title
 			,a.bda_view_cnt
 			,(select count(*) 
-				from tb_board_reply
+				from ${envVarMap["tablePrefix"]}_reply
 				where bda_seq = a.bda_seq) as reply_cnt
 			,STR_TO_DATE(a.regdate, '%Y-%m-%d') as regdate_str
 			,STR_TO_DATE(a.moddate, '%Y-%m-%d') as moddate_str

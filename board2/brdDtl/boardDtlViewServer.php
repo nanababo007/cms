@@ -23,10 +23,10 @@ $boardArticleHistoryListCount = 0;
 $sqlBoardArticleHistoryList = "";
 #---
 if($histBdaSeq!=""){
-	$boardArticleTableName = "tb_board_bak_article";
+	$boardArticleTableName = "${envVarMap["tablePrefix"]}_bak_article";
 	$histDateSelectSqlString = " ,STR_TO_DATE(a.bakdate, '%Y-%m-%d') as hist_date_str ";
 }else{
-	$boardArticleTableName = "tb_board_article";
+	$boardArticleTableName = "${envVarMap["tablePrefix"]}_article";
 	$histDateSelectSqlString = " ,'' as hist_date_str ";
 }#if
 #---
@@ -77,7 +77,7 @@ $sqlMain = "
 		,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddate_str
 		${histDateSelectSqlString}
 		,(select count(*) 
-			from tb_board_reply
+			from ${envVarMap["tablePrefix"]}_reply
 			where bda_seq = a.bda_seq) as reply_cnt
 		,a.regdate
 		,a.reguser
@@ -103,13 +103,13 @@ if($bdaSeq!=""){
 				,STR_TO_DATE(a.moddate, '%Y-%m-%d %H:%i:%s') as moddate_str
 				,STR_TO_DATE(a.bakdate, '%Y-%m-%d %H:%i:%s') as hist_date_str
 				,(select count(*) 
-					from tb_board_reply
+					from ${envVarMap["tablePrefix"]}_reply
 					where bda_seq = a.bda_seq) as reply_cnt
 				,a.regdate
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_bak_article a
+			from ${envVarMap["tablePrefix"]}_bak_article a
 			where a.bda_seq = ${bdaSeq}
 		) a
 		order by hist_date_str desc

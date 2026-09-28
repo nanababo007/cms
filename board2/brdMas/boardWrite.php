@@ -19,7 +19,7 @@ setDisplayMenuList();
 #---
 if($bdSeq!=""){
 	$sqlBodyPart = "
-		FROM tb_board_info a
+		FROM ${envVarMap["tablePrefix"]}_info a
 		where bd_seq = ${bdSeq}
 	";
 	#---

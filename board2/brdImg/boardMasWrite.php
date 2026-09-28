@@ -20,7 +20,7 @@ setDisplayMenuList();
 #---
 if($bdSeq!=""){
 	$sqlBodyPart = "
-		FROM tb_board_img_info a
+		FROM ${envVarMap["tablePrefix"]}_img_info a
 		where bd_seq = ${bdSeq}
 	";
 	#---

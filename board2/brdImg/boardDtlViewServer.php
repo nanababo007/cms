@@ -28,10 +28,10 @@ $boardArticleHistoryListCount = 0;
 $sqlBoardArticleHistoryList = "";
 #---
 if($histBdaSeq!=""){
-	$boardArticleTableName = "tb_board_bak_img_article";
+	$boardArticleTableName = "${envVarMap["tablePrefix"]}_bak_img_article";
 	$histDateSelectSqlString = " ,STR_TO_DATE(a.bakdate, '%Y-%m-%d') as hist_date_str ";
 }else{
-	$boardArticleTableName = "tb_board_img_article";
+	$boardArticleTableName = "${envVarMap["tablePrefix"]}_img_article";
 	$histDateSelectSqlString = " ,'' as hist_date_str ";
 }#if
 #---
@@ -108,7 +108,7 @@ if($bdaSeq!=""){
 				,a.reguser
 				,a.moddate
 				,a.moduser
-			from tb_board_bak_img_article a
+			from ${envVarMap["tablePrefix"]}_bak_img_article a
 			where a.bda_seq = ${bdaSeq}
 		) a
 		order by hist_date_str desc
@@ -134,7 +134,7 @@ $sqlFile = "
 			,a.reguser
 			,a.moddate
 			,a.moduser
-		from tb_board_img_article_file a
+		from ${envVarMap["tablePrefix"]}_img_article_file a
 		where a.bda_seq = ${bdaSeq}
 	) a
 	ORDER BY a.bda_seq DESC

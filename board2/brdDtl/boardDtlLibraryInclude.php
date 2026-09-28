@@ -9,7 +9,7 @@ function fnBoardArticleCheckInfo($bdaSeq=""){
 	$sql = "
 		SELECT
 			count(*) as cnt
-		FROM tb_board_article a
+		FROM ${envVarMap["tablePrefix"]}_article a
 		WHERE bda_seq = ${bdaSeq}
 	";
 	debugString("fnBoardArticleCheckInfo : sql",getDecodeHtmlString($sql));

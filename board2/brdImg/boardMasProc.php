@@ -29,7 +29,7 @@ if($actionString=="write"){
 	if($bdNm==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		insert into tb_board_img_info (
+		insert into ${envVarMap["tablePrefix"]}_img_info (
 			bd_nm
 			,bd_content
 			,bd_fix_yn
@@ -69,7 +69,7 @@ if($actionString=="write"){
 	fnHistInsertImgBoardInfo($bdSeq);
 	#---
 	$sql = "
-		update tb_board_img_info set
+		update ${envVarMap["tablePrefix"]}_img_info set
 			bd_nm = '${bdNm}'
 			,bd_content = '${bdContent}'
 			,bd_fix_yn = '${bdFixYn}'
@@ -96,7 +96,7 @@ if($actionString=="write"){
 	fnHistInsertImgBoardInfo($bdSeq);
 	#---
 	$sql = "
-		delete from tb_board_img_info
+		delete from ${envVarMap["tablePrefix"]}_img_info
 		where bd_seq = ${bdSeq}
 	";
 	#---

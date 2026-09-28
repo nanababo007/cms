@@ -45,7 +45,7 @@ if($actionString=="write"){
 	if($bdaTitle==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		insert into tb_board_img_article (
+		insert into ${envVarMap["tablePrefix"]}_img_article (
 			bda_title
 			,bda_content
 			,bd_seq
@@ -97,7 +97,7 @@ if($actionString=="write"){
 	fnHistInsertImgBoardArticle($bdaSeq);
 	#---
 	$sql = "
-		update tb_board_img_article set
+		update ${envVarMap["tablePrefix"]}_img_article set
 			bda_title = '${bdaTitle}'
 			,bda_content = '${bdaContent}'
 			,bda_fix_yn = '${bdaFixYn}'
@@ -131,7 +131,7 @@ if($actionString=="write"){
 	#---
 	$sql = "
 		select count(*) as cnt
-		from tb_board_img_reply
+		from ${envVarMap["tablePrefix"]}_img_reply
 		where bda_seq = ${bdaSeq}
 	";
 	$replyCount = fnDBGetIntValue($sql);
@@ -139,7 +139,7 @@ if($actionString=="write"){
 	#---
 	$sql = "
 		select count(*) as cnt
-		from tb_board_img_article_file
+		from ${envVarMap["tablePrefix"]}_img_article_file
 		where bda_seq = ${bdaSeq}
 	";
 	$fileCount = fnDBGetIntValue($sql);
@@ -148,7 +148,7 @@ if($actionString=="write"){
 	fnHistInsertImgBoardArticle($bdaSeq);
 	#---
 	$sql = "
-		delete from tb_board_img_article
+		delete from ${envVarMap["tablePrefix"]}_img_article
 		where bda_seq = ${bdaSeq}
 	";
 	#---
@@ -172,7 +172,7 @@ if($actionString=="write"){
 	if($bdafSeq==""){alertBack("정보가 부족 합니다.");}#if
 	#---
 	$sql = "
-		delete from tb_board_img_article_file
+		delete from ${envVarMap["tablePrefix"]}_img_article_file
 		where bdaf_seq = ${bdafSeq}
 	";
 	fnDBUpdate($sql);
@@ -229,7 +229,7 @@ function uploadFilesOfThisPage($bdaSeq=""){
 			#---
 			$sql = "
 				SELECT count(*) 
-				FROM tb_board_img_article_file
+				FROM ${envVarMap["tablePrefix"]}_img_article_file
 				where bda_seq = ${bdaSeq}
 				and bdaf_kind_name = '${fileFormName}'
 			";
@@ -237,7 +237,7 @@ function uploadFilesOfThisPage($bdaSeq=""){
 			#---
 			if($checkFileInfo==0){
 				$sql = "
-					insert into tb_board_img_article_file (
+					insert into ${envVarMap["tablePrefix"]}_img_article_file (
 						bda_seq
 						,bdaf_filename
 						,bdaf_save_filename
@@ -258,7 +258,7 @@ function uploadFilesOfThisPage($bdaSeq=""){
 				fnDBUpdate($sql);
 			}else{
 				$sql = "
-					update tb_board_img_article_file set
+					update ${envVarMap["tablePrefix"]}_img_article_file set
 						bdaf_filename = '${fileUploadItemName}'
 						,bdaf_save_filename = '${fileWebPathString}'
 						,bdaf_save_thumbnail = '${thumbnailWebPathString}'
