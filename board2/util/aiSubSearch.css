@@ -1,0 +1,350 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 15px;
+    font-family: Arial, "Malgun Gothic", sans-serif;
+    font-size: 14px;
+    color: #222;
+    background: #f5f6f8;
+}
+
+button, input, textarea, select {
+    font: inherit;
+}
+
+button {
+    padding: 8px 14px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e9edf2;
+}
+
+button.primary {
+    color: #fff;
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+button.primary:hover {
+    background: #1d4ed8;
+}
+
+button.danger {
+    color: #fff;
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    color: #222;
+}
+
+textarea {
+    resize: vertical;
+    line-height: 1.6;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: 2px solid #bfdbfe;
+    border-color: #3b82f6;
+}
+
+.page-title {
+    margin: 0 0 12px;
+    font-size: 20px;
+}
+
+/* 상단 입력 영역 */
+
+.top-panel {
+    padding: 12px;
+    border: 1px solid #d4d8de;
+    background: #fff;
+    border-radius: 5px;
+}
+
+.top-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.top-toolbar strong {
+    font-size: 15px;
+}
+
+.top-actions {
+    display: flex;
+    gap: 6px;
+}
+
+#sourceText {
+    display: block;
+    width: 100%;
+    height: 200px;
+    min-height: 200px;
+    max-height: 400px;
+    resize: vertical;
+}
+
+/* 하단 좌우 레이아웃 */
+
+.bottom-layout {
+    display: grid;
+    grid-template-columns: minmax(250px, 32%) minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+    align-items: stretch;
+}
+
+.panel {
+    min-width: 0;
+    border: 1px solid #d4d8de;
+    border-radius: 5px;
+    background: #fff;
+    padding: 12px;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.count {
+    color: #666;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+/* 좌측 목록 */
+
+.list-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+#itemList {
+    width: 100%;
+    height: 420px;
+    min-height: 220px;
+    padding: 4px;
+    overflow: auto;
+    border: 1px solid #cbd0d8;
+    border-radius: 4px;
+    background: #fff;
+}
+
+#itemList option {
+    padding: 8px 6px;
+    margin-bottom: 2px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+/* 목록 상태별 색상 */
+
+#itemList option.status-wait {
+    color: #555;
+    background-color: #eeeeee;
+}
+
+#itemList option.status-progress {
+    color: #084298;
+    background-color: #cfe2ff;
+}
+
+#itemList option.status-complete {
+    color: #146c43;
+    background-color: #d1e7dd;
+}
+
+#itemList option.status-stop {
+    color: #842029;
+    background-color: #f8d7da;
+}
+
+.list-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.list-toolbar button {
+    flex: 1;
+}
+
+.list-help {
+    margin-top: 9px;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* 우측 상세 정보 */
+
+.detail-panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.form-row {
+    margin-bottom: 12px;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-row select {
+    max-width: 220px;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    background: #eee;
+}
+
+.status-indicator.status-wait {
+    background: #bdbdbd;
+}
+
+.status-indicator.status-progress {
+    background: #0d6efd;
+}
+
+.status-indicator.status-complete {
+    background: #198754;
+}
+
+.status-indicator.status-stop {
+    background: #f1aeb5;
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    height: 280px;
+    min-height: 180px;
+    margin-bottom: 12px;
+    border: 1px solid #cbd0d8;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.detail-content-header {
+    flex: 0 0 auto;
+    padding: 9px;
+    border-bottom: 1px solid #ddd;
+    background: #f2f4f7;
+    font-weight: bold;
+}
+
+#detailContent {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    padding: 10px;
+    overflow: auto;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.7;
+    background: #fff;
+}
+
+#memo {
+    height: 130px;
+    min-height: 80px;
+    resize: vertical;
+}
+
+.detail-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 8px;
+}
+
+.footer-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.message {
+    color: #555;
+    font-size: 12px;
+}
+
+.empty-state {
+    color: #888;
+}
+
+@media (max-width: 760px) {
+    body {
+        padding: 8px;
+    }
+
+    .bottom-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #itemList {
+        height: 240px;
+    }
+
+    .top-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .top-actions {
+        width: 100%;
+    }
+
+    .top-actions button {
+        flex: 1;
+    }
+
+    .detail-content {
+        height: 260px;
+    }
+}
