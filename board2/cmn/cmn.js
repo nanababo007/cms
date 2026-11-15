@@ -328,3 +328,22 @@ function fnCmnExpandAllReply(){
 		}//if
 	});
 }
+function fnCmnCollapseItemReply(replyItemContentAreaJqueryObject=null){
+	if(replyItemContentAreaJqueryObject!==null && !replyItemContentAreaJqueryObject.hasClass('fixed-height-100px-class')){
+		replyItemContentAreaJqueryObject.addClass('fixed-height-100px-class');
+	}//if
+}
+function fnCmnExpandItemReply(replyItemContentAreaJqueryObject=null){
+	if(replyItemContentAreaJqueryObject!==null && replyItemContentAreaJqueryObject.hasClass('fixed-height-100px-class')){
+		replyItemContentAreaJqueryObject.removeClass('fixed-height-100px-class');
+	}//if
+}
+function fnCmnToggleItemReply(replyItemContentAreaJqueryObject=null){
+	if(replyItemContentAreaJqueryObject!==null){
+		if(replyItemContentAreaJqueryObject.hasClass('fixed-height-100px-class')){
+			replyItemContentAreaJqueryObject.removeClass('fixed-height-100px-class');
+		}else{
+			replyItemContentAreaJqueryObject.addClass('fixed-height-100px-class');
+		}//if
+	}//if
+}

@@ -14,6 +14,14 @@ $(function(){
 		//---
 		fnCmnBotReplaceSpcCharForElement(elJqueryObject);
 	});
+	//--- 댓글접기 후, 개별로 클릭 시 펴기동작
+	if($('.reply-item-area-class').length){
+		$('.reply-item-area-class').on('dblclick', '.reply-item-content-class', function() {
+			var replyItemContentJqueryObject = $(this);
+			//---
+			fnCmnToggleItemReply(replyItemContentJqueryObject);
+		});
+	}//if
 });
 function toggleShowMenu(){
 	const TOGGLE_SHOW_MENU_CLASS_NAME_CONST = 'toggle-show-menu-class';
