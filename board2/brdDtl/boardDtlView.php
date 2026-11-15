@@ -73,7 +73,9 @@ include("boardDtlViewServer.php");
 	<h3 style="margin:0;padding:0;">댓글 (<?php echo nvl(getArrayValue($boardArticleInfo,"reply_cnt"),"0"); ?>개)</h3>
 	<textarea style="width:99.4%;height:100px;margin-top:10px;" placeholder="댓글내용" id="replyContent"></textarea>
 	<button onclick="javascript:writeReply();">댓글등록</button>
-	<button onclick="javascript:cancelReply();">댓글취소</button>
+	<button onclick="javascript:cancelReply();">댓글취소</button> |
+	<button onclick="javascript:fnCmnCollapseAllReply();">댓글접기</button>
+	<button onclick="javascript:fnCmnExpandAllReply();">댓글펴기</button>
 	<div class="reply-item-area-class"></div>
 </div>
 

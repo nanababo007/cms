@@ -130,7 +130,9 @@ include("boardDtlViewServer.php");
 			<textarea class="form-control" id="replyContent" rows="4" placeholder="댓글내용을 입력해주세요"></textarea>
 			<div class="mt-2">
 				<button class="btn btn-light border flex-shrink-0" onclick="writeReply();">댓글등록</button>
-				<button class="btn btn-light border flex-shrink-0" onclick="cancelReply();">댓글취소</button>
+				<button class="btn btn-light border flex-shrink-0" onclick="cancelReply();">댓글취소</button> | 
+				<button class="btn btn-light border flex-shrink-0" onclick="fnCmnCollapseAllReply();">댓글접기</button>
+				<button class="btn btn-light border flex-shrink-0" onclick="fnCmnExpandAllReply();">댓글펴기</button>
 			</div>
 		</div>
 		<div class="reply-item-area-class">

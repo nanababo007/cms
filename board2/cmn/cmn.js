@@ -309,3 +309,22 @@ function fnCmnBotReplaceSpcCharForElement(elJqueryObject=null){
 		elJqueryObject.html(editHtmlString);
 	}//if
 }
+//---
+function fnCmnCollapseAllReply(){
+	$('.reply-item-content-class').each(function(index,replyItemContentArea){
+		var replyItemContentAreaJqueryObject = $(replyItemContentArea);
+		//---
+		if(!replyItemContentAreaJqueryObject.hasClass('fixed-height-100px-class')){
+			replyItemContentAreaJqueryObject.addClass('fixed-height-100px-class');
+		}//if
+	});
+}
+function fnCmnExpandAllReply(){
+	$('.reply-item-content-class').each(function(index,replyItemContentArea){
+		var replyItemContentAreaJqueryObject = $(replyItemContentArea);
+		//---
+		if(replyItemContentAreaJqueryObject.hasClass('fixed-height-100px-class')){
+			replyItemContentAreaJqueryObject.removeClass('fixed-height-100px-class');
+		}//if
+	});
+}

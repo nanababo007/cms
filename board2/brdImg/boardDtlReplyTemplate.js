@@ -5,7 +5,7 @@ var replyItemTemplateString = `
 		<a href="javascript:modifyReplyForm('{{bdrSeq}}','{{bdrSeqId}}');">수정</a> | 
 		<a href="javascript:deleteReply('{{bdrSeq}}','{{bdrSeqId}}');" style="color:red;">삭제</a> | 
 		<a href="javascript:fixReply('{{bdrSeq}}','{{bdrFixYN}}','{{bdrSeqId}}');">고정</a> 
-		<div id="replyItemView{{bdrSeqId}}">{{replyContent}}</div>
+		<div id="replyItemView{{bdrSeqId}}" class="reply-item-content-class">{{replyContent}}</div>
 		<div id="replyItemEdit{{bdrSeqId}}" style="display:none;">
 			<textarea id="replyItemEditText{{bdrSeqId}}" style="width:80%;height:100px;">{{orgReplyContent}}</textarea>
 			<div>

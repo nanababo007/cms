@@ -14,7 +14,7 @@ var replyItemTemplateString = `
 		</div>
 		<div class="fw-bold">{{replyDatetime}}</div>
 		<!--<div class="text-muted mb-1">5분전</div>-->
-		<div class="reply-item-view-class" id="replyItemView{{bdrSeqId}}">{{replyContent}}</div>
+		<div class="reply-item-view-class reply-item-content-class" id="replyItemView{{bdrSeqId}}">{{replyContent}}</div>
 		<!--2차댓글-->
 		<div id="reply2ListItemOutArea{{bdrSeqId}}" style="margin-top:10px;padding-left:20px;" class="reply2-area-class">
 			<div class="mb-3  pb-2 reply2-item-class"  id="reply2ListItemArea{{bdr2Seq}}" data-bdr_seq="{{bdrSeq}}">
