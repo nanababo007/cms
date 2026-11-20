@@ -68,7 +68,7 @@ include("boardDtlViewServer.php");
 			<hr />
 			최초 등록일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"regdate_str")); ?>
 			<br />최종 변경일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"moddate_str")); ?>
-			<br /><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?>
+			<br /><div class="board-content-dtl-area-class"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></div>
 			<br /><br />
 		</div>
 		<!--img src="https://placeholder.com" class="img-fluid rounded mb-3" alt="샘플 이미지" /-->

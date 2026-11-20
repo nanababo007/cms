@@ -105,7 +105,7 @@ include("boardDtlViewServer.php");
 				<div>최종 변경일시 : <?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"moddate_str")); ?></div>
 				<hr />
 			</div>
-			<br /><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?>
+			<br /><div class="board-content-dtl-area-class"><?php echo getDecodeHtmlString(getArrayValue($boardArticleInfo,"bda_content")); ?></div>
 		</div>
 	</td>
 </tr>

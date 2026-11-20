@@ -4,6 +4,8 @@
 
 <script>
 $(function(){
+	var boardContentDtlAreaJqueryObject = null;
+	//---
 	$('.post-content')
 		.add('.post-header .post-title')
 	.each(function(index,el){
@@ -21,5 +23,14 @@ $(function(){
 			fnCmnToggleItemReply(replyItemContentJqueryObject);
 		});
 	}//if
+	//--- 게시글 내용 접고/펴기 토글 동작
+	setTimeout(function(){
+		boardContentDtlAreaJqueryObject = $('.board-content-dtl-area-class');
+		if(boardContentDtlAreaJqueryObject.length){
+			boardContentDtlAreaJqueryObject.dblclick(function(e) {
+				fnCmnToggleBoardContent();
+			});
+		}//if
+	},100);
 });
 </script>

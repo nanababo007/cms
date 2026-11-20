@@ -4,6 +4,8 @@
 
 <script>
 $(function(){
+	var boardContentDtlAreaJqueryObject = null;
+	//---
 	$('.board-content-history-list-area')
 		.add('.board-title-area-class')
 		.add('.board-content-area')
@@ -22,6 +24,15 @@ $(function(){
 			fnCmnToggleItemReply(replyItemContentJqueryObject);
 		});
 	}//if
+	//--- 게시글 내용 접고/펴기 토글 동작
+	setTimeout(function(){
+		boardContentDtlAreaJqueryObject = $('.board-content-dtl-area-class');
+		if(boardContentDtlAreaJqueryObject.length){
+			boardContentDtlAreaJqueryObject.dblclick(function(e) {
+				fnCmnToggleBoardContent();
+			});
+		}//if
+	},100);
 });
 function toggleShowMenu(){
 	const TOGGLE_SHOW_MENU_CLASS_NAME_CONST = 'toggle-show-menu-class';
